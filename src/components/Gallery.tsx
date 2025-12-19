@@ -1,0 +1,342 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
+
+export const Gallery = () => {
+  const [showAll, setShowAll] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const allImages = [
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F483f76759fc3427c8b6c29c352b2221e?format=webp&width=800",
+      alt: "Headlight Restoration & Polishing",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F9cb02518bcef4375a06d9d062f807b90?format=webp&width=800",
+      alt: "Professional Brake Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fcb7b3af7d02f42f593db25a7b9b4a5fc?format=webp&width=800",
+      alt: "Engine Bay Diagnostics",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fe0a02dcc2cda49e299c90281e6a393b1?format=webp&width=800",
+      alt: "Transmission & CV Axle Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F52eb1b8329084e2fbf312d7bf2067645?format=webp&width=800",
+      alt: "Vehicle on Lift Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fad22e439ef4a4d5b8474e5fe238e0428?format=webp&width=800",
+      alt: "Professional Headlight Detail",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F64448697005d48ad88dd802ecb1dc760?format=webp&width=800",
+      alt: "Engine Work & Maintenance",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F116d44bb332741a187fe3086188bbb0d?format=webp&width=800",
+      alt: "Advanced Engine Diagnostics",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fdd9c1c91d1cc40879c4cda1344144f34?format=webp&width=800",
+      alt: "Transmission Service Setup",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F7c2cd6ce0d1642ee92d718f59b845be5?format=webp&width=800",
+      alt: "Suspension Component Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F313d55b89f744049905289ac1c60323f?format=webp&width=800",
+      alt: "Professional Engine Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fb5a3fdf41785432bb66e30334c95087e?format=webp&width=800",
+      alt: "Battery & Electrical Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F0192521194b946ba81c7e379f89dd014?format=webp&width=800",
+      alt: "Vehicle Maintenance Detail",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fe9610e8724a8434c8d86f49a1de0ea58?format=webp&width=800",
+      alt: "Complete Engine Inspection",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F1d993643fcfc4e2386693c222b736f2e?format=webp&width=800",
+      alt: "Professional Service Quality",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F5b220e88101f4ea69b16f26d86dc9f4a?format=webp&width=800",
+      alt: "Headlight Restoration Close-up",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F95917a645a584efb99c4d05988f9336b?format=webp&width=800",
+      alt: "Professional Headlight Repair",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fa1e7a42eb1874b1ba2a79c76578753dc?format=webp&width=800",
+      alt: "Advanced Headlight Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fd5e7f329baa14a249ef2f06f17b9e7ff?format=webp&width=800",
+      alt: "Engine Service & Diagnostics",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F864ff63b3a3a4545add504983adb6cde?format=webp&width=800",
+      alt: "Vehicle Hood Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F7c02c5fe623c4ea79f0509926e04d4ed?format=webp&width=800",
+      alt: "Professional Vehicle Maintenance",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Faba83b904b6e4634bbe755e0547cf10d?format=webp&width=800",
+      alt: "Engine Compartment Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fcddc90b37878410484a54005b120056f?format=webp&width=800",
+      alt: "Comprehensive Diagnostics Setup",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F6ee6e4283ccc48ffbcd0048ee297b474?format=webp&width=800",
+      alt: "Vehicle Brake System Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F76652870bbd346ceb4d9b40403c91b4e?format=webp&width=800",
+      alt: "Professional Engine Rebuild",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fd11f2793911447959105d0af3a92476e?format=webp&width=800",
+      alt: "Undercarriage Service Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F9a49e275cf01497884f1eac6dca9e7b4?format=webp&width=800",
+      alt: "Suspension & Axle Repair",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fc5b7176e6b474a2fbccce11b9c717333?format=webp&width=800",
+      alt: "Engine Block Inspection",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F72a613ca175b401a8a2db91e539ad062?format=webp&width=800",
+      alt: "Professional Parts Replacement",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F5c0bafc2ad5a44869e627bc5c19efd1c?format=webp&width=800",
+      alt: "Engine Maintenance Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F7076cc6a2e024477896adf104417f81b?format=webp&width=800",
+      alt: "Professional Truck Engine Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fb14d770f41a84b588ea85865a19dd970?format=webp&width=800",
+      alt: "Engine Block Detail Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fd43ae049801f4e7281e289c5b62faa5e?format=webp&width=800",
+      alt: "Engine Hood Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fd55cc17bdcf34c539b7de8417ade56b7?format=webp&width=800",
+      alt: "Engine Component Installation",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F0ac7878f08304be3bdb33485bdb205f1?format=webp&width=800",
+      alt: "Red Vehicle Engine Inspection",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F0dee8ac725ba46f7b2a3bb72cf5e5f07?format=webp&width=800",
+      alt: "Professional Mechanic Working",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F3a49128b69e5433bab1d08fd66c04681?format=webp&width=800",
+      alt: "Engine Diagnostics Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F63cfb8d536d840da9925a17dbd3e4639?format=webp&width=800",
+      alt: "Engine Work in Progress",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F57e548c057fb4d949b910e5d356b15d7?format=webp&width=800",
+      alt: "BMW Engine Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fb7393f41931c4944bf7d8447b71df104?format=webp&width=800",
+      alt: "Headlight Restoration In Progress",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fbed827f66f8742699b61c21b52f19baa?format=webp&width=800",
+      alt: "Headlight Restoration Detail",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F7f9738e6a291429083744e1448a52c65?format=webp&width=800",
+      alt: "Vehicle in Professional Shop",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fe764977990f44511aeb42e5507c2ead0?format=webp&width=800",
+      alt: "Automotive Parts Display",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F36537bef51ee44f7883e6606f367385c?format=webp&width=800",
+      alt: "Professional Shop Supplies",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F368fdf75e49b4ab699091e6aed90974e?format=webp&width=800",
+      alt: "Service Vehicle Setup",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F575f284f41154b63ac60beb07b955e78?format=webp&width=800",
+      alt: "Headlight Polishing Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F55d2dcec28774a03b3299293a047cb25?format=webp&width=800",
+      alt: "Engine Compartment Inspection",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F17d8af0e4a864f9a863fd4ffb52de149?format=webp&width=800",
+      alt: "Professional Brake Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fdfa5bdbae1fa41ae84b9ac97e9f9869f?format=webp&width=800",
+      alt: "Vehicle Lift Service Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F8b0b854e75954282a553c3131354acba?format=webp&width=800",
+      alt: "Suspension Component Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F8621d1a1db39400883f74249975bd662?format=webp&width=800",
+      alt: "Classic Car Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fcc4573955f4b4e828cd82d2e27f732f0?format=webp&width=800",
+      alt: "Classic Vehicle Hood Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Ffe6c19e7b0fa4d13afc0174637342472?format=webp&width=800",
+      alt: "Professional Service Equipment",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F1749c83f9f90422f9b12be0516d8adca?format=webp&width=800",
+      alt: "Ball Joint & Suspension Repair",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F0e8cf8e29c0b4efe8769e75aa1ee0b3a?format=webp&width=800",
+      alt: "Vehicle Suspension Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F340a8d0a6eda497f8bcf3c9263c4cecd?format=webp&width=800",
+      alt: "Complete Vehicle Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F9e8195c244b342a58ead5c16affed83e?format=webp&width=800",
+      alt: "Professional Brake System Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F0fc34aa618b6433e9f6642687fa53c87?format=webp&width=800",
+      alt: "Hybrid Vehicle Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fe7d786dc9bd24151af8678d160e83e5d?format=webp&width=800",
+      alt: "Mechanical Work Detail",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F6778e5f6a94d4327af8c0786b3667873?format=webp&width=800",
+      alt: "Engine Service with Tools",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F134164811f354b60ba934400ab53cfa6?format=webp&width=800",
+      alt: "Professional Vehicle Lift Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fa6dd723a51f24d8d9fa209804005758c?format=webp&width=800",
+      alt: "Suspension & Brake Work",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F3d82e8e8261649ddbd51e3f57e5f31c6?format=webp&width=800",
+      alt: "Engine Block Service",
+    },
+    {
+      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F39c74938d5b04fc4845790f7a2a10439?format=webp&width=800",
+      alt: "Professional Repair & Service",
+    },
+  ];
+
+  const displayedImages = showAll ? allImages : allImages.slice(0, 7);
+
+  return (
+    <>
+      <section className="py-20 bg-card">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="font-orbitron text-4xl md:text-5xl font-bold mb-4">
+              Our <span className="text-primary text-glow">Work</span>
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Professional service delivered at your location
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {displayedImages.map((image, index) => (
+              <div
+                key={index}
+                className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={() => setSelectedImage(image.src)}
+              >
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {!showAll && (
+            <div className="flex justify-center mt-12">
+              <Button
+                onClick={() => setShowAll(true)}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold text-lg glow-orange-strong"
+                size="lg"
+              >
+                View All Gallery
+              </Button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {selectedImage && (
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div
+            className="relative max-w-4xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute -top-12 right-0 text-white hover:text-primary transition-colors z-10"
+              aria-label="Close gallery"
+            >
+              <X className="w-8 h-8" />
+            </button>
+            <img
+              src={selectedImage}
+              alt="Gallery preview"
+              className="w-full h-auto rounded-lg"
+            />
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
