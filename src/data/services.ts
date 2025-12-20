@@ -182,18 +182,23 @@ export const SERVICES: Service[] = [
   // F. Spark Plugs / Ignition Coils
   {
     id: "spark-plugs",
-    name: "Spark Plugs Replacement",
+    name: "Spark Plugs Replacement (Labor Only)",
     category: "F. Spark Plugs / Ignition Coils",
     minPrice: 120,
     maxPrice: 250,
+    description: "Complete spark plug replacement service",
+    tooltip: "Includes removal, inspection, and installation of new spark plugs. Gap setting and testing included.",
+    partsAvailable: true,
   },
   {
     id: "ignition-coil",
-    name: "Ignition Coil Replacement (per cylinder)",
+    name: "Ignition Coil Replacement (Labor Only)",
     category: "F. Spark Plugs / Ignition Coils",
     minPrice: 25,
     maxPrice: 60,
-    description: "each",
+    description: "Per cylinder - labor only",
+    tooltip: "Replacement of faulty ignition coil(s) responsible for firing spark plugs",
+    partsAvailable: true,
   },
 
   // G. Suspension / Control Arms
