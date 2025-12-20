@@ -388,7 +388,7 @@ export const Pricing = () => {
                 onClick={calculatePrice}
                 className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold text-lg glow-orange-strong"
                 size="lg"
-                disabled={!selectedService || !vehicleType || !engineType}
+                disabled={!selectedService || !vehicleType || !engineType || !vehicleAge}
               >
                 <Calculator className="mr-2 w-5 h-5" />
                 Calculate Estimate
