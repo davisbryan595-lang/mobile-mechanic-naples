@@ -307,7 +307,7 @@ export const Pricing = () => {
               {/* Brand / Complexity Adjustments */}
               <div>
                 <label className="block text-sm font-orbitron font-bold mb-3">
-                  ④ Brand / Complexity Options (Optional)
+                  ⑤ Brand / Complexity Options (Optional)
                 </label>
                 <div className="space-y-2 bg-background/50 p-4 rounded border border-border/50">
                   {complexityOptions.map((option) => (
