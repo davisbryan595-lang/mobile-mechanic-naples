@@ -13,11 +13,13 @@ export const SERVICES: Service[] = [
   // A. Oil Change
   {
     id: "oil-change",
-    name: "Oil Change (labor only, without materials)",
+    name: "Oil Change (Labor Only)",
     category: "A. Oil Change",
     minPrice: 60,
     maxPrice: 120,
-    description: "Oil change labor only",
+    description: "Complete oil and filter change service",
+    tooltip: "Includes labor for oil drain, filter replacement, and refill. Oil and filter parts sold separately if needed.",
+    partsAvailable: true,
   },
 
   // B. Brake System
