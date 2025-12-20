@@ -329,10 +329,45 @@ export const Pricing = () => {
                 </div>
               </div>
 
+              {/* Parts Option */}
+              <div>
+                <label className="block text-sm font-orbitron font-bold mb-3">
+                  ⑥ Parts Option
+                </label>
+                <div className="space-y-2 bg-background/50 p-4 rounded border border-border/50">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="parts-option"
+                      value="own-parts"
+                      checked={partsOption === "own-parts"}
+                      onChange={() => setPartsOption("own-parts")}
+                      className="w-4 h-4 accent-primary"
+                    />
+                    <span className="text-sm text-foreground">
+                      ✓ I have my own parts (labor only)
+                    </span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="parts-option"
+                      value="shop-parts"
+                      checked={partsOption === "shop-parts"}
+                      onChange={() => setPartsOption("shop-parts")}
+                      className="w-4 h-4 accent-primary"
+                    />
+                    <span className="text-sm text-foreground">
+                      ✓ I need parts provided (parts billed separately)
+                    </span>
+                  </label>
+                </div>
+              </div>
+
               {/* Service Call */}
               <div>
                 <label className="block text-sm font-orbitron font-bold mb-3">
-                  ⑤ Service Call
+                  ⑦ Service Call
                 </label>
                 <label className="flex items-center gap-3 cursor-pointer bg-background/50 p-4 rounded border border-border/50">
                   <input
