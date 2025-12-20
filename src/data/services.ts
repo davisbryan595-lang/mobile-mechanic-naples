@@ -5,6 +5,8 @@ export interface Service {
   minPrice: number;
   maxPrice: number;
   description?: string;
+  tooltip?: string;
+  partsAvailable?: boolean;
 }
 
 export const SERVICES: Service[] = [
