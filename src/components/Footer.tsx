@@ -1,4 +1,4 @@
-import { MessageCircle, Facebook, Instagram } from "lucide-react";
+import { MessageCircle, Facebook, Instagram, Music } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Footer = () => {
@@ -93,6 +93,14 @@ export const Footer = () => {
                   className="p-2 bg-secondary rounded-lg hover:bg-primary/20 transition-colors"
                 >
                   <Instagram className="w-5 h-5 text-primary" />
+                </a>
+                <a
+                  href="https://tiktok.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-secondary rounded-lg hover:bg-primary/20 transition-colors"
+                >
+                  <Music className="w-5 h-5 text-primary" />
                 </a>
                 <a
                   href="https://wa.me/2392729166"

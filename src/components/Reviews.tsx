@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, MessageSquare, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Reviews = () => {
@@ -106,6 +106,66 @@ export const Reviews = () => {
           >
             <ChevronRight className="w-6 h-6" />
           </Button>
+        </div>
+
+        {/* Leave a Review Section */}
+        <div className="mt-16 max-w-4xl mx-auto">
+          <div className="bg-gradient-metallic border-2 border-border rounded-lg p-8 glow-orange">
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <MessageSquare className="w-6 h-6 text-primary" />
+              <h3 className="font-orbitron text-2xl font-bold text-center">
+                Share Your Experience
+              </h3>
+            </div>
+            <p className="text-muted-foreground text-center mb-8">
+              We'd love to hear about your service experience! Leave a review on your favorite platform.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Google Review Button */}
+              <a
+                href="https://www.google.com/search?q=mobile+mechanic+reviews"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center justify-center p-6 bg-background/50 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-all"
+              >
+                <Star className="w-8 h-8 text-primary mb-2" />
+                <span className="font-orbitron font-bold text-foreground">Google Reviews</span>
+                <span className="text-xs text-muted-foreground mt-1">5-star rating</span>
+                <ExternalLink className="w-4 h-4 text-primary mt-3" />
+              </a>
+
+              {/* Facebook Review Button */}
+              <a
+                href="https://www.facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center justify-center p-6 bg-background/50 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-all"
+              >
+                <Star className="w-8 h-8 text-primary mb-2" />
+                <span className="font-orbitron font-bold text-foreground">Facebook Reviews</span>
+                <span className="text-xs text-muted-foreground mt-1">Share feedback</span>
+                <ExternalLink className="w-4 h-4 text-primary mt-3" />
+              </a>
+
+              {/* Yelp Review Button */}
+              <a
+                href="https://www.yelp.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center justify-center p-6 bg-background/50 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-all"
+              >
+                <Star className="w-8 h-8 text-primary mb-2" />
+                <span className="font-orbitron font-bold text-foreground">Yelp Reviews</span>
+                <span className="text-xs text-muted-foreground mt-1">Rate our service</span>
+                <ExternalLink className="w-4 h-4 text-primary mt-3" />
+              </a>
+            </div>
+
+            <p className="text-xs text-muted-foreground text-center mt-6">
+              Your honest feedback helps us improve and helps other customers make informed decisions.
+            </p>
+          </div>
         </div>
       </div>
     </section>

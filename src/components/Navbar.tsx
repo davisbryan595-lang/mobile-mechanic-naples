@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Facebook, Instagram, MessageCircle, Phone, Menu, X } from "lucide-react";
+import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 
@@ -48,7 +48,8 @@ export const Navbar = () => {
     { id: "home", label: "Home" },
     { id: "about", label: "About" },
     { id: "services", label: "Services" },
-    { id: "pricing", label: "Pricing" },
+    { id: "pricing", label: "Pricing & Calculator" },
+    { id: "packages", label: "Packages" },
     { id: "reviews", label: "Reviews" },
     { id: "contact", label: "Contact" },
   ];
@@ -56,6 +57,7 @@ export const Navbar = () => {
   const socialLinks = [
     { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
     { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+    { icon: Music, href: "https://tiktok.com", label: "TikTok" },
     { icon: MessageCircle, href: "https://wa.me/2392729166", label: "WhatsApp" },
   ];
 

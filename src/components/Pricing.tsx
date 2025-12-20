@@ -14,8 +14,10 @@ export const Pricing = () => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [vehicleType, setVehicleType] = useState("");
   const [engineType, setEngineType] = useState("");
+  const [vehicleAge, setVehicleAge] = useState("");
   const [complexity, setComplexity] = useState<string[]>([]);
   const [includeServiceCall, setIncludeServiceCall] = useState(false);
+  const [partsOption, setPartsOption] = useState<"own-parts" | "shop-parts">("own-parts");
   const [estimatedPrice, setEstimatedPrice] = useState<{
     min: number;
     max: number;
@@ -44,13 +46,20 @@ export const Pricing = () => {
     "turbo-supercharged": { min: 20, max: 40 },
   };
 
+  // Vehicle Age / Category Multipliers
+  const vehicleAgeMultipliers: Record<string, number> = {
+    "modern-2000-2025": 1.0,
+    "older-1990-1999": 1.1,
+    "classic-pre-1990": 1.2,
+    "muscle-collector": 1.25,
+  };
+
   // Brand/Complexity Adjustments
   const complexityAdjustments: Record<
     string,
     { min: number; max: number }
   > = {
     european: { min: 40, max: 80 },
-    "older-vehicle": { min: 20, max: 50 },
     "rust-hard-access": { min: 30, max: 60 },
     luxury: { min: 20, max: 40 },
     "hybrid-electric": { min: 30, max: 70 },
@@ -61,14 +70,13 @@ export const Pricing = () => {
 
   const complexityOptions = [
     { id: "european", label: "European Vehicle (BMW, Mercedes, Audi, VW, Volvo)" },
-    { id: "older-vehicle", label: "Older Vehicle (10+ years)" },
     { id: "rust-hard-access", label: "Rust / Seized Bolts / Hard Access" },
     { id: "luxury", label: "Luxury / Premium (Lexus, Infiniti, Cadillac)" },
     { id: "hybrid-electric", label: "Hybrid / Electric Components" },
   ];
 
   const calculatePrice = () => {
-    if (!selectedService || !vehicleType || !engineType) {
+    if (!selectedService || !vehicleType || !engineType || !vehicleAge) {
       return;
     }
 
@@ -84,6 +92,11 @@ export const Pricing = () => {
     const engineMultiplier = engineMultipliers[engineType] || 1.0;
     minPrice *= engineMultiplier;
     maxPrice *= engineMultiplier;
+
+    // Apply vehicle age multiplier
+    const ageMultiplier = vehicleAgeMultipliers[vehicleAge] || 1.0;
+    minPrice *= ageMultiplier;
+    maxPrice *= ageMultiplier;
 
     // Apply turbo/supercharger surcharge if selected
     if (engineType === "turbo-supercharged") {
@@ -125,6 +138,7 @@ export const Pricing = () => {
     );
     breakdownParts.push(`Vehicle (${vehicleType}): ×${vehicleMultiplier}`);
     breakdownParts.push(`Engine (${engineType}): ×${engineMultiplier}`);
+    breakdownParts.push(`Vehicle Age (${vehicleAge}): ×${ageMultiplier}`);
 
     if (engineType === "turbo-supercharged") {
       breakdownParts.push(
@@ -167,13 +181,19 @@ export const Pricing = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-orbitron text-4xl md:text-5xl font-bold mb-4">
-            Estimate Your{" "}
-            <span className="text-primary text-glow">Service Cost</span>
+            Service Catalog & <span className="text-primary text-glow">Cost Estimator</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Advanced price calculator with vehicle coefficients and complexity
-            adjustments
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-4">
+            Advanced price calculator with vehicle coefficients and complexity adjustments
           </p>
+          <div className="bg-primary/10 border border-primary/30 rounded-lg p-4 max-w-2xl mx-auto inline-block">
+            <p className="text-sm font-bold text-primary">
+              💡 Service Catalog – Labor Only (Parts & Materials Not Included)
+            </p>
+            <p className="text-xs text-muted-foreground mt-2">
+              All labor prices shown are estimates. Final pricing depends on vehicle condition, parts availability, and additional labor requirements.
+            </p>
+          </div>
         </div>
 
         <div className="max-w-4xl mx-auto">
@@ -211,16 +231,23 @@ export const Pricing = () => {
                   </SelectContent>
                 </Select>
                 {selectedService && (
-                  <div className="mt-2 p-3 bg-primary/10 rounded border border-primary/20">
+                  <div className="mt-2 p-4 bg-primary/10 rounded border border-primary/20 space-y-2">
                     <p className="text-sm text-foreground font-medium">
                       {selectedService.name}
                     </p>
                     {selectedService.description && (
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-xs text-muted-foreground">
                         {selectedService.description}
                       </p>
                     )}
-                    <p className="text-sm font-bold text-primary mt-2">
+                    {selectedService.tooltip && (
+                      <div className="bg-background/50 p-2 rounded border-l-2 border-primary/50">
+                        <p className="text-xs text-foreground italic">
+                          💡 <span className="font-semibold">{selectedService.tooltip}</span>
+                        </p>
+                      </div>
+                    )}
+                    <p className="text-sm font-bold text-primary pt-2">
                       Base Range: ${selectedService.minPrice} - $
                       {selectedService.maxPrice}
                     </p>
@@ -272,10 +299,28 @@ export const Pricing = () => {
                 </Select>
               </div>
 
+              {/* Vehicle Age / Category */}
+              <div>
+                <label className="block text-sm font-orbitron font-bold mb-2">
+                  ④ Vehicle Age / Category
+                </label>
+                <Select value={vehicleAge} onValueChange={setVehicleAge}>
+                  <SelectTrigger className="bg-background border-border">
+                    <SelectValue placeholder="Select vehicle age/category" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border-border">
+                    <SelectItem value="modern-2000-2025">Modern (2000–2025) (×1.00)</SelectItem>
+                    <SelectItem value="older-1990-1999">Older (1990–1999) (×1.10)</SelectItem>
+                    <SelectItem value="classic-pre-1990">Classic (Pre-1990) (×1.20)</SelectItem>
+                    <SelectItem value="muscle-collector">Muscle / Collector (×1.25)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Brand / Complexity Adjustments */}
               <div>
                 <label className="block text-sm font-orbitron font-bold mb-3">
-                  ④ Brand / Complexity Options (Optional)
+                  ⑤ Brand / Complexity Options (Optional)
                 </label>
                 <div className="space-y-2 bg-background/50 p-4 rounded border border-border/50">
                   {complexityOptions.map((option) => (
@@ -297,10 +342,45 @@ export const Pricing = () => {
                 </div>
               </div>
 
+              {/* Parts Option */}
+              <div>
+                <label className="block text-sm font-orbitron font-bold mb-3">
+                  ⑥ Parts Option
+                </label>
+                <div className="space-y-2 bg-background/50 p-4 rounded border border-border/50">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="parts-option"
+                      value="own-parts"
+                      checked={partsOption === "own-parts"}
+                      onChange={() => setPartsOption("own-parts")}
+                      className="w-4 h-4 accent-primary"
+                    />
+                    <span className="text-sm text-foreground">
+                      ✓ I have my own parts (labor only)
+                    </span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="parts-option"
+                      value="shop-parts"
+                      checked={partsOption === "shop-parts"}
+                      onChange={() => setPartsOption("shop-parts")}
+                      className="w-4 h-4 accent-primary"
+                    />
+                    <span className="text-sm text-foreground">
+                      ✓ I need parts provided (parts billed separately)
+                    </span>
+                  </label>
+                </div>
+              </div>
+
               {/* Service Call */}
               <div>
                 <label className="block text-sm font-orbitron font-bold mb-3">
-                  ⑤ Service Call
+                  ⑦ Service Call
                 </label>
                 <label className="flex items-center gap-3 cursor-pointer bg-background/50 p-4 rounded border border-border/50">
                   <input
@@ -321,7 +401,7 @@ export const Pricing = () => {
                 onClick={calculatePrice}
                 className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold text-lg glow-orange-strong"
                 size="lg"
-                disabled={!selectedService || !vehicleType || !engineType}
+                disabled={!selectedService || !vehicleType || !engineType || !vehicleAge}
               >
                 <Calculator className="mr-2 w-5 h-5" />
                 Calculate Estimate
