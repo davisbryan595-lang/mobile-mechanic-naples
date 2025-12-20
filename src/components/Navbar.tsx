@@ -48,7 +48,8 @@ export const Navbar = () => {
     { id: "home", label: "Home" },
     { id: "about", label: "About" },
     { id: "services", label: "Services" },
-    { id: "pricing", label: "Pricing" },
+    { id: "pricing", label: "Pricing & Calculator" },
+    { id: "packages", label: "Packages" },
     { id: "reviews", label: "Reviews" },
     { id: "contact", label: "Contact" },
   ];
