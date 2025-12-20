@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, MessageSquare, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Reviews = () => {
