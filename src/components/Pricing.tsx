@@ -70,7 +70,6 @@ export const Pricing = () => {
 
   const complexityOptions = [
     { id: "european", label: "European Vehicle (BMW, Mercedes, Audi, VW, Volvo)" },
-    { id: "older-vehicle", label: "Older Vehicle (10+ years)" },
     { id: "rust-hard-access", label: "Rust / Seized Bolts / Hard Access" },
     { id: "luxury", label: "Luxury / Premium (Lexus, Infiniti, Cadillac)" },
     { id: "hybrid-electric", label: "Hybrid / Electric Components" },
