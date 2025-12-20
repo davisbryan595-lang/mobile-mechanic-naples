@@ -76,7 +76,7 @@ export const Pricing = () => {
   ];
 
   const calculatePrice = () => {
-    if (!selectedService || !vehicleType || !engineType) {
+    if (!selectedService || !vehicleType || !engineType || !vehicleAge) {
       return;
     }
 
@@ -92,6 +92,11 @@ export const Pricing = () => {
     const engineMultiplier = engineMultipliers[engineType] || 1.0;
     minPrice *= engineMultiplier;
     maxPrice *= engineMultiplier;
+
+    // Apply vehicle age multiplier
+    const ageMultiplier = vehicleAgeMultipliers[vehicleAge] || 1.0;
+    minPrice *= ageMultiplier;
+    maxPrice *= ageMultiplier;
 
     // Apply turbo/supercharger surcharge if selected
     if (engineType === "turbo-supercharged") {
