@@ -46,13 +46,20 @@ export const Pricing = () => {
     "turbo-supercharged": { min: 20, max: 40 },
   };
 
+  // Vehicle Age / Category Multipliers
+  const vehicleAgeMultipliers: Record<string, number> = {
+    "modern-2000-2025": 1.0,
+    "older-1990-1999": 1.1,
+    "classic-pre-1990": 1.2,
+    "muscle-collector": 1.25,
+  };
+
   // Brand/Complexity Adjustments
   const complexityAdjustments: Record<
     string,
     { min: number; max: number }
   > = {
     european: { min: 40, max: 80 },
-    "older-vehicle": { min: 20, max: 50 },
     "rust-hard-access": { min: 30, max: 60 },
     luxury: { min: 20, max: 40 },
     "hybrid-electric": { min: 30, max: 70 },
