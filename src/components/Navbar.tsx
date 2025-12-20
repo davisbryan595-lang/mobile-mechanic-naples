@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Facebook, Instagram, MessageCircle, Phone, Menu, X } from "lucide-react";
+import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 
