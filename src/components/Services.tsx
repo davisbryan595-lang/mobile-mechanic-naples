@@ -60,18 +60,24 @@ export const Services = () => {
               key={index}
               className="group bg-gradient-metallic border border-border rounded-lg hover:border-primary transition-all hover:glow-orange hover:scale-105 cursor-pointer animate-slide-up overflow-hidden"
               style={{ animationDelay: `${index * 0.1}s` }}
+              title={service.description}
             >
-              <div className="flex flex-col text-center">
+              <div className="flex flex-col text-center h-full">
                 <div className="w-full h-48 overflow-hidden">
-                  <img 
-                    src={service.image} 
+                  <img
+                    src={service.image}
                     alt={service.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                 </div>
-                <div className="p-6 space-y-3">
-                  <h3 className="font-orbitron font-bold text-lg">{service.title}</h3>
-                  <p className="text-muted-foreground text-sm">{service.description}</p>
+                <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-orbitron font-bold text-lg">{service.title}</h3>
+                    <p className="text-muted-foreground text-sm mt-2">{service.description}</p>
+                  </div>
+                  <div className="text-xs text-primary/60 pt-2">
+                    💡 Learn more in our Pricing Calculator
+                  </div>
                 </div>
               </div>
             </div>
