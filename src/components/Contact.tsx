@@ -111,21 +111,29 @@ export const Contact = () => {
             <div>
               <h3 className="font-orbitron text-xl font-bold mb-4">Follow Us</h3>
               <div className="flex gap-4">
-                <a 
-                  href="https://facebook.com" 
-                  target="_blank" 
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
                 >
                   <Facebook className="w-6 h-6 text-primary" />
                 </a>
-                <a 
-                  href="https://instagram.com" 
-                  target="_blank" 
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
                 >
                   <Instagram className="w-6 h-6 text-primary" />
+                </a>
+                <a
+                  href="https://tiktok.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
+                >
+                  <Music className="w-6 h-6 text-primary" />
                 </a>
               </div>
             </div>
