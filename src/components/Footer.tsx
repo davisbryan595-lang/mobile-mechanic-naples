@@ -95,6 +95,14 @@ export const Footer = () => {
                   <Instagram className="w-5 h-5 text-primary" />
                 </a>
                 <a
+                  href="https://tiktok.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-secondary rounded-lg hover:bg-primary/20 transition-colors"
+                >
+                  <Music className="w-5 h-5 text-primary" />
+                </a>
+                <a
                   href="https://wa.me/2392729166"
                   target="_blank"
                   rel="noopener noreferrer"
