@@ -291,18 +291,23 @@ export const SERVICES: Service[] = [
   // J. Headlight Restoration / Polishing
   {
     id: "headlight-sanding",
-    name: "Headlight Sanding + Polishing (1 light)",
+    name: "Headlight Sanding + Polishing (Labor Only)",
     category: "J. Headlight Restoration / Polishing",
     minPrice: 70,
     maxPrice: 150,
-    description: "starting at $70+",
+    description: "Single headlight restoration - per light",
+    tooltip: "Removes oxidation and clouding from headlight lens through wet sanding and professional polishing",
+    partsAvailable: false,
   },
   {
     id: "full-headlight-restoration",
-    name: "Full Headlight Restoration (both lights, multi-stage + ceramic)",
+    name: "Full Headlight Restoration (Labor Only)",
     category: "J. Headlight Restoration / Polishing",
     minPrice: 140,
     maxPrice: 250,
+    description: "Both headlights with multi-stage polishing and ceramic coating",
+    tooltip: "Complete headlight restoration: deep cleaning, multi-stage sanding, polishing, and UV-protective ceramic sealant application",
+    partsAvailable: false,
   },
 
   // K. Mobile Detailing
