@@ -286,6 +286,24 @@ export const Pricing = () => {
                 </Select>
               </div>
 
+              {/* Vehicle Age / Category */}
+              <div>
+                <label className="block text-sm font-orbitron font-bold mb-2">
+                  ④ Vehicle Age / Category
+                </label>
+                <Select value={vehicleAge} onValueChange={setVehicleAge}>
+                  <SelectTrigger className="bg-background border-border">
+                    <SelectValue placeholder="Select vehicle age/category" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border-border">
+                    <SelectItem value="modern-2000-2025">Modern (2000–2025) (×1.00)</SelectItem>
+                    <SelectItem value="older-1990-1999">Older (1990–1999) (×1.10)</SelectItem>
+                    <SelectItem value="classic-pre-1990">Classic (Pre-1990) (×1.20)</SelectItem>
+                    <SelectItem value="muscle-collector">Muscle / Collector (×1.25)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Brand / Complexity Adjustments */}
               <div>
                 <label className="block text-sm font-orbitron font-bold mb-3">
