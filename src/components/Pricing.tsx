@@ -181,13 +181,19 @@ export const Pricing = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-orbitron text-4xl md:text-5xl font-bold mb-4">
-            Estimate Your{" "}
-            <span className="text-primary text-glow">Service Cost</span>
+            Service Catalog & <span className="text-primary text-glow">Cost Estimator</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Advanced price calculator with vehicle coefficients and complexity
-            adjustments
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-4">
+            Advanced price calculator with vehicle coefficients and complexity adjustments
           </p>
+          <div className="bg-primary/10 border border-primary/30 rounded-lg p-4 max-w-2xl mx-auto inline-block">
+            <p className="text-sm font-bold text-primary">
+              💡 Service Catalog – Labor Only (Parts & Materials Not Included)
+            </p>
+            <p className="text-xs text-muted-foreground mt-2">
+              All labor prices shown are estimates. Final pricing depends on vehicle condition, parts availability, and additional labor requirements.
+            </p>
+          </div>
         </div>
 
         <div className="max-w-4xl mx-auto">
