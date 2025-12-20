@@ -36,7 +36,7 @@ export const Services = () => {
       description: "Professional interior and exterior detailing service",
     },
     {
-      image: "https://images.pexels.com/photos/12185933/pexels-photo-12185933.jpeg",
+      image: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Ffc560f9db0cd44dba832492ad68d29b8?format=webp&width=800",
       title: "Suspension & Struts",
       description: "Shock absorbers, struts, and complete suspension repair",
     },
