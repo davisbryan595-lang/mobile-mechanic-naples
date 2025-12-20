@@ -231,16 +231,23 @@ export const Pricing = () => {
                   </SelectContent>
                 </Select>
                 {selectedService && (
-                  <div className="mt-2 p-3 bg-primary/10 rounded border border-primary/20">
+                  <div className="mt-2 p-4 bg-primary/10 rounded border border-primary/20 space-y-2">
                     <p className="text-sm text-foreground font-medium">
                       {selectedService.name}
                     </p>
                     {selectedService.description && (
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-xs text-muted-foreground">
                         {selectedService.description}
                       </p>
                     )}
-                    <p className="text-sm font-bold text-primary mt-2">
+                    {selectedService.tooltip && (
+                      <div className="bg-background/50 p-2 rounded border-l-2 border-primary/50">
+                        <p className="text-xs text-foreground italic">
+                          💡 <span className="font-semibold">{selectedService.tooltip}</span>
+                        </p>
+                      </div>
+                    )}
+                    <p className="text-sm font-bold text-primary pt-2">
                       Base Range: ${selectedService.minPrice} - $
                       {selectedService.maxPrice}
                     </p>
