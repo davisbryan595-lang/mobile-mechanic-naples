@@ -14,8 +14,10 @@ export const Pricing = () => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [vehicleType, setVehicleType] = useState("");
   const [engineType, setEngineType] = useState("");
+  const [vehicleAge, setVehicleAge] = useState("");
   const [complexity, setComplexity] = useState<string[]>([]);
   const [includeServiceCall, setIncludeServiceCall] = useState(false);
+  const [partsOption, setPartsOption] = useState<"own-parts" | "shop-parts">("own-parts");
   const [estimatedPrice, setEstimatedPrice] = useState<{
     min: number;
     max: number;
