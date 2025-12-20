@@ -1,44 +1,44 @@
 export const Services = () => {
   const services = [
     {
-      image: "https://images.pexels.com/photos/3807386/pexels-photo-3807386.jpeg",
+      image: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F94e4eba16ad54f84936a6f7af881d1ab?format=webp&width=800",
+      title: "Routine Maintenance Service",
+      description: "Oil changes, filters, fluids, and preventive care",
+    },
+    {
+      image: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Fed5399a1ba734975b185d6fc2efdcd53?format=webp&width=800",
+      title: "Headlight Restoration",
+      description: "Professional headlight polishing and UV protection",
+    },
+    {
+      image: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F34b72e1131b14151a5a8b342b0c36c6b?format=webp&width=800",
       title: "A/C Repair & Recharge",
       description: "Complete air conditioning diagnostics and repair service",
     },
     {
-      image: "https://images.pexels.com/photos/3642618/pexels-photo-3642618.jpeg",
+      image: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F5dbffd29bdc44430ae6de4ae5f43d83f?format=webp&width=800",
       title: "Brake Service & Replacement",
       description: "Brake pads, rotors, calipers, and complete brake system service",
     },
     {
-      image: "https://images.pexels.com/photos/12271954/pexels-photo-12271954.jpeg",
+      image: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Fac01be146c2148bb97109e6b4f31d923?format=webp&width=800",
       title: "Engine Diagnostics",
       description: "Advanced diagnostic scanning and engine troubleshooting",
     },
     {
-      image: "https://images.pexels.com/photos/5562431/pexels-photo-5562431.jpeg",
+      image: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F18e25977dc7a4eb5ac11297d801851e9?format=webp&width=800",
       title: "Starter & Alternator",
       description: "Electrical system diagnostics and component replacement",
+    },
+    {
+      image: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F82386ba0d484475883f848caf812ea68?format=webp&width=800",
+      title: "Mobile Detailing Package",
+      description: "Professional interior and exterior detailing service",
     },
     {
       image: "https://images.pexels.com/photos/12185933/pexels-photo-12185933.jpeg",
       title: "Suspension & Struts",
       description: "Shock absorbers, struts, and complete suspension repair",
-    },
-    {
-      image: "https://images.pexels.com/photos/5562431/pexels-photo-5562431.jpeg",
-      title: "Battery Replacement",
-      description: "Battery testing, replacement, and charging system check",
-    },
-    {
-      image: "https://images.pexels.com/photos/10490622/pexels-photo-10490622.jpeg",
-      title: "Routine Maintenance",
-      description: "Oil changes, filters, fluids, and preventive care",
-    },
-    {
-      image: "https://images.pexels.com/photos/5233268/pexels-photo-5233268.jpeg",
-      title: "Headlight Restoration",
-      description: "Professional headlight polishing and UV protection",
     },
   ];
 
