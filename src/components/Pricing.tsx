@@ -138,6 +138,7 @@ export const Pricing = () => {
     );
     breakdownParts.push(`Vehicle (${vehicleType}): ×${vehicleMultiplier}`);
     breakdownParts.push(`Engine (${engineType}): ×${engineMultiplier}`);
+    breakdownParts.push(`Vehicle Age (${vehicleAge}): ×${ageMultiplier}`);
 
     if (engineType === "turbo-supercharged") {
       breakdownParts.push(
