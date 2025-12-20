@@ -62,18 +62,23 @@ export const SERVICES: Service[] = [
   // C. Diagnostics
   {
     id: "obd2-diagnostic",
-    name: "OBD2 Diagnostic (basic)",
+    name: "OBD2 Diagnostic (Labor Only)",
     category: "C. Diagnostics",
     minPrice: 90,
     maxPrice: 120,
+    description: "Computer diagnostic scan and error code reading",
+    tooltip: "Full OBD2 scanner reading to identify engine warning lights and fault codes",
+    partsAvailable: false,
   },
   {
     id: "electrical-diagnostics",
-    name: "Electrical / Wiring Diagnostics (hourly rate)",
+    name: "Electrical / Wiring Diagnostics (Labor Only)",
     category: "C. Diagnostics",
     minPrice: 95,
     maxPrice: 145,
-    description: "per hour",
+    description: "Advanced electrical system troubleshooting (per hour)",
+    tooltip: "In-depth electrical system testing and diagnostics for charging, starting, and lighting issues",
+    partsAvailable: true,
   },
 
   // D. AC Service
