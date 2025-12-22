@@ -145,16 +145,15 @@ All colors MUST be HSL.
   }
 }
 
-/* Hide Elfsight Facebook Reviews Widget "Free" text and promotional elements */
 .elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 iframe {
   border: none !important;
+  display: none !important;
 }
 
 .eapps-iframe-container {
   background: transparent !important;
 }
 
-/* Hide free text/branding from widget */
 .elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 [data-test*="free"],
 .elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 [class*="free"],
 .elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 [class*="powered"],
@@ -162,7 +161,7 @@ All colors MUST be HSL.
   display: none !important;
 }
 
-/* Additional targeting for common widget elements */
+
 .elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 span:has-text("Free"),
 .elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 div:has-text("Free") {
   display: none !important;
@@ -175,12 +174,11 @@ All colors MUST be HSL.
   display: none !important;
 }
 
-/* Hide Elfsight promotional "Free Facebook Reviews Widget" link */
+
 a[href*="elfsight.com/facebook-reviews-widget"] {
   display: none !important;
 }
 
-/* Alternative: Hide by content if link styling changes */
 .elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 a[target="_blank"][rel="noreferrer"] {
   display: none !important;
 }
