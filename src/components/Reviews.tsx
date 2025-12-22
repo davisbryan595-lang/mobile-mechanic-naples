@@ -24,8 +24,13 @@ export const Reviews = () => {
         </div>
 
         {/* Elfsight Facebook Reviews Widget */}
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto mb-12">
           <div className="elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97" data-elfsight-app-lazy></div>
+        </div>
+
+        {/* Elfsight Google Reviews Widget */}
+        <div className="max-w-4xl mx-auto">
+          <div className="elfsight-app-6be60a80-5140-4d41-bb5b-6cb271f0c2d0" data-elfsight-app-lazy></div>
         </div>
       </div>
     </section>
