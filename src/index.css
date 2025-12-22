@@ -144,3 +144,33 @@ All colors MUST be HSL.
     box-shadow: 0 0 30px rgba(255, 140, 0, 0.8);
   }
 }
+
+/* Hide Elfsight Facebook Reviews Widget "Free" text and promotional elements */
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 iframe {
+  border: none !important;
+}
+
+.eapps-iframe-container {
+  background: transparent !important;
+}
+
+/* Hide free text/branding from widget */
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 [data-test*="free"],
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 [class*="free"],
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 [class*="powered"],
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 [class*="branding"] {
+  display: none !important;
+}
+
+/* Additional targeting for common widget elements */
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 span:has-text("Free"),
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 div:has-text("Free") {
+  display: none !important;
+}
+
+/* Hide footer attribution text if present */
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 footer,
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 [class*="footer"],
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 [class*="attribution"] {
+  display: none !important;
+}
