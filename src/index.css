@@ -174,3 +174,18 @@ All colors MUST be HSL.
 .elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 [class*="attribution"] {
   display: none !important;
 }
+
+/* Hide Elfsight promotional "Free Facebook Reviews Widget" link */
+a[href*="elfsight.com/facebook-reviews-widget"] {
+  display: none !important;
+}
+
+/* Alternative: Hide by content if link styling changes */
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 a[target="_blank"][rel="noreferrer"] {
+  display: none !important;
+}
+
+/* Hide any promotional text mentioning "Free" in widget area */
+.elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97 {
+  --elfsight-powered-by-display: none !important;
+}
