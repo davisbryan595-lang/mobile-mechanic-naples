@@ -36,12 +36,12 @@ export const MaintenancePackages = () => {
   const packages: Package[] = [
     {
       id: "package-a",
-      name: "Basic Maintenance",
+      name: "Service A",
       description: "Essential maintenance for regular vehicle upkeep",
       icon: "🛠️",
       services: [
         "Oil Change (Labor Only)",
-        "Oil Filter Replacement",
+        "Engine Oil Filter",
         "Fluid Level Check",
         "Battery Test",
       ],
@@ -52,13 +52,14 @@ export const MaintenancePackages = () => {
     },
     {
       id: "package-b",
-      name: "Standard Service",
+      name: "Service B",
       description: "Comprehensive service for optimal performance",
       icon: "⚙️",
       services: [
         "Oil Change (Labor Only)",
+        "Engine Oil Filter",
+        "Cabin Air Filter",
         "Spark Plugs Replacement",
-        "Air Filter Replacement",
         "Brake Inspection",
         "Battery Test",
         "Fluid Top-Off",
@@ -70,13 +71,15 @@ export const MaintenancePackages = () => {
     },
     {
       id: "package-c",
-      name: "Premium Care",
+      name: "Service C",
       description: "Full vehicle inspection and preventive maintenance",
       icon: "👑",
       services: [
-        "Full Oil Service",
+        "Oil Change (Labor Only)",
+        "Engine Oil Filter",
+        "Cabin Air Filter",
+        "Fuel Filter",
         "Spark Plugs Replacement",
-        "Air & Cabin Filter Replacement",
         "Brake System Check",
         "Suspension Inspection",
         "Battery & Alternator Test",
@@ -86,6 +89,30 @@ export const MaintenancePackages = () => {
       basePrice: {
         min: 400,
         max: 700,
+      },
+    },
+    {
+      id: "package-d",
+      name: "Service D",
+      description: "Complete vehicle care with diagnostics and advanced services",
+      icon: "🔧",
+      services: [
+        "Oil Change (Labor Only)",
+        "Engine Oil Filter",
+        "Cabin Air Filter",
+        "Fuel Filter",
+        "Spark Plugs Replacement",
+        "Full Brake Service",
+        "Suspension Inspection",
+        "Battery & Alternator Test",
+        "OBD Computer Diagnostic",
+        "Electrical Diagnostics",
+        "Fluid Check & Top-Off",
+        "Headlight Inspection",
+      ],
+      basePrice: {
+        min: 600,
+        max: 1000,
       },
     },
   ];
@@ -227,7 +254,7 @@ export const MaintenancePackages = () => {
         </div>
 
         {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
           {packages.map((pkg) => (
             <div
               key={pkg.id}

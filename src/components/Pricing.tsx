@@ -240,6 +240,13 @@ export const Pricing = () => {
                         {selectedService.description}
                       </p>
                     )}
+                    {selectedService.category === "C. Diagnostics" && (
+                      <div className="bg-yellow-500/20 p-2 rounded border border-yellow-500/50">
+                        <p className="text-xs text-foreground font-semibold">
+                          ⏱️ Diagnostics are billed hourly: $95–$145 per hour
+                        </p>
+                      </div>
+                    )}
                     {selectedService.tooltip && (
                       <div className="bg-background/50 p-2 rounded border-l-2 border-primary/50">
                         <p className="text-xs text-foreground italic">
