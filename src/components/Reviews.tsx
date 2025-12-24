@@ -91,7 +91,7 @@ export const Reviews = () => {
             {reviews.map((_, index) => (
               <button
                 key={index}
-                className={`indicator-dot ${api?.selectedScrollSnap() === index ? "active" : ""}`}
+                className={`indicator-dot ${current === index ? "active" : ""}`}
                 onClick={() => api?.scrollTo(index)}
                 aria-label={`Go to review ${index + 1}`}
               />
