@@ -27,6 +27,7 @@ const Index = () => {
         <WhyChooseUs />
         <Gallery />
         <FacebookPosts />
+        <InstagramReels />
         <WarrantyInfo />
         <Reviews />
         <Disclaimer />
