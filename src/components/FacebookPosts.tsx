@@ -2,30 +2,54 @@ import { useEffect } from "react";
 
 export const FacebookPosts = () => {
   useEffect(() => {
-    // Load Facebook SDK if not already loaded
-    if (!window.fbAsyncInit) {
+    // Load and initialize Facebook SDK
+    const loadFacebookSdk = () => {
+      // Check if SDK is already loaded
+      if (window.FB) {
+        window.FB.XFBML.parse();
+        return;
+      }
+
       window.fbAsyncInit = function () {
         FB.init({
-          appId: "1234567890", // Placeholder - Facebook SDK will work without this for embedded posts
           xfbml: true,
           version: "v21.0",
         });
-        // Parse any new Facebook plugins that may have been added
         FB.XFBML.parse();
       };
 
+      // Load the Facebook SDK script
       const script = document.createElement("script");
+      script.id = "facebook-jssdk";
       script.async = true;
       script.defer = true;
       script.crossOrigin = "anonymous";
       script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v21.0";
-      document.body.appendChild(script);
-    } else {
-      // SDK already loaded, just parse the new content
+      script.onload = () => {
+        // Parse after script loads
+        setTimeout(() => {
+          if (window.FB && window.FB.XFBML) {
+            window.FB.XFBML.parse();
+          }
+        }, 100);
+      };
+
+      const existingScript = document.getElementById("facebook-jssdk");
+      if (!existingScript) {
+        document.head.appendChild(script);
+      }
+    };
+
+    loadFacebookSdk();
+
+    // Fallback: parse again after a short delay to ensure all elements are loaded
+    const parseTimer = setTimeout(() => {
       if (window.FB && window.FB.XFBML) {
         window.FB.XFBML.parse();
       }
-    }
+    }, 1500);
+
+    return () => clearTimeout(parseTimer);
   }, []);
 
   const facebookPostUrls = [
@@ -54,7 +78,13 @@ export const FacebookPosts = () => {
               className="flex justify-center animate-slide-up"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="fb-video w-full max-w-lg" data-href={url} data-show-text="false" />
+              <div
+                className="fb-video w-full"
+                data-href={url}
+                data-width="500"
+                data-show-text="false"
+                data-allowfullscreen="true"
+              />
             </div>
           ))}
         </div>
