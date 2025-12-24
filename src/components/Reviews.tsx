@@ -63,7 +63,7 @@ export const Reviews = () => {
           <Carousel setApi={setApi} className="w-full">
             <CarouselContent>
               {reviews.map((review) => (
-                <CarouselItem key={review.id} className="md:basis-1/3">
+                <CarouselItem key={review.id} className="basis-full sm:basis-1/2 lg:basis-1/3">
                   <div className="facebook-review-card">
                     <div className="review-header">
                       <div className="reviewer-info">
