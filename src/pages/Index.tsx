@@ -6,6 +6,7 @@ import { Pricing } from "@/components/Pricing";
 import { MaintenancePackages } from "@/components/MaintenancePackages";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { Gallery } from "@/components/Gallery";
+import { FacebookPosts } from "@/components/FacebookPosts";
 import { WarrantyInfo } from "@/components/WarrantyInfo";
 import { Reviews } from "@/components/Reviews";
 import { Disclaimer } from "@/components/Disclaimer";
