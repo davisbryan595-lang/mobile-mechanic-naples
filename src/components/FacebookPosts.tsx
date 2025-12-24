@@ -1,62 +1,74 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+
+interface FacebookEmbed {
+  href: string;
+  id: string;
+}
 
 export const FacebookPosts = () => {
+  const embedsLoaded = useRef(false);
+
   useEffect(() => {
     // Load and initialize Facebook SDK
-    const loadFacebookSdk = () => {
-      // Check if SDK is already loaded
-      if (window.FB) {
-        window.FB.XFBML.parse();
-        return;
-      }
+    const loadFacebookSdk = async () => {
+      // Only load once
+      if (embedsLoaded.current) return;
 
-      window.fbAsyncInit = function () {
-        FB.init({
-          xfbml: true,
-          version: "v21.0",
-        });
-        FB.XFBML.parse();
-      };
+      return new Promise<void>((resolve) => {
+        window.fbAsyncInit = function () {
+          if (window.FB) {
+            window.FB.init({
+              appId: "",
+              xfbml: true,
+              version: "v21.0",
+            });
+            window.FB.XFBML.parse();
+            embedsLoaded.current = true;
+            resolve();
+          }
+        };
 
-      // Load the Facebook SDK script
-      const script = document.createElement("script");
-      script.id = "facebook-jssdk";
-      script.async = true;
-      script.defer = true;
-      script.crossOrigin = "anonymous";
-      script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v21.0";
-      script.onload = () => {
-        // Parse after script loads
+        // Load the Facebook SDK script
+        if (!document.getElementById("facebook-jssdk")) {
+          const script = document.createElement("script");
+          script.id = "facebook-jssdk";
+          script.async = true;
+          script.defer = true;
+          script.crossOrigin = "anonymous";
+          script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v21.0";
+          document.head.appendChild(script);
+        }
+
+        // Timeout fallback to ensure parsing happens
         setTimeout(() => {
           if (window.FB && window.FB.XFBML) {
             window.FB.XFBML.parse();
           }
-        }, 100);
-      };
-
-      const existingScript = document.getElementById("facebook-jssdk");
-      if (!existingScript) {
-        document.head.appendChild(script);
-      }
+          resolve();
+        }, 2000);
+      });
     };
 
     loadFacebookSdk();
-
-    // Fallback: parse again after a short delay to ensure all elements are loaded
-    const parseTimer = setTimeout(() => {
-      if (window.FB && window.FB.XFBML) {
-        window.FB.XFBML.parse();
-      }
-    }, 1500);
-
-    return () => clearTimeout(parseTimer);
   }, []);
 
-  const facebookPostUrls = [
-    "https://www.facebook.com/reel/1063659892535347",
-    "https://www.facebook.com/reel/1283700730200298/?s=single_unit",
-    "https://www.facebook.com/reel/1996593834239180/?s=single_unit",
-    "https://www.facebook.com/reel/3192988037542385/?s=single_unit",
+  const facebookEmbeds: FacebookEmbed[] = [
+    {
+      href: "https://www.facebook.com/reel/1063659892535347",
+      id: "fb-post-1",
+    },
+    {
+      href: "https://www.facebook.com/reel/1283700730200298/?s=single_unit",
+      id: "fb-post-2",
+    },
+    {
+      href: "https://www.facebook.com/reel/1996593834239180/?s=single_unit",
+      id: "fb-post-3",
+    },
+    {
+      href: "https://www.facebook.com/reel/3192988037542385/?s=single_unit",
+      id: "fb-post-4",
+    },
   ];
 
   return (
@@ -71,18 +83,18 @@ export const FacebookPosts = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {facebookPostUrls.map((url, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto justify-items-center">
+          {facebookEmbeds.map((embed, index) => (
             <div
-              key={index}
-              className="flex justify-center animate-slide-up"
+              key={embed.id}
+              className="w-full max-w-md animate-slide-up"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div
-                className="fb-video w-full"
-                data-href={url}
+                id={embed.id}
+                className="fb-video overflow-hidden"
+                data-href={embed.href}
                 data-width="500"
-                data-show-text="false"
                 data-allowfullscreen="true"
               />
             </div>
@@ -97,6 +109,11 @@ export const FacebookPosts = () => {
 declare global {
   interface Window {
     fbAsyncInit?: () => void;
-    FB: any;
+    FB?: {
+      init: (config: any) => void;
+      XFBML: {
+        parse: () => void;
+      };
+    };
   }
 }
