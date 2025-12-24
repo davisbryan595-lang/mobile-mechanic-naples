@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { ExternalLink } from "lucide-react";
+import { Facebook, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface FacebookPost {
@@ -11,31 +11,39 @@ interface FacebookPost {
 export const FacebookPosts = () => {
   useEffect(() => {
     // Load Facebook SDK for embedding
-    if (!window.FB) {
-      window.fbAsyncInit = function () {
-        FB.init({
-          appId: "",
-          xfbml: true,
-          version: "v21.0",
-        });
-      };
+    const loadFacebookSDK = () => {
+      if (document.getElementById("facebook-jssdk")) return;
 
       const script = document.createElement("script");
+      script.id = "facebook-jssdk";
       script.async = true;
       script.defer = true;
       script.crossOrigin = "anonymous";
       script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v21.0";
 
-      script.onload = () => {
-        if (window.FB && window.FB.XFBML) {
-          setTimeout(() => window.FB.XFBML.parse(), 100);
+      window.fbAsyncInit = () => {
+        if (window.FB) {
+          window.FB.init({
+            xfbml: true,
+            version: "v21.0",
+          });
+          window.FB.XFBML.parse();
         }
       };
 
       document.head.appendChild(script);
-    } else if (window.FB && window.FB.XFBML) {
-      window.FB.XFBML.parse();
-    }
+    };
+
+    // Give a small delay to ensure DOM is ready
+    setTimeout(() => {
+      loadFacebookSDK();
+      // Also try parsing after SDK loads
+      setTimeout(() => {
+        if (window.FB && window.FB.XFBML) {
+          window.FB.XFBML.parse();
+        }
+      }, 1000);
+    }, 100);
   }, []);
 
   const facebookPosts: FacebookPost[] = [
@@ -73,32 +81,73 @@ export const FacebookPosts = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {facebookPosts.map((post, index) => (
-            <div
-              key={post.id}
-              className="flex flex-col items-center justify-center animate-slide-up min-h-96 bg-card rounded-lg border border-border p-6"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div
-                className="fb-video w-full max-w-md"
-                data-href={post.url}
-                data-show-text="false"
-                data-width="500"
-              />
-              <div className="mt-4 w-full flex justify-center">
-                <Button
-                  asChild
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold gap-2"
-                >
-                  <a href={post.url} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="w-4 h-4" />
-                    Watch on Facebook
-                  </a>
-                </Button>
-              </div>
+            <div key={post.id} className="animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
+              <a
+                href={post.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block"
+              >
+                <div className="bg-card border-2 border-border rounded-lg overflow-hidden hover:border-primary transition-all duration-300 h-full flex flex-col">
+                  {/* Embed Container */}
+                  <div className="relative w-full bg-black/20 flex items-center justify-center overflow-hidden" style={{ minHeight: "300px" }}>
+                    <div
+                      className="fb-video w-full"
+                      data-href={post.url}
+                      data-show-text="false"
+                      data-width="500"
+                      data-allowfullscreen="true"
+                    />
+                    {/* Fallback play icon if embed doesn't load */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      <div className="bg-primary rounded-full p-4">
+                        <Play className="w-8 h-8 fill-primary-foreground text-primary-foreground" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className="p-6 flex flex-col items-center justify-center flex-grow">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Facebook className="w-5 h-5 text-primary" />
+                      <span className="font-orbitron font-bold text-foreground">Facebook Reel</span>
+                    </div>
+                    <Button
+                      className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold w-full"
+                      asChild
+                    >
+                      <a href={post.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                        Watch Now
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </a>
             </div>
           ))}
+        </div>
+
+        {/* Direct Links Section */}
+        <div className="mt-16 text-center">
+          <p className="text-muted-foreground mb-6">
+            Or visit us directly on Facebook
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            {facebookPosts.map((post) => (
+              <Button
+                key={`link-${post.id}`}
+                asChild
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-orbitron"
+              >
+                <a href={post.url} target="_blank" rel="noopener noreferrer">
+                  Reel {post.id.split("-")[1]}
+                </a>
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
     </section>
