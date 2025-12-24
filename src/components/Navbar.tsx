@@ -73,11 +73,11 @@ export const Navbar = () => {
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-12 text-sm">
               <div className="flex items-center gap-4">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.facebook.com/share/1GmBcnPumP/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <Facebook className="w-4 h-4" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.instagram.com/mobilemechanicservice_?igsh=MWtoNGl5NXhxNGgzcw%3D%3D" target="_blank" rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <Instagram className="w-4 h-4" />
                 </a>
