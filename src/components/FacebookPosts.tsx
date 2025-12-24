@@ -1,73 +1,63 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-interface FacebookEmbed {
-  href: string;
+interface FacebookPost {
   id: string;
+  url: string;
+  reelId: string;
 }
 
 export const FacebookPosts = () => {
-  const embedsLoaded = useRef(false);
-
   useEffect(() => {
-    // Load and initialize Facebook SDK
-    const loadFacebookSdk = async () => {
-      // Only load once
-      if (embedsLoaded.current) return;
+    // Load Facebook SDK for embedding
+    if (!window.FB) {
+      window.fbAsyncInit = function () {
+        FB.init({
+          appId: "",
+          xfbml: true,
+          version: "v21.0",
+        });
+      };
 
-      return new Promise<void>((resolve) => {
-        window.fbAsyncInit = function () {
-          if (window.FB) {
-            window.FB.init({
-              appId: "",
-              xfbml: true,
-              version: "v21.0",
-            });
-            window.FB.XFBML.parse();
-            embedsLoaded.current = true;
-            resolve();
-          }
-        };
+      const script = document.createElement("script");
+      script.async = true;
+      script.defer = true;
+      script.crossOrigin = "anonymous";
+      script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v21.0";
 
-        // Load the Facebook SDK script
-        if (!document.getElementById("facebook-jssdk")) {
-          const script = document.createElement("script");
-          script.id = "facebook-jssdk";
-          script.async = true;
-          script.defer = true;
-          script.crossOrigin = "anonymous";
-          script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v21.0";
-          document.head.appendChild(script);
+      script.onload = () => {
+        if (window.FB && window.FB.XFBML) {
+          setTimeout(() => window.FB.XFBML.parse(), 100);
         }
+      };
 
-        // Timeout fallback to ensure parsing happens
-        setTimeout(() => {
-          if (window.FB && window.FB.XFBML) {
-            window.FB.XFBML.parse();
-          }
-          resolve();
-        }, 2000);
-      });
-    };
-
-    loadFacebookSdk();
+      document.head.appendChild(script);
+    } else if (window.FB && window.FB.XFBML) {
+      window.FB.XFBML.parse();
+    }
   }, []);
 
-  const facebookEmbeds: FacebookEmbed[] = [
+  const facebookPosts: FacebookPost[] = [
     {
-      href: "https://www.facebook.com/reel/1063659892535347",
-      id: "fb-post-1",
+      id: "post-1",
+      url: "https://www.facebook.com/reel/1063659892535347",
+      reelId: "1063659892535347",
     },
     {
-      href: "https://www.facebook.com/reel/1283700730200298/?s=single_unit",
-      id: "fb-post-2",
+      id: "post-2",
+      url: "https://www.facebook.com/reel/1283700730200298/?s=single_unit",
+      reelId: "1283700730200298",
     },
     {
-      href: "https://www.facebook.com/reel/1996593834239180/?s=single_unit",
-      id: "fb-post-3",
+      id: "post-3",
+      url: "https://www.facebook.com/reel/1996593834239180/?s=single_unit",
+      reelId: "1996593834239180",
     },
     {
-      href: "https://www.facebook.com/reel/3192988037542385/?s=single_unit",
-      id: "fb-post-4",
+      id: "post-4",
+      url: "https://www.facebook.com/reel/3192988037542385/?s=single_unit",
+      reelId: "3192988037542385",
     },
   ];
 
@@ -83,20 +73,30 @@ export const FacebookPosts = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto justify-items-center">
-          {facebookEmbeds.map((embed, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          {facebookPosts.map((post, index) => (
             <div
-              key={embed.id}
-              className="w-full max-w-md animate-slide-up"
+              key={post.id}
+              className="flex flex-col items-center justify-center animate-slide-up min-h-96 bg-card rounded-lg border border-border p-6"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div
-                id={embed.id}
-                className="fb-video overflow-hidden"
-                data-href={embed.href}
+                className="fb-video w-full max-w-md"
+                data-href={post.url}
+                data-show-text="false"
                 data-width="500"
-                data-allowfullscreen="true"
               />
+              <div className="mt-4 w-full flex justify-center">
+                <Button
+                  asChild
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold gap-2"
+                >
+                  <a href={post.url} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="w-4 h-4" />
+                    Watch on Facebook
+                  </a>
+                </Button>
+              </div>
             </div>
           ))}
         </div>
