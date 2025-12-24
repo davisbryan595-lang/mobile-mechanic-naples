@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Facebook, Play } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { Facebook, Play, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface FacebookPost {
@@ -9,10 +9,21 @@ interface FacebookPost {
 }
 
 export const FacebookPosts = () => {
+  const timeoutRefs = useRef<NodeJS.Timeout[]>([]);
+
   useEffect(() => {
     // Load Facebook SDK for embedding
     const loadFacebookSDK = () => {
-      if (document.getElementById("facebook-jssdk")) return;
+      if (document.getElementById("facebook-jssdk")) {
+        // SDK already loaded, just parse
+        if (window.FB && window.FB.XFBML) {
+          const t1 = setTimeout(() => {
+            window.FB.XFBML.parse();
+          }, 500);
+          timeoutRefs.current.push(t1);
+        }
+        return;
+      }
 
       const script = document.createElement("script");
       script.id = "facebook-jssdk";
@@ -21,29 +32,40 @@ export const FacebookPosts = () => {
       script.crossOrigin = "anonymous";
       script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v21.0";
 
-      window.fbAsyncInit = () => {
-        if (window.FB) {
-          window.FB.init({
-            xfbml: true,
-            version: "v21.0",
-          });
-          window.FB.XFBML.parse();
-        }
-      };
+      // Only set fbAsyncInit if not already set
+      if (!window.fbAsyncInit) {
+        window.fbAsyncInit = () => {
+          if (window.FB) {
+            window.FB.init({
+              xfbml: true,
+              version: "v21.0",
+            });
+            window.FB.XFBML.parse();
+          }
+        };
+      }
 
       document.head.appendChild(script);
-    };
 
-    // Give a small delay to ensure DOM is ready
-    setTimeout(() => {
-      loadFacebookSDK();
-      // Also try parsing after SDK loads
-      setTimeout(() => {
+      // Fallback parse after SDK should be loaded
+      const t2 = setTimeout(() => {
         if (window.FB && window.FB.XFBML) {
           window.FB.XFBML.parse();
         }
-      }, 1000);
+      }, 2000);
+      timeoutRefs.current.push(t2);
+    };
+
+    // Give a small delay to ensure DOM is ready
+    const t3 = setTimeout(() => {
+      loadFacebookSDK();
     }, 100);
+    timeoutRefs.current.push(t3);
+
+    // Cleanup timeouts on unmount
+    return () => {
+      timeoutRefs.current.forEach((t) => clearTimeout(t));
+    };
   }, []);
 
   const facebookPosts: FacebookPost[] = [
