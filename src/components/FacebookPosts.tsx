@@ -105,58 +105,59 @@ export const FacebookPosts = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {facebookPosts.map((post, index) => (
-            <div key={post.id} className="animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
-              <a
-                href={post.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block"
-              >
-                <div className="bg-card border-2 border-border rounded-lg overflow-hidden hover:border-primary transition-all duration-300 h-full flex flex-col">
-                  {/* Embed Container */}
-                  <div className="relative w-full bg-black/20 flex items-center justify-center overflow-hidden" style={{ minHeight: "300px" }}>
-                    <div
-                      className="fb-video w-full"
-                      data-href={post.url}
-                      data-show-text="false"
-                      data-width="500"
-                      data-allowfullscreen="true"
-                    />
-                    {/* Fallback play icon if embed doesn't load */}
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                      <div className="bg-primary rounded-full p-4">
-                        <Play className="w-8 h-8 fill-primary-foreground text-primary-foreground" />
-                      </div>
-                    </div>
-                  </div>
+            <div
+              key={post.id}
+              className="animate-slide-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="bg-card border-2 border-border rounded-lg overflow-hidden hover:border-primary transition-all duration-300 h-full flex flex-col group">
+                {/* Embed Container */}
+                <div className="relative w-full bg-gradient-to-b from-black/40 to-black/20 flex items-center justify-center overflow-hidden" style={{ minHeight: "400px" }}>
+                  {/* Facebook Embed */}
+                  <div
+                    className="fb-video w-full"
+                    data-href={post.url}
+                    data-show-text="false"
+                    data-width="500"
+                    data-allowfullscreen="true"
+                  />
 
-                  {/* Card Footer */}
-                  <div className="p-6 flex flex-col items-center justify-center flex-grow">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Facebook className="w-5 h-5 text-primary" />
-                      <span className="font-orbitron font-bold text-foreground">Facebook Reel</span>
+                  {/* Fallback/Overlay */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <div className="bg-primary rounded-full p-4 mb-4">
+                      <Play className="w-8 h-8 fill-primary-foreground text-primary-foreground" />
                     </div>
-                    <Button
-                      className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold w-full"
-                      asChild
-                    >
-                      <a href={post.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-                        Watch Now
-                      </a>
-                    </Button>
+                    <p className="text-white font-orbitron font-bold text-sm">Click to Watch</p>
                   </div>
                 </div>
-              </a>
+
+                {/* Card Footer */}
+                <div className="p-6 flex flex-col items-center justify-center flex-grow gap-4">
+                  <div className="flex items-center gap-2">
+                    <Facebook className="w-5 h-5 text-primary" />
+                    <span className="font-orbitron font-bold text-foreground">Facebook Reel</span>
+                  </div>
+                  <Button
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold w-full gap-2"
+                    asChild
+                  >
+                    <a href={post.url} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-4 h-4" />
+                      Watch on Facebook
+                    </a>
+                  </Button>
+                </div>
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Direct Links Section */}
+        {/* Quick Access Links */}
         <div className="mt-16 text-center">
-          <p className="text-muted-foreground mb-6">
-            Or visit us directly on Facebook
+          <p className="text-muted-foreground mb-8 font-orbitron">
+            View all reels directly
           </p>
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-3 justify-center">
             {facebookPosts.map((post) => (
               <Button
                 key={`link-${post.id}`}
