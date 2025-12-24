@@ -25,6 +25,7 @@ const Index = () => {
         <MaintenancePackages />
         <WhyChooseUs />
         <Gallery />
+        <FacebookPosts />
         <WarrantyInfo />
         <Reviews />
         <Disclaimer />
