@@ -70,7 +70,7 @@ export const FacebookPosts = () => {
   ];
 
   return (
-    <section className="py-20 bg-background">
+    <section id="facebook-posts" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-orbitron text-4xl md:text-5xl font-bold mb-4">
