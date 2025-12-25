@@ -9,27 +9,29 @@ export const Gallery = () => {
 
   useEffect(() => {
     if (activeTab === "instagram") {
-      // Load Instagram embed script
-      const script = document.createElement("script");
-      script.src = "https://www.instagram.com/embed.js";
-      script.async = true;
-      document.body.appendChild(script);
-
-      script.onload = () => {
-        // Process embeds after script loads
+      // Ensure Instagram embed script is loaded
+      if (!(window as any).instgrm) {
+        const script = document.createElement("script");
+        script.src = "https://www.instagram.com/embed.js";
+        script.async = true;
+        document.body.appendChild(script);
+      } else {
+        // Script already loaded, process embeds
         setTimeout(() => {
-          if ((window as any).instgrm) {
+          if ((window as any).instgrm && (window as any).instgrm.Embed) {
             (window as any).instgrm.Embed.process();
           }
         }, 100);
-      };
+      }
 
-      return () => {
-        // Cleanup: remove script if needed
-        if (document.body.contains(script)) {
-          document.body.removeChild(script);
+      // Also try to process after a delay to ensure DOM is ready
+      const processTimeout = setTimeout(() => {
+        if ((window as any).instgrm && (window as any).instgrm.Embed) {
+          (window as any).instgrm.Embed.process();
         }
-      };
+      }, 500);
+
+      return () => clearTimeout(processTimeout);
     }
   }, [activeTab]);
 
