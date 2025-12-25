@@ -8,8 +8,28 @@ export const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (activeTab === "instagram" && (window as any).instgrm) {
-      (window as any).instgrm.Embed.process();
+    if (activeTab === "instagram") {
+      // Load Instagram embed script
+      const script = document.createElement("script");
+      script.src = "https://www.instagram.com/embed.js";
+      script.async = true;
+      document.body.appendChild(script);
+
+      script.onload = () => {
+        // Process embeds after script loads
+        setTimeout(() => {
+          if ((window as any).instgrm) {
+            (window as any).instgrm.Embed.process();
+          }
+        }, 100);
+      };
+
+      return () => {
+        // Cleanup: remove script if needed
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
+      };
     }
   }, [activeTab]);
 
