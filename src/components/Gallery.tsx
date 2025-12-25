@@ -8,37 +8,28 @@ interface InstagramEmbedWrapperProps {
 }
 
 const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (containerRef.current && (window as any).instgrm) {
-      try {
-        (window as any).instgrm.Embed.process();
-      } catch (e) {
-        console.log("Instagram embed processing:", e);
-      }
-    }
-  }, []);
+  const url = `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`;
 
   return (
     <div
-      ref={containerRef}
-      className="flex justify-center animate-slide-up"
+      className="flex flex-col items-center justify-center p-6 bg-gradient-to-b from-background to-card rounded-lg border-2 border-border hover:border-primary transition-all animate-slide-up"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <blockquote
-        className="instagram-media"
-        data-instgrm-permalink={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
-        data-instgrm-version="14"
+      <Instagram className="w-12 h-12 text-primary mb-4" />
+      <h3 className="font-rajdhani font-bold text-lg text-center mb-2">
+        Instagram Post {index + 1}
+      </h3>
+      <p className="text-muted-foreground text-sm text-center mb-4 max-w-xs">
+        Check out our latest post on Instagram
+      </p>
+      <Button
+        asChild
+        className="bg-primary text-primary-foreground hover:bg-primary/90"
       >
-        <a
-          href={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          View Instagram Post
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          View Post on Instagram
         </a>
-      </blockquote>
+      </Button>
     </div>
   );
 };
