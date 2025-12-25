@@ -9,46 +9,80 @@ interface InstagramEmbedWrapperProps {
 
 const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [embedProcessed, setEmbedProcessed] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Clear previous content
-    containerRef.current.innerHTML = "";
-
-    // Create blockquote element
-    const blockquote = document.createElement("blockquote");
-    blockquote.className = "instagram-media";
-    blockquote.setAttribute(
-      "data-instgrm-permalink",
-      `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`
-    );
-    blockquote.setAttribute("data-instgrm-version", "14");
-
-    // Create link inside blockquote
-    const link = document.createElement("a");
-    link.href = `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = `View Instagram Post on Instagram`;
-
-    blockquote.appendChild(link);
-    containerRef.current.appendChild(blockquote);
-
-    // Process with Instagram's embed script
-    setTimeout(() => {
+    // Try to load Instagram embed
+    const loadEmbed = () => {
       if ((window as any).instgrm && (window as any).instgrm.Embed) {
-        (window as any).instgrm.Embed.process();
+        try {
+          // Clear and recreate
+          containerRef.current!.innerHTML = "";
+
+          const blockquote = document.createElement("blockquote");
+          blockquote.className = "instagram-media";
+          blockquote.setAttribute(
+            "data-instgrm-permalink",
+            `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`
+          );
+          blockquote.setAttribute("data-instgrm-version", "14");
+
+          const link = document.createElement("a");
+          link.href = `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = "View on Instagram";
+
+          blockquote.appendChild(link);
+          containerRef.current!.appendChild(blockquote);
+
+          // Process the embed
+          (window as any).instgrm.Embed.process();
+          setEmbedProcessed(true);
+        } catch (e) {
+          console.log("Instagram embed error:", e);
+          setEmbedProcessed(false);
+        }
       }
-    }, 100);
+    };
+
+    // Try immediately and after a delay
+    loadEmbed();
+    const timer = setTimeout(loadEmbed, 500);
+
+    return () => clearTimeout(timer);
   }, [postId]);
+
+  const url = `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`;
 
   return (
     <div
       ref={containerRef}
       className="flex justify-center animate-slide-up"
       style={{ animationDelay: `${index * 0.1}s` }}
-    />
+    >
+      {!embedProcessed && (
+        <div className="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-background to-card rounded-lg border-2 border-border min-w-sm">
+          <Instagram className="w-16 h-16 text-primary mb-4" />
+          <h3 className="font-rajdhani font-bold text-lg text-center mb-2">
+            Instagram Post
+          </h3>
+          <p className="text-muted-foreground text-sm text-center mb-4 max-w-xs">
+            Visit our Instagram to see this post
+          </p>
+          <Button
+            asChild
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            <a href={url} target="_blank" rel="noopener noreferrer">
+              View on Instagram →
+            </a>
+          </Button>
+        </div>
+      )}
+    </div>
   );
 };
 
