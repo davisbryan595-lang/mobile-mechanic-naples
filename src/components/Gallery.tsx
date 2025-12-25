@@ -406,28 +406,41 @@ export const Gallery = () => {
 
           {/* Instagram Posts Tab */}
           {activeTab === "instagram" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {instagramPosts.map((post, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-center justify-center p-6 bg-border rounded-lg border-2 border-border hover:border-primary transition-all animate-slide-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <Instagram className="w-12 h-12 text-primary mb-4" />
-                  <h3 className="font-rajdhani font-bold text-lg text-center mb-4">
-                    Instagram Post {index + 1}
-                  </h3>
-                  <Button
-                    asChild
-                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                {instagramPostIds.map((postId, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-center rounded-lg border-2 border-border hover:border-primary transition-all animate-slide-up overflow-hidden"
+                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <a href={post} target="_blank" rel="noopener noreferrer">
-                      View on Instagram
-                    </a>
-                  </Button>
-                </div>
-              ))}
-            </div>
+                    <blockquote
+                      className="instagram-media"
+                      data-instgrm-permalink={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
+                      data-instgrm-version="14"
+                    >
+                      <a
+                        href={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:text-primary/80"
+                      >
+                        View Instagram Post {index + 1}
+                      </a>
+                    </blockquote>
+                  </div>
+                ))}
+              </div>
+              <script
+                async
+                src="//www.instagram.com/embed.js"
+                onLoad={() => {
+                  if ((window as any).instgrm) {
+                    (window as any).instgrm.Embed.process();
+                  }
+                }}
+              ></script>
+            </>
           )}
         </div>
       </section>
