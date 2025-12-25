@@ -426,29 +426,23 @@ export const Gallery = () => {
 
           {/* Instagram Posts Tab */}
           {activeTab === "instagram" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
               {instagramPostIds.map((postId, index) => (
-                <div
+                <blockquote
                   key={index}
-                  className="flex justify-center rounded-lg border-2 border-border hover:border-primary transition-all animate-slide-up overflow-visible"
+                  className="instagram-media animate-slide-up"
+                  data-instgrm-permalink={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
+                  data-instgrm-version="14"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <blockquote
-                    className="instagram-media"
-                    data-instgrm-permalink={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
-                    data-instgrm-version="14"
-                    style={{ maxWidth: "540px" }}
+                  <a
+                    href={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    <a
-                      href={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:text-primary/80"
-                    >
-                      View Instagram Post {index + 1}
-                    </a>
-                  </blockquote>
-                </div>
+                    Loading Instagram Post
+                  </a>
+                </blockquote>
               ))}
             </div>
           )}
