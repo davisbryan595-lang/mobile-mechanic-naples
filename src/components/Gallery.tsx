@@ -8,32 +8,103 @@ interface InstagramEmbedWrapperProps {
 }
 
 const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [showEmbed, setShowEmbed] = useState(true);
   const url = `https://www.instagram.com/p/${postId}/`;
+
+  useEffect(() => {
+    const attemptEmbed = () => {
+      if (!containerRef.current) return;
+
+      try {
+        // Clear container
+        containerRef.current.innerHTML = "";
+
+        // Create blockquote
+        const blockquote = document.createElement("blockquote");
+        blockquote.className = "instagram-media";
+        blockquote.setAttribute("data-instgrm-permalink", `${url}?utm_source=ig_embed&utm_campaign=loading`);
+        blockquote.setAttribute("data-instgrm-version", "14");
+
+        const link = document.createElement("a");
+        link.href = `${url}?utm_source=ig_embed&utm_campaign=loading`;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "View on Instagram";
+
+        blockquote.appendChild(link);
+        containerRef.current.appendChild(blockquote);
+
+        // Process with Instagram script multiple times
+        const processEmbed = () => {
+          if ((window as any).instgrm && (window as any).instgrm.Embed) {
+            try {
+              (window as any).instgrm.Embed.process();
+              setShowEmbed(true);
+              return true;
+            } catch (e) {
+              return false;
+            }
+          }
+          return false;
+        };
+
+        // Try processing immediately and with delays
+        if (processEmbed()) return;
+
+        setTimeout(() => processEmbed(), 100);
+        setTimeout(() => processEmbed(), 500);
+        setTimeout(() => processEmbed(), 1000);
+
+        // If script not loaded, load it
+        if (!(window as any).instgrm) {
+          const script = document.createElement("script");
+          script.src = "https://www.instagram.com/embed.js";
+          script.async = true;
+          script.onload = () => {
+            setTimeout(() => processEmbed(), 200);
+          };
+          document.body.appendChild(script);
+        }
+      } catch (e) {
+        console.error("Instagram embed error:", e);
+        setShowEmbed(false);
+      }
+    };
+
+    // Attempt embed
+    const timer = setTimeout(attemptEmbed, 100);
+    return () => clearTimeout(timer);
+  }, [postId, url]);
 
   return (
     <div
-      className="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-background via-card to-background rounded-xl border-2 border-border hover:border-primary transition-all transform hover:scale-105 duration-300 animate-slide-up min-h-64 shadow-lg"
+      ref={containerRef}
+      className="flex justify-center animate-slide-up"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 mb-4">
-        <Instagram className="w-10 h-10 text-primary" />
-      </div>
-      <h3 className="font-rajdhani font-bold text-xl text-center mb-3">
-        Instagram Post {index + 1}
-      </h3>
-      <p className="text-muted-foreground text-sm text-center mb-6 max-w-xs leading-relaxed">
-        Follow us on Instagram to see our latest mobile mechanic service updates, behind-the-scenes content, and customer stories.
-      </p>
-      <Button
-        asChild
-        className="bg-gradient-primary text-white hover:opacity-90 font-bold px-8 py-2 rounded-lg transition-all transform hover:scale-105"
-      >
-        <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-          View on Instagram
-          <span className="text-lg">↗</span>
-        </a>
-      </Button>
-      <p className="text-muted-foreground text-xs mt-4">@yourbusiness</p>
+      {!showEmbed && (
+        <div className="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-background via-card to-background rounded-xl border-2 border-border hover:border-primary transition-all transform hover:scale-105 duration-300 min-h-64 shadow-lg w-full max-w-sm">
+          <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 mb-4">
+            <Instagram className="w-10 h-10 text-primary" />
+          </div>
+          <h3 className="font-rajdhani font-bold text-xl text-center mb-3">
+            Instagram Post {index + 1}
+          </h3>
+          <p className="text-muted-foreground text-sm text-center mb-6 max-w-xs leading-relaxed">
+            Follow us on Instagram to see our latest mobile mechanic service updates and customer stories.
+          </p>
+          <Button
+            asChild
+            className="bg-gradient-primary text-white hover:opacity-90 font-bold px-8 py-2 rounded-lg transition-all transform hover:scale-105"
+          >
+            <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+              View on Instagram
+              <span className="text-lg">↗</span>
+            </a>
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
