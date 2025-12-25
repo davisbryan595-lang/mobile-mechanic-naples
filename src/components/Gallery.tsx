@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, Facebook, Instagram } from "lucide-react";
 
 export const Gallery = () => {
   const [showAll, setShowAll] = useState(false);
