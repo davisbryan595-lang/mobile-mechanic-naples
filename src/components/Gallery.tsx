@@ -410,23 +410,13 @@ export const Gallery = () => {
 
           {/* Instagram Posts Tab */}
           {activeTab === "instagram" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {instagramPostIds.map((postId, index) => (
-                <blockquote
+                <InstagramEmbedWrapper
                   key={index}
-                  className="instagram-media animate-slide-up"
-                  data-instgrm-permalink={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
-                  data-instgrm-version="14"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <a
-                    href={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Loading Instagram Post
-                  </a>
-                </blockquote>
+                  postId={postId}
+                  index={index}
+                />
               ))}
             </div>
           )}
