@@ -284,15 +284,60 @@ export const Gallery = () => {
 
   return (
     <>
-      <section className="py-20 bg-card">
+      <section id="gallery" className="py-20 bg-card">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold mb-4">
-              Our <span className="text-primary text-glow">Work</span>
+              Gallery & <span className="text-primary text-glow">Social Media</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Professional service delivered at your location
             </p>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex justify-center gap-4 mb-12 flex-wrap">
+            <button
+              onClick={() => {
+                setActiveTab("work");
+                setShowAll(false);
+              }}
+              className={`px-6 py-2 rounded-lg font-rajdhani font-medium transition-all ${
+                activeTab === "work"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-border text-foreground hover:bg-border/80"
+              }`}
+            >
+              Our Work
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab("facebook");
+                setShowAll(false);
+              }}
+              className={`px-6 py-2 rounded-lg font-rajdhani font-medium transition-all flex items-center gap-2 ${
+                activeTab === "facebook"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-border text-foreground hover:bg-border/80"
+              }`}
+            >
+              <Facebook className="w-4 h-4" />
+              Facebook
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab("instagram");
+                setShowAll(false);
+              }}
+              className={`px-6 py-2 rounded-lg font-rajdhani font-medium transition-all flex items-center gap-2 ${
+                activeTab === "instagram"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-border text-foreground hover:bg-border/80"
+              }`}
+            >
+              <Instagram className="w-4 h-4" />
+              Instagram
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
