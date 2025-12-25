@@ -340,34 +340,91 @@ export const Gallery = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {displayedImages.map((image, index) => (
-              <div
-                key={index}
-                className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-                onClick={() => setSelectedImage(image.src)}
-              >
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
+          {/* Our Work Tab */}
+          {activeTab === "work" && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {displayedImages.map((image, index) => (
+                  <div
+                    key={index}
+                    className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                    onClick={() => setSelectedImage(image.src)}
+                  >
+                    <div className="aspect-[4/3] overflow-hidden">
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {!showAll && (
-            <div className="flex justify-center mt-12">
-              <Button
-                onClick={() => setShowAll(true)}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold text-lg glow-orange-strong"
-                size="lg"
-              >
-                View All Gallery
-              </Button>
+              {!showAll && (
+                <div className="flex justify-center mt-12">
+                  <Button
+                    onClick={() => setShowAll(true)}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold text-lg glow-orange-strong"
+                    size="lg"
+                  >
+                    View All Gallery
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Facebook Posts Tab */}
+          {activeTab === "facebook" && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {facebookPosts.map((post, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center justify-center p-6 bg-border rounded-lg border-2 border-border hover:border-primary transition-all animate-slide-up"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <Facebook className="w-12 h-12 text-primary mb-4" />
+                  <h3 className="font-rajdhani font-bold text-lg text-center mb-4">
+                    Facebook Reel {index + 1}
+                  </h3>
+                  <Button
+                    asChild
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    <a href={post} target="_blank" rel="noopener noreferrer">
+                      View on Facebook
+                    </a>
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Instagram Posts Tab */}
+          {activeTab === "instagram" && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {instagramPosts.map((post, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center justify-center p-6 bg-border rounded-lg border-2 border-border hover:border-primary transition-all animate-slide-up"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <Instagram className="w-12 h-12 text-primary mb-4" />
+                  <h3 className="font-rajdhani font-bold text-lg text-center mb-4">
+                    Instagram Post {index + 1}
+                  </h3>
+                  <Button
+                    asChild
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    <a href={post} target="_blank" rel="noopener noreferrer">
+                      View on Instagram
+                    </a>
+                  </Button>
+                </div>
+              ))}
             </div>
           )}
         </div>
