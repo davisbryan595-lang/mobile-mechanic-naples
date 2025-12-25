@@ -8,80 +8,32 @@ interface InstagramEmbedWrapperProps {
 }
 
 const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [embedProcessed, setEmbedProcessed] = useState(false);
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    // Try to load Instagram embed
-    const loadEmbed = () => {
-      if ((window as any).instgrm && (window as any).instgrm.Embed) {
-        try {
-          // Clear and recreate
-          containerRef.current!.innerHTML = "";
-
-          const blockquote = document.createElement("blockquote");
-          blockquote.className = "instagram-media";
-          blockquote.setAttribute(
-            "data-instgrm-permalink",
-            `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`
-          );
-          blockquote.setAttribute("data-instgrm-version", "14");
-
-          const link = document.createElement("a");
-          link.href = `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = "View on Instagram";
-
-          blockquote.appendChild(link);
-          containerRef.current!.appendChild(blockquote);
-
-          // Process the embed
-          (window as any).instgrm.Embed.process();
-          setEmbedProcessed(true);
-        } catch (e) {
-          console.log("Instagram embed error:", e);
-          setEmbedProcessed(false);
-        }
-      }
-    };
-
-    // Try immediately and after a delay
-    loadEmbed();
-    const timer = setTimeout(loadEmbed, 500);
-
-    return () => clearTimeout(timer);
-  }, [postId]);
-
-  const url = `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`;
+  const url = `https://www.instagram.com/p/${postId}/`;
 
   return (
     <div
-      ref={containerRef}
-      className="flex justify-center animate-slide-up"
+      className="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-background via-card to-background rounded-xl border-2 border-border hover:border-primary transition-all transform hover:scale-105 duration-300 animate-slide-up min-h-64 shadow-lg"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      {!embedProcessed && (
-        <div className="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-background to-card rounded-lg border-2 border-border min-w-sm">
-          <Instagram className="w-16 h-16 text-primary mb-4" />
-          <h3 className="font-rajdhani font-bold text-lg text-center mb-2">
-            Instagram Post
-          </h3>
-          <p className="text-muted-foreground text-sm text-center mb-4 max-w-xs">
-            Visit our Instagram to see this post
-          </p>
-          <Button
-            asChild
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
-          >
-            <a href={url} target="_blank" rel="noopener noreferrer">
-              View on Instagram →
-            </a>
-          </Button>
-        </div>
-      )}
+      <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 mb-4">
+        <Instagram className="w-10 h-10 text-primary" />
+      </div>
+      <h3 className="font-rajdhani font-bold text-xl text-center mb-3">
+        Instagram Post {index + 1}
+      </h3>
+      <p className="text-muted-foreground text-sm text-center mb-6 max-w-xs leading-relaxed">
+        Follow us on Instagram to see our latest mobile mechanic service updates, behind-the-scenes content, and customer stories.
+      </p>
+      <Button
+        asChild
+        className="bg-gradient-primary text-white hover:opacity-90 font-bold px-8 py-2 rounded-lg transition-all transform hover:scale-105"
+      >
+        <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+          View on Instagram
+          <span className="text-lg">↗</span>
+        </a>
+      </Button>
+      <p className="text-muted-foreground text-xs mt-4">@yourbusiness</p>
     </div>
   );
 };
