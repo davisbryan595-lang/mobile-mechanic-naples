@@ -48,15 +48,29 @@ export const Gallery = () => {
   const [showAll, setShowAll] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  // Load Instagram embed script once on component mount
   useEffect(() => {
-    // Load Instagram embed script globally
-    if (!(window as any).instgrm && activeTab === "instagram") {
+    // Load the Instagram embed script
+    let scriptElement = document.getElementById("instagram-embed");
+    if (!scriptElement) {
       const script = document.createElement("script");
+      script.id = "instagram-embed";
       script.src = "https://www.instagram.com/embed.js";
       script.async = true;
       document.body.appendChild(script);
     }
   }, []);
+
+  // Process embeds when Instagram tab becomes active
+  useEffect(() => {
+    if (activeTab === "instagram") {
+      setTimeout(() => {
+        if ((window as any).instgrm && (window as any).instgrm.Embed) {
+          (window as any).instgrm.Embed.process();
+        }
+      }, 200);
+    }
+  }, [activeTab]);
 
   const facebookPostIds = [
     "1063659892535347",
