@@ -384,25 +384,21 @@ export const Gallery = () => {
 
           {/* Facebook Posts Tab */}
           {activeTab === "facebook" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {facebookPosts.map((post, index) => (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {facebookPostIds.map((postId, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center justify-center p-6 bg-border rounded-lg border-2 border-border hover:border-primary transition-all animate-slide-up"
+                  className="flex flex-col items-center justify-center rounded-lg border-2 border-border hover:border-primary transition-all animate-slide-up overflow-hidden"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <Facebook className="w-12 h-12 text-primary mb-4" />
-                  <h3 className="font-rajdhani font-bold text-lg text-center mb-4">
-                    Facebook Reel {index + 1}
-                  </h3>
-                  <Button
-                    asChild
-                    className="bg-primary text-primary-foreground hover:bg-primary/90"
-                  >
-                    <a href={post} target="_blank" rel="noopener noreferrer">
-                      View on Facebook
-                    </a>
-                  </Button>
+                  <iframe
+                    src={`https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/reel/${postId}/&width=500&show_text=true`}
+                    width="100%"
+                    height="500"
+                    style={{ border: "none", overflow: "hidden" }}
+                    allowFullScreen={true}
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  ></iframe>
                 </div>
               ))}
             </div>
