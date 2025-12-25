@@ -1,6 +1,47 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { X, Facebook, Instagram } from "lucide-react";
+
+interface InstagramEmbedWrapperProps {
+  postId: string;
+  index: number;
+}
+
+const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current && (window as any).instgrm) {
+      try {
+        (window as any).instgrm.Embed.process();
+      } catch (e) {
+        console.log("Instagram embed processing:", e);
+      }
+    }
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="flex justify-center animate-slide-up"
+      style={{ animationDelay: `${index * 0.1}s` }}
+    >
+      <blockquote
+        className="instagram-media"
+        data-instgrm-permalink={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
+        data-instgrm-version="14"
+      >
+        <a
+          href={`https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View Instagram Post
+        </a>
+      </blockquote>
+    </div>
+  );
+};
 
 export const Gallery = () => {
   const [activeTab, setActiveTab] = useState<"work" | "facebook" | "instagram">("work");
