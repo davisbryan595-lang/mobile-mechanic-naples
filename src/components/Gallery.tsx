@@ -8,29 +8,47 @@ interface InstagramEmbedWrapperProps {
 }
 
 const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
-  const url = `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`;
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Clear previous content
+    containerRef.current.innerHTML = "";
+
+    // Create blockquote element
+    const blockquote = document.createElement("blockquote");
+    blockquote.className = "instagram-media";
+    blockquote.setAttribute(
+      "data-instgrm-permalink",
+      `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`
+    );
+    blockquote.setAttribute("data-instgrm-version", "14");
+
+    // Create link inside blockquote
+    const link = document.createElement("a");
+    link.href = `https://www.instagram.com/p/${postId}/?utm_source=ig_embed&utm_campaign=loading`;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = `View Instagram Post on Instagram`;
+
+    blockquote.appendChild(link);
+    containerRef.current.appendChild(blockquote);
+
+    // Process with Instagram's embed script
+    setTimeout(() => {
+      if ((window as any).instgrm && (window as any).instgrm.Embed) {
+        (window as any).instgrm.Embed.process();
+      }
+    }, 100);
+  }, [postId]);
 
   return (
     <div
-      className="flex flex-col items-center justify-center p-6 bg-gradient-to-b from-background to-card rounded-lg border-2 border-border hover:border-primary transition-all animate-slide-up"
+      ref={containerRef}
+      className="flex justify-center animate-slide-up"
       style={{ animationDelay: `${index * 0.1}s` }}
-    >
-      <Instagram className="w-12 h-12 text-primary mb-4" />
-      <h3 className="font-rajdhani font-bold text-lg text-center mb-2">
-        Instagram Post {index + 1}
-      </h3>
-      <p className="text-muted-foreground text-sm text-center mb-4 max-w-xs">
-        Check out our latest post on Instagram
-      </p>
-      <Button
-        asChild
-        className="bg-primary text-primary-foreground hover:bg-primary/90"
-      >
-        <a href={url} target="_blank" rel="noopener noreferrer">
-          View Post on Instagram
-        </a>
-      </Button>
-    </div>
+    />
   );
 };
 
