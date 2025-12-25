@@ -59,13 +59,14 @@ export const Gallery = () => {
 
   // Load Instagram embed script once on component mount
   useEffect(() => {
-    // Load the Instagram embed script
-    let scriptElement = document.getElementById("instagram-embed");
-    if (!scriptElement) {
+    // Check if script is already loaded
+    if (!(window as any).instgrm) {
       const script = document.createElement("script");
-      script.id = "instagram-embed";
       script.src = "https://www.instagram.com/embed.js";
       script.async = true;
+      script.onload = () => {
+        console.log("Instagram embed script loaded");
+      };
       document.body.appendChild(script);
     }
   }, []);
@@ -73,11 +74,13 @@ export const Gallery = () => {
   // Process embeds when Instagram tab becomes active
   useEffect(() => {
     if (activeTab === "instagram") {
-      setTimeout(() => {
+      // Give the DOM time to render, then process
+      const timer = setTimeout(() => {
         if ((window as any).instgrm && (window as any).instgrm.Embed) {
           (window as any).instgrm.Embed.process();
         }
-      }, 200);
+      }, 300);
+      return () => clearTimeout(timer);
     }
   }, [activeTab]);
 
