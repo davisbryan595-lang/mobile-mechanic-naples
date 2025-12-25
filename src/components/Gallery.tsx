@@ -3,8 +3,23 @@ import { Button } from "@/components/ui/button";
 import { X, Facebook, Instagram } from "lucide-react";
 
 export const Gallery = () => {
+  const [activeTab, setActiveTab] = useState<"work" | "facebook" | "instagram">("work");
   const [showAll, setShowAll] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const facebookPosts = [
+    "https://www.facebook.com/reel/1063659892535347/?s=single_unit",
+    "https://www.facebook.com/reel/1283700730200298/?s=single_unit",
+    "https://www.facebook.com/reel/1996593834239180/?s=single_unit",
+    "https://www.facebook.com/reel/3192988037542385/?s=single_unit",
+  ];
+
+  const instagramPosts = [
+    "https://www.instagram.com/p/DSp-7FDEYB7/",
+    "https://www.instagram.com/p/DSi9s1uETxF/",
+    "https://www.instagram.com/p/DSi9nv2EVSJ/",
+    "https://www.instagram.com/p/DSfKhgYEbpB/",
+  ];
 
   const allImages = [
     {
