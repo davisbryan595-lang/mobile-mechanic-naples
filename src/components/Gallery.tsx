@@ -8,32 +8,14 @@ export const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (activeTab === "instagram") {
-      // Ensure Instagram embed script is loaded
-      if (!(window as any).instgrm) {
-        const script = document.createElement("script");
-        script.src = "https://www.instagram.com/embed.js";
-        script.async = true;
-        document.body.appendChild(script);
-      } else {
-        // Script already loaded, process embeds
-        setTimeout(() => {
-          if ((window as any).instgrm && (window as any).instgrm.Embed) {
-            (window as any).instgrm.Embed.process();
-          }
-        }, 100);
-      }
-
-      // Also try to process after a delay to ensure DOM is ready
-      const processTimeout = setTimeout(() => {
-        if ((window as any).instgrm && (window as any).instgrm.Embed) {
-          (window as any).instgrm.Embed.process();
-        }
-      }, 500);
-
-      return () => clearTimeout(processTimeout);
+    // Load Instagram embed script globally
+    if (!(window as any).instgrm && activeTab === "instagram") {
+      const script = document.createElement("script");
+      script.src = "https://www.instagram.com/embed.js";
+      script.async = true;
+      document.body.appendChild(script);
     }
-  }, [activeTab]);
+  }, []);
 
   const facebookPostIds = [
     "1063659892535347",
