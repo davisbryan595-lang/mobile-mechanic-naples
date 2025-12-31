@@ -33,6 +33,7 @@ const Index = () => {
       </main>
       <Footer />
       <ChatBot />
+      <AccessibilityWidget />
     </div>
   );
 };
