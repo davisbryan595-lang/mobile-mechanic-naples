@@ -181,7 +181,15 @@ export const ChatBot = () => {
     <div className="fixed bottom-6 right-6 z-50 font-rajdhani">
       {/* Chat Window */}
       {isOpen && (
-        <div className="chat-window-mobile absolute bottom-20 right-0 w-full sm:w-96 bg-white rounded-lg shadow-2xl flex flex-col max-h-96 overflow-hidden" style={{ animation: "slideUpAnimation 0.3s ease-out" }}>
+        <div
+          className="chat-window-mobile absolute bottom-20 right-0 bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden"
+          style={{
+            animation: "slideUpAnimation 0.3s ease-out",
+            width: "100%",
+            maxWidth: "24rem",
+            maxHeight: "500px",
+          }}
+        >
           {/* Header */}
           <div className="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
             <h2 className="font-orbitron font-bold text-lg">Mobile Mechanic Helper</h2>
