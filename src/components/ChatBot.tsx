@@ -24,6 +24,12 @@ export const ChatBot = () => {
 
   // FAQ database with keywords and responses (prioritized by specificity)
   const faqDatabase: FAQItem[] = [
+    // Identity/introduction questions - high priority
+    {
+      keywords: ["who", "you", "who are you", "who is this", "what's your name", "introduce", "yourself", "name"],
+      response:
+        "👋 **Hi! I'm Bryan Davis**\n\nI'm an AI assistant powered by **Linkage Digital**, here to help you with all your mobile mechanic needs in Southwest Florida.\n\nI can help you with:\n💰 Pricing & service details\n📍 Service areas & locations\n🔧 Types of repairs we offer\n📅 Booking & scheduling\n✅ Warranty information\n\nWhat would you like to know?",
+    },
     // High priority - specific pricing/package queries
     {
       keywords: ["price", "pricing", "cost", "estimate", "quote", "how much", "package", "packages"],
