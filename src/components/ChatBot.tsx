@@ -87,7 +87,7 @@ export const ChatBot = () => {
 
   // Welcome message
   const welcomeMessage =
-    "Hi! I'm here to help with mobile mechanic services in Southwest Florida. Ask about pricing, locations, booking, or anything from our site! I'm Bryan Davis, an AI assistant powered by Linkage Digital.";
+    "👋 **Hi there! I'm Bryan Davis** - an AI assistant powered by Linkage Digital.\n\nI'm here to help with all your mobile mechanic needs in Southwest Florida! Feel free to ask me about:\n\n💰 **Pricing & Packages** - Oil changes, brakes, A/C, batteries & more\n📍 **Service Areas** - Naples, Bonita Springs, Estero, Fort Myers, Lehigh\n🔧 **Services** - Diagnostics, repairs, detailing, restoration\n📅 **Booking** - Same-day appointments often available\n✅ **Warranty** - 6-month coverage on all labor\n\nWhat can I help you with today?";
 
   // Auto-scroll to latest message
   useEffect(() => {
