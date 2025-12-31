@@ -283,8 +283,10 @@ export const ChatBot = () => {
       <style jsx>{`
         @media (max-width: 640px) {
           .chat-window-mobile {
-            width: calc(100vw - 48px);
-            max-width: none;
+            width: calc(100vw - 48px) !important;
+            max-width: none !important;
+            left: 24px !important;
+            right: auto !important;
           }
         }
 
