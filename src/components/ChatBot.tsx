@@ -90,7 +90,12 @@ export const ChatBot = () => {
         "✅ **Warranty Coverage:**\n• Standard: 6-month labor warranty\n• Premium: 12-month upgrade available\n• Peace of mind on all repairs\n\nLearn more when you call: 239-272-9166",
     },
     {
-      keywords: ["book", "appointment", "schedule", "contact", "phone", "call", "reserve", "available"],
+      keywords: ["contact", "reach", "how can i contact", "get in touch", "talk to", "call you"],
+      response:
+        "📞 **How to Reach Us:**\n\n📱 Call or Text: **239-272-9166**\n\n⏰ **Hours:**\n• Mon-Fri: 8AM-6PM\n• Sat: 9AM-4PM\n• Sun: Closed\n\n💬 Same-day service often available!",
+    },
+    {
+      keywords: ["book", "appointment", "schedule", "reserve", "booking", "available"],
       response:
         "📞 **Let's Get Started!**\n• Call/Text: 239-272-9166\n• Same-day appointments often available!\n• Hours:\n  - Mon-Fri: 8AM-6PM\n  - Sat: 9AM-4PM\n  - Sun: Closed\n\nWe're ready to help!",
     },
