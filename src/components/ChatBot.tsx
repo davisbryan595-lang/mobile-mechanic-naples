@@ -319,21 +319,19 @@ export const ChatBot = () => {
       )}
 
       {/* Floating Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="absolute bottom-6 right-6 pointer-events-auto bg-gradient-to-br from-primary to-orange-500 hover:from-primary/90 hover:to-orange-600 text-white rounded-full w-14 h-14 md:w-16 md:h-16 flex items-center justify-center shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-gray-900 hover:scale-110 active:scale-95"
-        aria-label={isOpen ? "Close chat" : "Open chat"}
-        aria-expanded={isOpen}
-      >
-        {isOpen ? (
-          <X className="w-6 h-6 md:w-7 md:h-7 transition-transform duration-300" />
-        ) : (
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="absolute bottom-6 right-6 pointer-events-auto bg-gradient-to-br from-primary to-orange-500 hover:from-primary/90 hover:to-orange-600 text-white rounded-full w-14 h-14 md:w-16 md:h-16 flex items-center justify-center shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-gray-900 hover:scale-110 active:scale-95"
+          aria-label="Open chat"
+          aria-expanded={isOpen}
+        >
           <div className="flex flex-col items-center gap-0.5">
             <MessageCircle className="w-6 h-6 md:w-7 md:h-7" />
             <span className="text-[10px] md:text-xs font-bold leading-none">Chat</span>
           </div>
-        )}
-      </button>
+        </button>
+      )}
 
       {/* Animations and Responsive Styles */}
       <style jsx>{`
