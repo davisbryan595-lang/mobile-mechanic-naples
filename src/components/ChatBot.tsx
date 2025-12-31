@@ -22,63 +22,66 @@ export const ChatBot = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // FAQ database with keywords and responses
+  // FAQ database with keywords and responses (prioritized by specificity)
   const faqDatabase: FAQItem[] = [
+    // High priority - specific pricing/package queries
     {
-      keywords: ["hello", "hi", "hey", "greetings"],
-      response: "Hello! How can I assist with your car repair today?",
+      keywords: ["price", "pricing", "cost", "estimate", "quote", "how much", "package", "packages"],
+      response:
+        "📋 **Pricing Guide:**\n\n💰 **Common Services:**\n• Oil Changes: $60–$120 labor\n• Brake Service: $120–$600 (full 4-wheel)\n• A/C Services: $80–$500+\n• Battery: $50–$120\n• Starters/Alternators: $180–$350\n• Diagnostics: $95–$145\n• Headlight Restoration: $70–$250\n• Mobile Detailing: $150–$1200\n\nPrices shown are labor only—parts extra. Need a custom quote? Call 239-272-9166!",
     },
     {
-      keywords: ["location", "area", "where", "serve", "naples", "bonita", "estero", "fort myers", "lehigh"],
+      keywords: ["hello", "hi", "hey", "greetings"],
+      response: "Hello! 👋 How can I assist with your car repair today?",
+    },
+    {
+      keywords: ["location", "area", "where", "serve", "service area", "naples", "bonita", "estero", "fort myers", "lehigh"],
       response:
-        "We provide mobile services in Naples, Bonita Springs, Estero, Fort Myers, and Lehigh Acres. We come to your home, office, or roadside!",
+        "📍 **Service Areas:**\nWe provide mobile services in:\n• Naples\n• Bonita Springs\n• Estero\n• Fort Myers\n• Lehigh Acres\n\nWe come to your home, office, or roadside! No towing needed.",
     },
     {
       keywords: ["oil", "change", "filter"],
       response:
-        "Oil Change (labor only): $60–$120. Oil Filter: $20–$50. Recommended every 3,000 miles or 90 days. Parts extra.",
+        "🛢️ **Oil Change Service:**\n• Labor: $60–$120\n• Oil Filter: $20–$50\n• Recommended: Every 3,000 miles or 90 days\n• Note: Parts costs extra\n\nNeed to book? Call 239-272-9166",
     },
     {
       keywords: ["brake", "brakes", "pads", "rotors"],
       response:
-        "Brake Pads (labor): $120–$190. Pads + Rotors: $220–$350. Full 4-wheel: $380–$600. Fluid Flush: $120–$200.",
+        "🛑 **Brake Service Options:**\n• Pads (labor): $120–$190\n• Pads + Rotors: $220–$350\n• Full 4-wheel: $380–$600\n• Fluid Flush: $120–$200\n\nNeed an inspection? We offer free diagnostics!",
     },
     {
-      keywords: ["ac", "a/c", "air conditioning", "recharge"],
+      keywords: ["ac", "a/c", "air conditioning", "recharge", "climate"],
       response:
-        "A/C services: Inspection/recharge $80–$500+ depending on the issue (R134a or R1234yf).",
+        "❄️ **A/C Services:**\n• Inspection/Recharge: $80–$500+ (depending on issue)\n• We work with R134a and R1234yf refrigerants\n• Same-day service often available!\n\nFeel free to call for details: 239-272-9166",
     },
     {
-      keywords: ["diagnostic", "diagnostics", "check engine", "obd"],
-      response: "OBD Diagnostics: $95–$145 using advanced tools.",
-    },
-    {
-      keywords: ["starter", "alternator", "battery"],
+      keywords: ["diagnostic", "diagnostics", "check engine", "obd", "scanner"],
       response:
-        "Starter Replacement: $180–$350. Alternator: $180–$320. Battery: $50–$120 (plus testing).",
+        "🔍 **Diagnostic Services:**\n• OBD Diagnostics: $95–$145\n• Using advanced diagnostic tools\n• Identifies all check engine issues\n• Quick turnaround time\n\nSchedule now: 239-272-9166",
     },
     {
-      keywords: ["headlight", "restoration", "polishing"],
-      response: "Headlight Restoration: $70–$250.",
-    },
-    {
-      keywords: ["detailing", "clean", "wash", "interior", "exterior"],
+      keywords: ["starter", "alternator", "battery", "electrical"],
       response:
-        "Mobile Detailing: Packages from $150–$1200 (wash/wax, deep clean, full detail).",
+        "🔋 **Electrical Services:**\n• Starter Replacement: $180–$350\n• Alternator: $180–$320\n• Battery: $50–$120 (includes testing)\n• Expert diagnosis & replacement\n\nCall for same-day service!",
     },
     {
-      keywords: ["price", "cost", "estimate", "quote"],
+      keywords: ["headlight", "restoration", "polishing", "lights"],
+      response: "💡 **Headlight Restoration:**\n• Service Cost: $70–$250\n• Professional restoration & polishing\n• Improved visibility & safety\n\nBook today: 239-272-9166",
+    },
+    {
+      keywords: ["detailing", "clean", "wash", "interior", "exterior", "maintenance"],
       response:
-        "Prices are labor estimates only—parts extra. Use our on-site estimator or contact for exact quote!",
+        "✨ **Mobile Detailing Packages:**\n• Basic: $150–$300 (wash/wax)\n• Deep Clean: $300–$600 (interior/exterior)\n• Full Detail: $600–$1200 (comprehensive)\n\nLet's make your car shine! Call 239-272-9166",
     },
     {
-      keywords: ["warranty", "guarantee"],
-      response: "6-month labor warranty (optional 12-month upgrade).",
-    },
-    {
-      keywords: ["book", "appointment", "schedule", "contact", "phone"],
+      keywords: ["warranty", "guarantee", "protection"],
       response:
-        "Call or text 239-272-9166 for booking. Same-day often available! Hours: Mon-Fri 8AM-6PM, Sat 9AM-4PM.",
+        "✅ **Warranty Coverage:**\n• Standard: 6-month labor warranty\n• Premium: 12-month upgrade available\n• Peace of mind on all repairs\n\nLearn more when you call: 239-272-9166",
+    },
+    {
+      keywords: ["book", "appointment", "schedule", "contact", "phone", "call", "reserve", "available"],
+      response:
+        "📞 **Let's Get Started!**\n• Call/Text: 239-272-9166\n• Same-day appointments often available!\n• Hours:\n  - Mon-Fri: 8AM-6PM\n  - Sat: 9AM-4PM\n  - Sun: Closed\n\nWe're ready to help!",
     },
   ];
 
