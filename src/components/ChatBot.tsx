@@ -41,6 +41,11 @@ export const ChatBot = () => {
       response: "Hello! 👋 How can I assist with your car repair today?",
     },
     {
+      keywords: ["service", "services", "what services", "what can", "repair", "repairs", "offer", "do you do", "available"],
+      response:
+        "🔧 **Our Services:**\n\n🛢️ **Engine & Maintenance**\n• Oil Changes (labor: $60–$120)\n• Oil Filters ($20–$50)\n• Full preventative maintenance\n\n🛑 **Brakes**\n• Brake Pads (labor: $120–$190)\n• Pads + Rotors ($220–$350)\n• Full 4-wheel service ($380–$600)\n• Fluid Flush ($120–$200)\n\n❄️ **Climate Control**\n• A/C Inspection & Recharge ($80–$500+)\n• Works with R134a & R1234yf\n\n🔋 **Electrical**\n• Starters ($180–$350)\n• Alternators ($180–$320)\n• Batteries ($50–$120)\n\n🔍 **Diagnostics**\n• OBD Diagnostics ($95–$145)\n• Check Engine Light diagnosis\n• Advanced tools & scanning\n\n💡 **Other Services**\n• Headlight Restoration ($70–$250)\n• Mobile Detailing ($150–$1200)\n\nNeed details on any service? Just ask! 📞 239-272-9166",
+    },
+    {
       keywords: ["location", "area", "where", "serve", "service area", "naples", "bonita", "estero", "fort myers", "lehigh"],
       response:
         "📍 **Service Areas:**\nWe provide mobile services in:\n• Naples\n• Bonita Springs\n• Estero\n• Fort Myers\n• Lehigh Acres\n\nWe come to your home, office, or roadside! No towing needed.",
