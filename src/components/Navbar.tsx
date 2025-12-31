@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music } from "lucide-react";
+import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music, LogIn } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -89,17 +91,28 @@ export const Navbar = () => {
 
               <img src={logo} alt="Mobile Service" className="h-12 w-auto" />
 
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-primary hover:text-primary-foreground hover:bg-primary"
-                asChild
-              >
-                <a href="tel:2392729166">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Call Now
-                </a>
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary hover:text-primary-foreground hover:bg-primary"
+                  onClick={() => navigate("/admin/login")}
+                >
+                  <LogIn className="w-4 h-4 mr-1" />
+                  Admin Login
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary hover:text-primary-foreground hover:bg-primary"
+                  asChild
+                >
+                  <a href="tel:2392729166">
+                    <Phone className="w-4 h-4 mr-2" />
+                    Call Now
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -201,6 +214,18 @@ export const Navbar = () => {
                         })}
                       </div>
                     </div>
+
+                    {/* Mobile Admin Login Button */}
+                    <Button
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-rajdhani font-medium mb-2 gap-2"
+                      onClick={() => {
+                        navigate("/admin/login");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <LogIn className="w-4 h-4" />
+                      Admin Login
+                    </Button>
 
                     {/* Mobile Call Button */}
                     <Button
