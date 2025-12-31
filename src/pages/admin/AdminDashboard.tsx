@@ -135,7 +135,7 @@ const AdminDashboard = () => {
         <StatsCard
           label="Weekly Revenue"
           value="$2,850"
-          icon={<Trending className="w-6 h-6 text-emerald-500" />}
+          icon={<TrendingUp className="w-6 h-6 text-emerald-500" />}
           bgColor="bg-emerald-500/20"
         />
         <StatsCard
