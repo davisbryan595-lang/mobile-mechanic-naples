@@ -240,7 +240,7 @@ export const ChatBot = () => {
                   >
                     <div
                       className={cn(
-                        "max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed transition-all duration-300 animate-fade-in",
+                        "max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed transition-all duration-300 animate-fade-in whitespace-pre-wrap break-words",
                         message.type === "user"
                           ? "bg-gradient-to-br from-primary to-orange-500 text-white rounded-br-none font-medium shadow-lg"
                           : "bg-gradient-to-br from-gray-700 to-gray-800 text-gray-100 rounded-bl-none border border-gray-600 shadow-md",
