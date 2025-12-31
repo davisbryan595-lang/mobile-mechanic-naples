@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
