@@ -114,31 +114,45 @@ export const ChatBot = () => {
     }
   }, [isOpen]);
 
-  // Keyword matching algorithm
+  // Improved keyword matching algorithm with context awareness
   const findBestMatch = (userInput: string): string => {
-    const inputLower = userInput.toLowerCase();
+    const inputLower = userInput.toLowerCase().trim();
+
+    // Split input into words for better matching
+    const inputWords = inputLower.split(/\s+/);
+
     let bestMatch: FAQItem | null = null;
-    let maxMatches = 0;
+    let maxScore = 0;
 
     for (const faq of faqDatabase) {
-      let matchCount = 0;
+      let score = 0;
+
       for (const keyword of faq.keywords) {
-        if (inputLower.includes(keyword.toLowerCase())) {
-          matchCount++;
+        const keywordLower = keyword.toLowerCase();
+
+        // Exact word match gets highest score
+        if (inputWords.includes(keywordLower)) {
+          score += 10;
+        }
+        // Substring match (word contains keyword)
+        else if (inputLower.includes(keywordLower)) {
+          score += 5;
         }
       }
 
-      if (matchCount > maxMatches) {
-        maxMatches = matchCount;
+      // Higher score wins, or first match if tied
+      if (score > maxScore) {
+        maxScore = score;
         bestMatch = faq;
       }
     }
 
-    if (bestMatch && maxMatches > 0) {
+    // Return best match if found, otherwise fallback
+    if (bestMatch && maxScore > 0) {
       return bestMatch.response;
     }
 
-    return "I don't have that info yet—please call 239-272-9166 or message us for help!";
+    return "I'm not sure about that—could you rephrase? Or call 239-272-9166 and our team can help! 📞";
   };
 
   // Handle message sending
