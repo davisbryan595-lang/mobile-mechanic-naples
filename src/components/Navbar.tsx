@@ -215,6 +215,18 @@ export const Navbar = () => {
                       </div>
                     </div>
 
+                    {/* Mobile Admin Login Button */}
+                    <Button
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-rajdhani font-medium mb-2 gap-2"
+                      onClick={() => {
+                        navigate("/admin/login");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <LogIn className="w-4 h-4" />
+                      Admin Login
+                    </Button>
+
                     {/* Mobile Call Button */}
                     <Button
                       className="w-full bg-primary hover:bg-primary/90 text-white"
