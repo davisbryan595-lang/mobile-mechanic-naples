@@ -12,6 +12,7 @@ import { Disclaimer } from "@/components/Disclaimer";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { ChatBot } from "@/components/ChatBot";
+import { AccessibilityWidget } from "@/components/AccessibilityWidget";
 
 const Index = () => {
   return (
