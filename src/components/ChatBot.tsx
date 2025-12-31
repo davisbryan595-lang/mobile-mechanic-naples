@@ -98,7 +98,7 @@ export const ChatBot = () => {
 
   // Welcome message
   const welcomeMessage =
-    "👋 **Hi there! I'm Bryan Davis** - an AI assistant powered by Linkage Digital.\n\nI'm here to help with all your mobile mechanic needs in Southwest Florida! Feel free to ask me about:\n\n💰 **Pricing & Packages** - Oil changes, brakes, A/C, batteries & more\n📍 **Service Areas** - Naples, Bonita Springs, Estero, Fort Myers, Lehigh\n🔧 **Services** - Diagnostics, repairs, detailing, restoration\n📅 **Booking** - Same-day appointments often available\n✅ **Warranty** - 6-month coverage on all labor\n\nWhat can I help you with today?";
+    "👋 **Hi! I'm Bryan Davis**, an AI assistant powered by Linkage Digital.\n\nAsk me about pricing, services, locations, or booking! 🔧";
 
   // Auto-scroll to latest message
   useEffect(() => {
