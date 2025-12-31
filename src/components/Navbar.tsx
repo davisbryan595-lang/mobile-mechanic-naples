@@ -91,17 +91,28 @@ export const Navbar = () => {
 
               <img src={logo} alt="Mobile Service" className="h-12 w-auto" />
 
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-primary hover:text-primary-foreground hover:bg-primary"
-                asChild
-              >
-                <a href="tel:2392729166">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Call Now
-                </a>
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary hover:text-primary-foreground hover:bg-primary"
+                  onClick={() => navigate("/admin/login")}
+                >
+                  <LogIn className="w-4 h-4 mr-1" />
+                  Admin Login
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary hover:text-primary-foreground hover:bg-primary"
+                  asChild
+                >
+                  <a href="tel:2392729166">
+                    <Phone className="w-4 h-4 mr-2" />
+                    Call Now
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
