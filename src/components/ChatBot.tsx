@@ -181,7 +181,7 @@ export const ChatBot = () => {
     <div className="fixed bottom-6 right-6 z-50 font-rajdhani">
       {/* Chat Window */}
       {isOpen && (
-        <div className="absolute bottom-20 right-0 w-full sm:w-96 bg-white rounded-lg shadow-2xl flex flex-col max-h-96 overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
+        <div className="absolute bottom-20 right-0 w-full sm:w-96 bg-white rounded-lg shadow-2xl flex flex-col max-h-96 overflow-hidden" style={{ animation: "slideUpAnimation 0.3s ease-out" }}>
           {/* Header */}
           <div className="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
             <h2 className="font-orbitron font-bold text-lg">Mobile Mechanic Helper</h2>
@@ -217,9 +217,9 @@ export const ChatBot = () => {
               <div className="flex justify-start">
                 <div className="bg-gray-300 text-gray-900 px-4 py-2 rounded-lg rounded-bl-none">
                   <div className="flex gap-2">
-                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" />
-                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce animation-delay-100" />
-                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce animation-delay-200" />
+                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "0s" }} />
+                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
+                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
                   </div>
                 </div>
               </div>
@@ -271,16 +271,16 @@ export const ChatBot = () => {
         )}
       </button>
 
-      {/* Mobile Responsive Styles */}
+      {/* Mobile Responsive and Animation Styles */}
       <style jsx>{`
         @media (max-width: 640px) {
-          .absolute.bottom-20 {
+          .chat-window-mobile {
             width: calc(100vw - 48px);
             max-width: none;
           }
         }
 
-        @keyframes slide-in-from-bottom {
+        @keyframes slideUpAnimation {
           from {
             opacity: 0;
             transform: translateY(10px);
@@ -289,18 +289,6 @@ export const ChatBot = () => {
             opacity: 1;
             transform: translateY(0);
           }
-        }
-
-        .animate-in.slide-in-from-bottom-4 {
-          animation: slide-in-from-bottom 0.3s ease-out;
-        }
-
-        .animation-delay-100 {
-          animation-delay: 0.1s;
-        }
-
-        .animation-delay-200 {
-          animation-delay: 0.2s;
         }
       `}</style>
     </div>
