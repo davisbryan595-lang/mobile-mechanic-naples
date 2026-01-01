@@ -76,8 +76,8 @@ export const Navbar = () => {
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-12 text-sm">
               <div className="flex items-center gap-4">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors" title="Facebook (URL pending)">
+                <a href="https://www.facebook.com/profile.php?id=61578075644481" target="_blank" rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors">
                   <Facebook className="w-4 h-4" />
                 </a>
                 <a href="https://www.instagram.com/mobilemechanicservice_/" target="_blank" rel="noopener noreferrer"
