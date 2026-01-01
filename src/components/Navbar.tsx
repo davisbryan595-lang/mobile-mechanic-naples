@@ -125,19 +125,35 @@ export const Navbar = () => {
               <ul className="flex items-center gap-8">
                 {navLinks.map((link) => (
                   <li key={link.id}>
-                    <button
-                      onClick={() => scrollToSection(link.id)}
-                      className={`relative font-rajdhani font-medium tracking-wide text-sm transition-colors ${
-                        activeSection === link.id
-                          ? "text-primary"
-                          : "text-foreground hover:text-primary"
-                      } group`}
-                    >
-                      {link.label}
-                      <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform duration-300 ${
-                        activeSection === link.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                      }`} />
-                    </button>
+                    {(link as any).path ? (
+                      <a
+                        href={(link as any).path}
+                        className={`relative font-rajdhani font-medium tracking-wide text-sm transition-colors ${
+                          window.location.pathname === (link as any).path
+                            ? "text-primary"
+                            : "text-foreground hover:text-primary"
+                        } group`}
+                      >
+                        {link.label}
+                        <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform duration-300 ${
+                          window.location.pathname === (link as any).path ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        }`} />
+                      </a>
+                    ) : (
+                      <button
+                        onClick={() => scrollToSection(link.id)}
+                        className={`relative font-rajdhani font-medium tracking-wide text-sm transition-colors ${
+                          activeSection === link.id
+                            ? "text-primary"
+                            : "text-foreground hover:text-primary"
+                        } group`}
+                      >
+                        {link.label}
+                        <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform duration-300 ${
+                          activeSection === link.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        }`} />
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
