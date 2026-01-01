@@ -45,17 +45,19 @@ const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) =>
               <X className="w-6 h-6" />
             </button>
 
-            <iframe
-              src={`${url}embed/captioned/`}
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              scrolling="no"
-              allowFullScreen={true}
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-              className="w-full h-full"
-              title={`Instagram Post ${index + 1}`}
-            ></iframe>
+            <div className="w-full h-full flex items-center justify-center bg-black">
+              <iframe
+                src={`https://www.instagram.com/p/${postId}/embed/`}
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                scrolling="no"
+                allowFullScreen={true}
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                className="w-full h-full"
+                title={`Instagram Post ${index + 1}`}
+              ></iframe>
+            </div>
           </div>
         </div>
       )}
