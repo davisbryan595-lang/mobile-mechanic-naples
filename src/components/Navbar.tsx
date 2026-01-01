@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music, LogIn } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 
 export const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -39,11 +40,24 @@ export const Navbar = () => {
   }, [isMobileMenuOpen]);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setIsMobileMenuOpen(false);
+    // If not on home page, navigate to home first
+    if (location.pathname !== "/") {
+      navigate("/");
+      // Schedule scroll after navigation
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      // Already on home page, just scroll
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
+    setIsMobileMenuOpen(false);
   };
 
   const navLinks = [
@@ -59,8 +73,8 @@ export const Navbar = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61578075644481", label: "Facebook" },
-    { icon: Instagram, href: "https://www.instagram.com/mobilemechanicservice_/", label: "Instagram" },
+    { icon: Facebook, href: "https://www.facebook.com/share/1GmBcnPumP/?mibextid=wwXIfr", label: "Facebook" },
+    { icon: Instagram, href: "https://www.instagram.com/mobilemechanicservice_?igsh=MWtoNGl5NXhxNGgzcw%3D%3D", label: "Instagram" },
     { icon: Music, href: "https://tiktok.com", label: "TikTok" },
     { icon: MessageCircle, href: "https://wa.me/2392729166", label: "WhatsApp" },
   ];
@@ -76,11 +90,11 @@ export const Navbar = () => {
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-12 text-sm">
               <div className="flex items-center gap-4">
-                <a href="https://www.facebook.com/profile.php?id=61578075644481" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.facebook.com/share/1GmBcnPumP/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <Facebook className="w-4 h-4" />
                 </a>
-                <a href="https://www.instagram.com/mobilemechanicservice_/" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.instagram.com/mobilemechanicservice_?igsh=MWtoNGl5NXhxNGgzcw%3D%3D" target="_blank" rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <Instagram className="w-4 h-4" />
                 </a>

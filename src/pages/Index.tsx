@@ -6,6 +6,8 @@ import { Pricing } from "@/components/Pricing";
 import { MaintenancePackages } from "@/components/MaintenancePackages";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { Gallery } from "@/components/Gallery";
+import { FacebookPosts } from "@/components/FacebookPosts";
+import { InstagramReels } from "@/components/InstagramReels";
 import { WarrantyInfo } from "@/components/WarrantyInfo";
 import { Reviews } from "@/components/Reviews";
 import { Disclaimer } from "@/components/Disclaimer";
@@ -26,6 +28,8 @@ const Index = () => {
         <MaintenancePackages />
         <WhyChooseUs />
         <Gallery />
+        <FacebookPosts />
+        <InstagramReels />
         <WarrantyInfo />
         <Reviews />
         <Disclaimer />

@@ -79,7 +79,7 @@ export const Footer = () => {
               </div>
               <div className="flex gap-3 pt-2">
                 <a
-                  href="https://www.facebook.com/profile.php?id=61578075644481"
+                  href="https://www.facebook.com/share/1GmBcnPumP/?mibextid=wwXIfr"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 bg-secondary rounded-lg hover:bg-primary/20 transition-colors"
@@ -87,7 +87,7 @@ export const Footer = () => {
                   <Facebook className="w-5 h-5 text-primary" />
                 </a>
                 <a
-                  href="https://www.instagram.com/mobilemechanicservice_/"
+                  href="https://www.instagram.com/mobilemechanicservice_?igsh=MWtoNGl5NXhxNGgzcw%3D%3D"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 bg-secondary rounded-lg hover:bg-primary/20 transition-colors"
