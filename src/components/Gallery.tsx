@@ -13,68 +13,75 @@ const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) =>
   const url = `https://www.instagram.com/p/${postId}/`;
 
   useEffect(() => {
-    const attemptEmbed = () => {
+    const loadEmbed = async () => {
       if (!containerRef.current) return;
 
       try {
         // Clear container
         containerRef.current.innerHTML = "";
 
-        // Create blockquote
+        // Create the proper Instagram blockquote structure
         const blockquote = document.createElement("blockquote");
         blockquote.className = "instagram-media";
+        blockquote.setAttribute("data-instgrm-captioned", "");
         blockquote.setAttribute("data-instgrm-permalink", `${url}?utm_source=ig_embed&utm_campaign=loading`);
         blockquote.setAttribute("data-instgrm-version", "14");
+        blockquote.style.background = "#FFF";
+        blockquote.style.border = "0";
+        blockquote.style.borderRadius = "3px";
+        blockquote.style.boxShadow = "0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)";
+        blockquote.style.margin = "1px";
+        blockquote.style.maxWidth = "540px";
+        blockquote.style.minWidth = "326px";
+        blockquote.style.padding = "0";
+        blockquote.style.width = "99.375%";
 
         const link = document.createElement("a");
         link.href = `${url}?utm_source=ig_embed&utm_campaign=loading`;
         link.target = "_blank";
         link.rel = "noopener noreferrer";
         link.textContent = "View on Instagram";
+        link.style.color = "#c9c8cd";
+        link.style.fontFamily = "Arial,sans-serif";
+        link.style.fontSize = "14px";
+        link.style.fontStyle = "normal";
+        link.style.fontWeight = "normal";
+        link.style.lineHeight = "17px";
+        link.style.textDecoration = "none";
 
         blockquote.appendChild(link);
         containerRef.current.appendChild(blockquote);
 
-        // Process with Instagram script multiple times
-        const processEmbed = () => {
-          if ((window as any).instgrm && (window as any).instgrm.Embed) {
-            try {
-              (window as any).instgrm.Embed.process();
-              setShowEmbed(true);
-              return true;
-            } catch (e) {
-              return false;
-            }
-          }
-          return false;
-        };
-
-        // Try processing immediately and with delays
-        if (processEmbed()) return;
-
-        setTimeout(() => processEmbed(), 100);
-        setTimeout(() => processEmbed(), 500);
-        setTimeout(() => processEmbed(), 1000);
-
-        // If script not loaded, load it
+        // Load Instagram embed script if not already loaded
         if (!(window as any).instgrm) {
           const script = document.createElement("script");
           script.src = "https://www.instagram.com/embed.js";
           script.async = true;
-          script.onload = () => {
-            setTimeout(() => processEmbed(), 200);
-          };
           document.body.appendChild(script);
         }
+
+        // Process the embed with the Instagram script
+        const processEmbed = () => {
+          if ((window as any).instgrm && (window as any).instgrm.Embed) {
+            try {
+              (window as any).instgrm.Embed.process(containerRef.current);
+              setShowEmbed(true);
+            } catch (e) {
+              console.error("Instagram embed process error:", e);
+            }
+          }
+        };
+
+        // Give the script time to load and process
+        setTimeout(processEmbed, 100);
+        setTimeout(processEmbed, 500);
       } catch (e) {
         console.error("Instagram embed error:", e);
         setShowEmbed(false);
       }
     };
 
-    // Attempt embed
-    const timer = setTimeout(attemptEmbed, 100);
-    return () => clearTimeout(timer);
+    loadEmbed();
   }, [postId, url]);
 
   return (
