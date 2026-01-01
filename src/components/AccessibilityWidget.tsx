@@ -492,7 +492,7 @@ export const AccessibilityWidget = () => {
       )}
 
       {/* Global Accessibility Styles */}
-      <style jsx global>{`
+      <style>{`
         /* High Contrast Mode */
         :root.a11y-high-contrast {
           --background: 0 0% 0%;
