@@ -59,6 +59,16 @@ export const Gallery = () => {
   const [showAll, setShowAll] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  // Load Instagram embed script once
+  useEffect(() => {
+    if (!(window as any).instgrm) {
+      const script = document.createElement("script");
+      script.src = "https://www.instagram.com/embed.js";
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
   const facebookPostIds = [
     "1063659892535347",
     "1283700730200298",
