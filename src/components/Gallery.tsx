@@ -121,32 +121,15 @@ export const Gallery = () => {
   const [showAll, setShowAll] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  // Load Instagram embed script once on component mount
+  // Ensure Instagram embed script is loaded globally
   useEffect(() => {
-    // Check if script is already loaded
     if (!(window as any).instgrm) {
       const script = document.createElement("script");
       script.src = "https://www.instagram.com/embed.js";
       script.async = true;
-      script.onload = () => {
-        console.log("Instagram embed script loaded");
-      };
       document.body.appendChild(script);
     }
   }, []);
-
-  // Process embeds when Instagram tab becomes active
-  useEffect(() => {
-    if (activeTab === "instagram") {
-      // Give the DOM time to render, then process
-      const timer = setTimeout(() => {
-        if ((window as any).instgrm && (window as any).instgrm.Embed) {
-          (window as any).instgrm.Embed.process();
-        }
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [activeTab]);
 
   const facebookPostIds = [
     "1063659892535347",
