@@ -92,7 +92,7 @@ export const ChatBot = () => {
     {
       keywords: ["contact", "reach", "how can i contact", "get in touch", "talk to", "call you"],
       response:
-        "📞 **How to Reach Us:**\n\n📱 Call or Text: **239-272-9166**\n\n⏰ **Hours:**\n• Mon-Fri: 8AM-6PM\n• Sat: 9AM-4PM\n• Sun: Closed\n\n💬 Same-day service often available!",
+        "📞 **Contact Us - Multiple Ways to Reach:**\n\n**📱 PHONE & TEXT (Fastest!)**\n• Call or Text: **239-272-9166**\n• Direct line to our scheduling team\n• Same-day appointments often available\n\n**💬 WHATSAPP**\n• Message us: **239-272-9166**\n• Get quick responses & photo sharing\n• Perfect for describing your issue\n\n**🕐 BUSINESS HOURS**\n• Mon-Fri: 8:00 AM - 6:00 PM\n• Sat: 9:00 AM - 4:00 PM\n• Sun: Closed\n• Emergency? Call anytime!\n\n**📍 SERVICE AREAS**\n• Naples • Bonita Springs • Estero\n• Fort Myers • Lehigh Acres\n• Mobile service comes to YOU!\n\n**💡 QUICK TIP:**\nText a photo or description of your issue with your address, and we'll give you an instant quote!",
     },
     {
       keywords: ["book", "appointment", "schedule", "reserve", "booking", "available"],
