@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { X, Facebook, Instagram, Play } from "lucide-react";
+import { X, Facebook, Instagram } from "lucide-react";
 
 interface InstagramEmbedWrapperProps {
   postId: string;
@@ -8,23 +8,49 @@ interface InstagramEmbedWrapperProps {
 }
 
 const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const url = `https://www.instagram.com/p/${postId}/`;
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Create blockquote element
+    const blockquote = document.createElement("blockquote");
+    blockquote.className = "instagram-media";
+    blockquote.setAttribute("data-instgrm-permalink", url);
+    blockquote.setAttribute("data-instgrm-version", "14");
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.textContent = "View on Instagram";
+
+    blockquote.appendChild(link);
+    containerRef.current.appendChild(blockquote);
+
+    // Load and process Instagram embed script
+    if ((window as any).instgrm?.Embed?.process) {
+      (window as any).instgrm.Embed.process();
+    } else if (!(window as any).instgrm) {
+      const script = document.createElement("script");
+      script.src = "https://www.instagram.com/embed.js";
+      script.async = true;
+      script.onload = () => {
+        setTimeout(() => {
+          if ((window as any).instgrm?.Embed?.process) {
+            (window as any).instgrm.Embed.process();
+          }
+        }, 100);
+      };
+      document.body.appendChild(script);
+    }
+  }, [postId, url]);
 
   return (
     <div
-      className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up h-64 bg-gradient-to-br from-background via-card to-background"
+      ref={containerRef}
+      className="flex justify-center animate-slide-up"
       style={{ animationDelay: `${index * 0.1}s` }}
-      onClick={() => window.open(url, "_blank")}
-    >
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="flex flex-col items-center justify-center gap-4">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 group-hover:bg-primary/30 transition-colors">
-            <Play className="w-8 h-8 text-primary fill-primary" />
-          </div>
-          <p className="text-sm text-muted-foreground font-rajdhani">Click to view on Instagram</p>
-        </div>
-      </div>
-    </div>
+    />
   );
 };
 
