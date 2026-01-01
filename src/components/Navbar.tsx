@@ -54,6 +54,7 @@ export const Navbar = () => {
     { id: "gallery", label: "Gallery" },
     { id: "packages", label: "Packages" },
     { id: "reviews", label: "Reviews" },
+    { id: "blog", label: "Blog", path: "/blog" },
     { id: "contact", label: "Contact" },
   ];
 
