@@ -9,21 +9,44 @@ interface InstagramEmbedWrapperProps {
 
 const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [thumbnail, setThumbnail] = useState<string | null>(null);
   const url = `https://www.instagram.com/p/${postId}/`;
+
+  useState(() => {
+    // Fetch Instagram OEmbed data to get thumbnail
+    fetch(`https://www.instagram.com/oembed/?url=${encodeURIComponent(url)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.thumbnail_url) {
+          setThumbnail(data.thumbnail_url);
+        }
+      })
+      .catch(() => {
+        // Fallback thumbnail if fetch fails
+        setThumbnail(null);
+      });
+  });
 
   return (
     <>
       <div
-        className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up h-64 bg-gradient-to-br from-background via-card to-background"
+        className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up h-64"
         style={{ animationDelay: `${index * 0.1}s` }}
         onClick={() => setIsOpen(true)}
       >
-        <div className="flex items-center justify-center w-full h-full">
-          <div className="flex flex-col items-center justify-center gap-4">
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 group-hover:bg-primary/30 transition-colors">
-              <Play className="w-8 h-8 text-primary fill-primary" />
-            </div>
-            <p className="text-sm text-muted-foreground font-rajdhani">Click to view</p>
+        {thumbnail ? (
+          <img
+            src={thumbnail}
+            alt={`Instagram post ${index + 1}`}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-background via-card to-background" />
+        )}
+
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all flex items-center justify-center">
+          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/80 group-hover:bg-primary transition-colors">
+            <Play className="w-8 h-8 text-white fill-white" />
           </div>
         </div>
       </div>
