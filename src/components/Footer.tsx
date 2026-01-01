@@ -87,7 +87,7 @@ export const Footer = () => {
                   <Facebook className="w-5 h-5 text-primary" />
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/mobilemechanicservice_/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 bg-secondary rounded-lg hover:bg-primary/20 transition-colors"
