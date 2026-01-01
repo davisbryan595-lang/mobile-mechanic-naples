@@ -1,10 +1,82 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, Facebook, Instagram, Play } from "lucide-react";
+
+interface InstagramEmbedWrapperProps {
+  postId: string;
+  index: number;
+}
+
+const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const url = `https://www.instagram.com/p/${postId}/`;
+
+  return (
+    <>
+      <div
+        className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up h-64 bg-gradient-to-br from-background via-card to-background"
+        style={{ animationDelay: `${index * 0.1}s` }}
+        onClick={() => setIsOpen(true)}
+      >
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all flex items-center justify-center">
+          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/80 group-hover:bg-primary transition-colors">
+            <Play className="w-8 h-8 text-white fill-white" />
+          </div>
+        </div>
+      </div>
+
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setIsOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-2xl bg-black rounded-lg overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-primary transition-colors z-10 bg-black/50 rounded-full p-2 hover:bg-black/70"
+              aria-label="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <iframe
+              src={`https://www.instagram.com/p/${postId}/embed/captioned/`}
+              width="100%"
+              style={{ minHeight: "600px" }}
+              frameBorder="0"
+              scrolling="no"
+              allowFullScreen={true}
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              title={`Instagram Post ${index + 1}`}
+            ></iframe>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
 
 export const Gallery = () => {
+  const [activeTab, setActiveTab] = useState<"work" | "facebook" | "instagram">("work");
   const [showAll, setShowAll] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const facebookPostIds = [
+    "1063659892535347",
+    "1283700730200298",
+    "1996593834239180",
+    "3192988037542385",
+  ];
+
+  const instagramPostIds = [
+    "DSp-7FDEYB7",
+    "DSi9s1uETxF",
+    "DSi9nv2EVSJ",
+    "DSfKhgYEbpB",
+  ];
 
   const allImages = [
     {
@@ -273,41 +345,126 @@ export const Gallery = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold mb-4">
-              Our <span className="text-primary text-glow">Work</span>
+              Gallery & <span className="text-primary text-glow">Social Media</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Professional service delivered at your location
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {displayedImages.map((image, index) => (
-              <div
-                key={index}
-                className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-                onClick={() => setSelectedImage(image.src)}
-              >
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-              </div>
-            ))}
+          {/* Tabs */}
+          <div className="flex justify-center gap-4 mb-12 flex-wrap">
+            <button
+              onClick={() => {
+                setActiveTab("work");
+                setShowAll(false);
+              }}
+              className={`px-6 py-2 rounded-lg font-rajdhani font-medium transition-all ${
+                activeTab === "work"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-border text-foreground hover:bg-border/80"
+              }`}
+            >
+              Our Work
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab("facebook");
+                setShowAll(false);
+              }}
+              className={`px-6 py-2 rounded-lg font-rajdhani font-medium transition-all flex items-center gap-2 ${
+                activeTab === "facebook"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-border text-foreground hover:bg-border/80"
+              }`}
+            >
+              <Facebook className="w-4 h-4" />
+              Facebook
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab("instagram");
+                setShowAll(false);
+              }}
+              className={`px-6 py-2 rounded-lg font-rajdhani font-medium transition-all flex items-center gap-2 ${
+                activeTab === "instagram"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-border text-foreground hover:bg-border/80"
+              }`}
+            >
+              <Instagram className="w-4 h-4" />
+              Instagram
+            </button>
           </div>
 
-          {!showAll && (
-            <div className="flex justify-center mt-12">
-              <Button
-                onClick={() => setShowAll(true)}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold text-lg glow-orange-strong"
-                size="lg"
-              >
-                View All Gallery
-              </Button>
+          {/* Our Work Tab */}
+          {activeTab === "work" && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {displayedImages.map((image, index) => (
+                  <div
+                    key={index}
+                    className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                    onClick={() => setSelectedImage(image.src)}
+                  >
+                    <div className="aspect-[4/3] overflow-hidden">
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {!showAll && (
+                <div className="flex justify-center mt-12">
+                  <Button
+                    onClick={() => setShowAll(true)}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold text-lg glow-orange-strong"
+                    size="lg"
+                  >
+                    View All Gallery
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Facebook Posts Tab */}
+          {activeTab === "facebook" && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {facebookPostIds.map((postId, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center justify-center rounded-lg border-2 border-border hover:border-primary transition-all animate-slide-up overflow-hidden"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <iframe
+                    src={`https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/reel/${postId}/&width=500&show_text=true`}
+                    width="100%"
+                    height="500"
+                    style={{ border: "none", overflow: "hidden" }}
+                    allowFullScreen={true}
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  ></iframe>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Instagram Posts Tab */}
+          {activeTab === "instagram" && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {instagramPostIds.map((postId, index) => (
+                <InstagramEmbedWrapper
+                  key={index}
+                  postId={postId}
+                  index={index}
+                />
+              ))}
             </div>
           )}
         </div>

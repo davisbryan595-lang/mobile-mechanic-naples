@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music } from "lucide-react";
+import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music, LogIn } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -52,6 +54,7 @@ export const Navbar = () => {
     { id: "gallery", label: "Gallery" },
     { id: "packages", label: "Packages" },
     { id: "reviews", label: "Reviews" },
+    { id: "blog", label: "Blog", path: "/blog" },
     { id: "contact", label: "Contact" },
   ];
 
@@ -89,17 +92,28 @@ export const Navbar = () => {
 
               <img src={logo} alt="Mobile Service" className="h-12 w-auto" />
 
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-primary hover:text-primary-foreground hover:bg-primary"
-                asChild
-              >
-                <a href="tel:2392729166">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Call Now
-                </a>
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary hover:text-primary-foreground hover:bg-primary"
+                  onClick={() => navigate("/admin/login")}
+                >
+                  <LogIn className="w-4 h-4 mr-1" />
+                  Admin Login
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary hover:text-primary-foreground hover:bg-primary"
+                  asChild
+                >
+                  <a href="tel:2392729166">
+                    <Phone className="w-4 h-4 mr-2" />
+                    Call Now
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -111,19 +125,35 @@ export const Navbar = () => {
               <ul className="flex items-center gap-8">
                 {navLinks.map((link) => (
                   <li key={link.id}>
-                    <button
-                      onClick={() => scrollToSection(link.id)}
-                      className={`relative font-rajdhani font-medium tracking-wide text-sm transition-colors ${
-                        activeSection === link.id
-                          ? "text-primary"
-                          : "text-foreground hover:text-primary"
-                      } group`}
-                    >
-                      {link.label}
-                      <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform duration-300 ${
-                        activeSection === link.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                      }`} />
-                    </button>
+                    {(link as any).path ? (
+                      <a
+                        href={(link as any).path}
+                        className={`relative font-rajdhani font-medium tracking-wide text-sm transition-colors ${
+                          window.location.pathname === (link as any).path
+                            ? "text-primary"
+                            : "text-foreground hover:text-primary"
+                        } group`}
+                      >
+                        {link.label}
+                        <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform duration-300 ${
+                          window.location.pathname === (link as any).path ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        }`} />
+                      </a>
+                    ) : (
+                      <button
+                        onClick={() => scrollToSection(link.id)}
+                        className={`relative font-rajdhani font-medium tracking-wide text-sm transition-colors ${
+                          activeSection === link.id
+                            ? "text-primary"
+                            : "text-foreground hover:text-primary"
+                        } group`}
+                      >
+                        {link.label}
+                        <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform duration-300 ${
+                          activeSection === link.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        }`} />
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -163,17 +193,34 @@ export const Navbar = () => {
                   {/* Mobile Navigation Links */}
                   <div className="px-4 space-y-2">
                     {navLinks.map((link) => (
-                      <button
-                        key={link.id}
-                        onClick={() => scrollToSection(link.id)}
-                        className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium transition-all ${
-                          activeSection === link.id
-                            ? "bg-white/30 text-white"
-                            : "text-white/80 hover:bg-white/20 hover:text-white"
-                        }`}
-                      >
-                        {link.label}
-                      </button>
+                      (link as any).path ? (
+                        <a
+                          key={link.id}
+                          href={(link as any).path}
+                          className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium transition-all ${
+                            window.location.pathname === (link as any).path
+                              ? "bg-white/30 text-white"
+                              : "text-white/80 hover:bg-white/20 hover:text-white"
+                          }`}
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <button
+                          key={link.id}
+                          onClick={() => {
+                            scrollToSection(link.id);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium transition-all ${
+                            activeSection === link.id
+                              ? "bg-white/30 text-white"
+                              : "text-white/80 hover:bg-white/20 hover:text-white"
+                          }`}
+                        >
+                          {link.label}
+                        </button>
+                      )
                     ))}
                   </div>
 
@@ -201,6 +248,18 @@ export const Navbar = () => {
                         })}
                       </div>
                     </div>
+
+                    {/* Mobile Admin Login Button */}
+                    <Button
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-rajdhani font-medium mb-2 gap-2"
+                      onClick={() => {
+                        navigate("/admin/login");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <LogIn className="w-4 h-4" />
+                      Admin Login
+                    </Button>
 
                     {/* Mobile Call Button */}
                     <Button
