@@ -120,7 +120,7 @@ export const Contact = () => {
                   <Facebook className="w-6 h-6 text-primary" />
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/mobilemechanicservice_/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
