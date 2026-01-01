@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { X, Facebook, Instagram } from "lucide-react";
+import { X, Facebook, Instagram, Play } from "lucide-react";
 
 interface InstagramEmbedWrapperProps {
   postId: string;
@@ -8,111 +8,58 @@ interface InstagramEmbedWrapperProps {
 }
 
 const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [showEmbed, setShowEmbed] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const url = `https://www.instagram.com/p/${postId}/`;
 
-  useEffect(() => {
-    const loadEmbed = async () => {
-      if (!containerRef.current) return;
-
-      try {
-        // Clear container
-        containerRef.current.innerHTML = "";
-
-        // Create the proper Instagram blockquote structure
-        const blockquote = document.createElement("blockquote");
-        blockquote.className = "instagram-media";
-        blockquote.setAttribute("data-instgrm-captioned", "");
-        blockquote.setAttribute("data-instgrm-permalink", `${url}?utm_source=ig_embed&utm_campaign=loading`);
-        blockquote.setAttribute("data-instgrm-version", "14");
-        blockquote.style.background = "#FFF";
-        blockquote.style.border = "0";
-        blockquote.style.borderRadius = "3px";
-        blockquote.style.boxShadow = "0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)";
-        blockquote.style.margin = "1px";
-        blockquote.style.maxWidth = "540px";
-        blockquote.style.minWidth = "326px";
-        blockquote.style.padding = "0";
-        blockquote.style.width = "99.375%";
-
-        const link = document.createElement("a");
-        link.href = `${url}?utm_source=ig_embed&utm_campaign=loading`;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.textContent = "View on Instagram";
-        link.style.color = "#c9c8cd";
-        link.style.fontFamily = "Arial,sans-serif";
-        link.style.fontSize = "14px";
-        link.style.fontStyle = "normal";
-        link.style.fontWeight = "normal";
-        link.style.lineHeight = "17px";
-        link.style.textDecoration = "none";
-
-        blockquote.appendChild(link);
-        containerRef.current.appendChild(blockquote);
-
-        // Load Instagram embed script if not already loaded
-        if (!(window as any).instgrm) {
-          const script = document.createElement("script");
-          script.src = "https://www.instagram.com/embed.js";
-          script.async = true;
-          document.body.appendChild(script);
-        }
-
-        // Process the embed with the Instagram script
-        const processEmbed = () => {
-          if ((window as any).instgrm && (window as any).instgrm.Embed) {
-            try {
-              (window as any).instgrm.Embed.process(containerRef.current);
-              setShowEmbed(true);
-            } catch (e) {
-              console.error("Instagram embed process error:", e);
-            }
-          }
-        };
-
-        // Give the script time to load and process
-        setTimeout(processEmbed, 100);
-        setTimeout(processEmbed, 500);
-      } catch (e) {
-        console.error("Instagram embed error:", e);
-        setShowEmbed(false);
-      }
-    };
-
-    loadEmbed();
-  }, [postId, url]);
-
   return (
-    <div
-      ref={containerRef}
-      className="flex justify-center animate-slide-up"
-      style={{ animationDelay: `${index * 0.1}s` }}
-    >
-      {!showEmbed && (
-        <div className="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-background via-card to-background rounded-xl border-2 border-border hover:border-primary transition-all transform hover:scale-105 duration-300 min-h-64 shadow-lg w-full max-w-sm">
-          <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 mb-4">
-            <Instagram className="w-10 h-10 text-primary" />
+    <>
+      <div
+        className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up h-64 bg-gradient-to-br from-background via-card to-background"
+        style={{ animationDelay: `${index * 0.1}s` }}
+        onClick={() => setIsOpen(true)}
+      >
+        <div className="flex items-center justify-center w-full h-full">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 group-hover:bg-primary/30 transition-colors">
+              <Play className="w-8 h-8 text-primary fill-primary" />
+            </div>
+            <p className="text-sm text-muted-foreground font-rajdhani">Click to view</p>
           </div>
-          <h3 className="font-rajdhani font-bold text-xl text-center mb-3">
-            Instagram Post {index + 1}
-          </h3>
-          <p className="text-muted-foreground text-sm text-center mb-6 max-w-xs leading-relaxed">
-            Follow us on Instagram to see our latest mobile mechanic service updates and customer stories.
-          </p>
-          <Button
-            asChild
-            className="bg-gradient-primary text-white hover:opacity-90 font-bold px-8 py-2 rounded-lg transition-all transform hover:scale-105"
+        </div>
+      </div>
+
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setIsOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-lg h-[90vh] bg-black rounded-lg overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
           >
-            <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-              View on Instagram
-              <span className="text-lg">↗</span>
-            </a>
-          </Button>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-primary transition-colors z-10 bg-black/50 rounded-full p-2 hover:bg-black/70"
+              aria-label="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <iframe
+              src={`${url}embed/captioned/`}
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              scrolling="no"
+              allowFullScreen={true}
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              className="w-full h-full"
+              title={`Instagram Post ${index + 1}`}
+            ></iframe>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
