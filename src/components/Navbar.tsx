@@ -59,8 +59,8 @@ export const Navbar = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
-    { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+    { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61578075644481", label: "Facebook" },
+    { icon: Instagram, href: "https://www.instagram.com/mobilemechanicservice_/", label: "Instagram" },
     { icon: Music, href: "https://tiktok.com", label: "TikTok" },
     { icon: MessageCircle, href: "https://wa.me/2392729166", label: "WhatsApp" },
   ];
@@ -76,11 +76,11 @@ export const Navbar = () => {
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-12 text-sm">
               <div className="flex items-center gap-4">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.facebook.com/profile.php?id=61578075644481" target="_blank" rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <Facebook className="w-4 h-4" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.instagram.com/mobilemechanicservice_/" target="_blank" rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <Instagram className="w-4 h-4" />
                 </a>

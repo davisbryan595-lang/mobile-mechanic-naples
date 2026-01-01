@@ -112,7 +112,7 @@ export const Contact = () => {
               <h3 className="font-orbitron text-xl font-bold mb-4">Follow Us</h3>
               <div className="flex gap-4">
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/profile.php?id=61578075644481"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
@@ -120,7 +120,7 @@ export const Contact = () => {
                   <Facebook className="w-6 h-6 text-primary" />
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/mobilemechanicservice_/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
