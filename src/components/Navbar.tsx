@@ -59,8 +59,8 @@ export const Navbar = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
-    { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+    { icon: Facebook, href: "https://facebook.com", label: "Facebook" }, // Update pending
+    { icon: Instagram, href: "https://www.instagram.com/mobilemechanicservice_/", label: "Instagram" },
     { icon: Music, href: "https://tiktok.com", label: "TikTok" },
     { icon: MessageCircle, href: "https://wa.me/2392729166", label: "WhatsApp" },
   ];
