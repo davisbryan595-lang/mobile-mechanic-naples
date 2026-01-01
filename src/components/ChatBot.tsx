@@ -334,7 +334,7 @@ export const ChatBot = () => {
       )}
 
       {/* Animations and Responsive Styles */}
-      <style jsx>{`
+      <style>{`
         @keyframes slideUpChat {
           from {
             opacity: 0;
