@@ -80,7 +80,7 @@ export const Navbar = () => {
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <Facebook className="w-4 h-4" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.instagram.com/mobilemechanicservice_/" target="_blank" rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <Instagram className="w-4 h-4" />
                 </a>
