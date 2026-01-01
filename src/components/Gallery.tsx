@@ -12,7 +12,7 @@ const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) =>
   const [thumbnail, setThumbnail] = useState<string | null>(null);
   const url = `https://www.instagram.com/p/${postId}/`;
 
-  useState(() => {
+  useEffect(() => {
     // Fetch Instagram OEmbed data to get thumbnail
     fetch(`https://www.instagram.com/oembed/?url=${encodeURIComponent(url)}`)
       .then(res => res.json())
@@ -25,7 +25,7 @@ const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) =>
         // Fallback thumbnail if fetch fails
         setThumbnail(null);
       });
-  });
+  }, [url]);
 
   return (
     <>
