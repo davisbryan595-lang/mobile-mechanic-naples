@@ -193,17 +193,34 @@ export const Navbar = () => {
                   {/* Mobile Navigation Links */}
                   <div className="px-4 space-y-2">
                     {navLinks.map((link) => (
-                      <button
-                        key={link.id}
-                        onClick={() => scrollToSection(link.id)}
-                        className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium transition-all ${
-                          activeSection === link.id
-                            ? "bg-white/30 text-white"
-                            : "text-white/80 hover:bg-white/20 hover:text-white"
-                        }`}
-                      >
-                        {link.label}
-                      </button>
+                      (link as any).path ? (
+                        <a
+                          key={link.id}
+                          href={(link as any).path}
+                          className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium transition-all ${
+                            window.location.pathname === (link as any).path
+                              ? "bg-white/30 text-white"
+                              : "text-white/80 hover:bg-white/20 hover:text-white"
+                          }`}
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <button
+                          key={link.id}
+                          onClick={() => {
+                            scrollToSection(link.id);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium transition-all ${
+                            activeSection === link.id
+                              ? "bg-white/30 text-white"
+                              : "text-white/80 hover:bg-white/20 hover:text-white"
+                          }`}
+                        >
+                          {link.label}
+                        </button>
+                      )
                     ))}
                   </div>
 
