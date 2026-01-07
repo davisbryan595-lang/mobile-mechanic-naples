@@ -14,7 +14,7 @@ import {
   User,
   ChevronRight,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
@@ -27,6 +27,11 @@ export default function BlogPost() {
     phone: "",
     message: "",
   });
+
+  // Scroll to top when slug changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
 
   if (!post) {
     return (
