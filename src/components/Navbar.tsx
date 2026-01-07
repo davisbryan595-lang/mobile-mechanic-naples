@@ -40,6 +40,21 @@ export const Navbar = () => {
     }
   }, [isMobileMenuOpen]);
 
+  // Close call menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const callMenu = document.querySelector('[data-call-menu]');
+      if (callMenu && !callMenu.contains(event.target as Node)) {
+        setIsCallMenuOpen(false);
+      }
+    };
+
+    if (isCallMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [isCallMenuOpen]);
+
   const scrollToSection = (id: string) => {
     // If not on home page, navigate to home first
     if (location.pathname !== "/") {
