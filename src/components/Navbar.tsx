@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music, LogIn } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/sonner";
 import logo from "@/assets/logo.png";
 
 export const Navbar = () => {
@@ -120,7 +121,18 @@ export const Navbar = () => {
                   variant="ghost"
                   size="sm"
                   className="text-primary hover:text-primary-foreground hover:bg-primary"
-                  onClick={() => scrollToSection("contact")}
+                  onClick={() => {
+                    const phoneNumber = "(239) 272-9166";
+                    toast.success(`Call us at: ${phoneNumber}`, {
+                      action: {
+                        label: "Copy",
+                        onClick: () => {
+                          navigator.clipboard.writeText("2392729166");
+                          toast.success("Phone number copied!");
+                        },
+                      },
+                    });
+                  }}
                 >
                   <Phone className="w-4 h-4 mr-2" />
                   Call Now
