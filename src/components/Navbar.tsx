@@ -11,7 +11,6 @@ export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isCallMenuOpen, setIsCallMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
