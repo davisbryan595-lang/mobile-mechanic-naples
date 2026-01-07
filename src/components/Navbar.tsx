@@ -98,7 +98,7 @@ export const Navbar = () => {
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <Instagram className="w-4 h-4" />
                 </a>
-                <a href="https://wa.me/2392729166" target="_blank" rel="noopener noreferrer"
+                <a href="sms:2392729166"
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <MessageCircle className="w-4 h-4" />
                 </a>
