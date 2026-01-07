@@ -211,7 +211,7 @@ export const Navbar = () => {
                         <a
                           key={link.id}
                           href={(link as any).path}
-                          className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium transition-all ${
+                          className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium text-sm transition-all ${
                             window.location.pathname === (link as any).path
                               ? "bg-white/30 text-white"
                               : "text-white/80 hover:bg-white/20 hover:text-white"
@@ -226,7 +226,7 @@ export const Navbar = () => {
                             scrollToSection(link.id);
                             setIsMobileMenuOpen(false);
                           }}
-                          className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium transition-all ${
+                          className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium text-sm transition-all ${
                             activeSection === link.id
                               ? "bg-white/30 text-white"
                               : "text-white/80 hover:bg-white/20 hover:text-white"
@@ -241,7 +241,7 @@ export const Navbar = () => {
                   <div className="border-t border-white/20 pt-4 px-4">
                     {/* Mobile Social Icons */}
                     <div className="mb-4">
-                      <p className="text-xs font-rajdhani font-medium text-white/60 mb-3 uppercase">
+                      <p className="text-xs font-rajdhani font-medium text-white/60 mb-2 uppercase text-xs">
                         Follow Us
                       </p>
                       <div className="flex items-center gap-3">
@@ -265,7 +265,8 @@ export const Navbar = () => {
 
                     {/* Mobile Admin Login Button */}
                     <Button
-                      className="w-full bg-primary hover:bg-primary/90 text-white font-rajdhani font-medium mb-2 gap-2"
+                      size="sm"
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-rajdhani font-medium mb-2 gap-2 text-sm"
                       onClick={() => {
                         navigate("/admin/login");
                         setIsMobileMenuOpen(false);
@@ -277,7 +278,8 @@ export const Navbar = () => {
 
                     {/* Mobile Call Button */}
                     <Button
-                      className="w-full bg-primary hover:bg-primary/90 text-white"
+                      size="sm"
+                      className="w-full bg-primary hover:bg-primary/90 text-white text-sm"
                       asChild
                     >
                       <a href="tel:2392729166" className="flex items-center justify-center gap-2">
