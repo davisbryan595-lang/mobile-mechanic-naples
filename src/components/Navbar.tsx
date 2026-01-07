@@ -133,53 +133,26 @@ export const Navbar = () => {
                   <LogIn className="w-4 h-4 mr-1" />
                   Admin Login
                 </Button>
-                <div className="relative" data-call-menu>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-primary hover:text-primary-foreground hover:bg-primary"
-                    onClick={() => setIsCallMenuOpen(!isCallMenuOpen)}
-                  >
-                    <Phone className="w-4 h-4 mr-2" />
-                    Call Now
-                  </Button>
-
-                  {/* Call Options Dropdown */}
-                  {isCallMenuOpen && (
-                    <div className="absolute top-full right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg z-50 animate-in fade-in duration-200" data-call-menu>
-                      <div className="py-2">
-                        <a
-                          href="tel:2392729166"
-                          className="flex items-center gap-3 px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-                          onClick={() => setIsCallMenuOpen(false)}
-                        >
-                          <Phone className="w-4 h-4" />
-                          <span>Call</span>
-                        </a>
-                        <a
-                          href="sms:2392729166"
-                          className="flex items-center gap-3 px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-                          onClick={() => setIsCallMenuOpen(false)}
-                        >
-                          <MessageCircle className="w-4 h-4" />
-                          <span>Text Message</span>
-                        </a>
-                        <button
-                          onClick={() => {
-                            scrollToSection("contact");
-                            setIsCallMenuOpen(false);
-                          }}
-                          className="w-full text-left flex items-center gap-3 px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                          </svg>
-                          <span>Contact Form</span>
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary hover:text-primary-foreground hover:bg-primary"
+                  onClick={() => {
+                    const phoneNumber = "(239) 272-9166";
+                    toast.success(`Call us at: ${phoneNumber}`, {
+                      action: {
+                        label: "Copy",
+                        onClick: () => {
+                          navigator.clipboard.writeText("2392729166");
+                          toast.success("Phone number copied!");
+                        },
+                      },
+                    });
+                  }}
+                >
+                  <Phone className="w-4 h-4 mr-2" />
+                  Call Now
+                </Button>
               </div>
             </div>
           </div>
