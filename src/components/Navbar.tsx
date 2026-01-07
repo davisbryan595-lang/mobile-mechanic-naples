@@ -120,12 +120,10 @@ export const Navbar = () => {
                   variant="ghost"
                   size="sm"
                   className="text-primary hover:text-primary-foreground hover:bg-primary"
-                  asChild
+                  onClick={() => scrollToSection("contact")}
                 >
-                  <a href="tel:2392729166">
-                    <Phone className="w-4 h-4 mr-2" />
-                    Call Now
-                  </a>
+                  <Phone className="w-4 h-4 mr-2" />
+                  Call Now
                 </Button>
               </div>
             </div>
