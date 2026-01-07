@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music, LogIn } from "lucide-react";
+import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music, LogIn, Copy } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/sonner";
 import logo from "@/assets/logo.png";
 
 export const Navbar = () => {
