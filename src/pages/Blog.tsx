@@ -259,13 +259,11 @@ export default function Blog() {
                 <div className="text-xs text-primary-foreground/70 border-t border-primary-foreground/20 pt-4">
                   <p className="font-bold mb-2">Quick Contact</p>
                   <a
-                    href="https://wa.me/2392729166"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="sms:2392729166"
                     className="inline-flex items-center gap-2 hover:text-primary-foreground transition-colors"
                   >
                     <MessageCircle className="w-4 h-4" />
-                    WhatsApp Message
+                    SMS Message
                   </a>
                 </div>
               </div>
