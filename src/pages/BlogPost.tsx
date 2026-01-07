@@ -357,13 +357,11 @@ export default function BlogPost() {
             <div className="mt-6 pt-6 border-t border-border">
               <p className="text-sm text-muted-foreground mb-3">Or contact us directly:</p>
               <a
-                href="https://wa.me/2392729166"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="sms:2392729166"
                 className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-bold"
               >
                 <MessageCircle className="w-5 h-5" />
-                Message on WhatsApp
+                Message via SMS
               </a>
             </div>
           </div>
