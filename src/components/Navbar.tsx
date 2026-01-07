@@ -132,7 +132,7 @@ export const Navbar = () => {
                   <LogIn className="w-4 h-4 mr-1" />
                   Admin Login
                 </Button>
-                <div className="relative">
+                <div className="relative" data-call-menu>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -145,7 +145,7 @@ export const Navbar = () => {
 
                   {/* Call Options Dropdown */}
                   {isCallMenuOpen && (
-                    <div className="absolute top-full right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg z-50 animate-in fade-in duration-200">
+                    <div className="absolute top-full right-0 mt-2 w-48 bg-background border border-border rounded-lg shadow-lg z-50 animate-in fade-in duration-200" data-call-menu>
                       <div className="py-2">
                         <a
                           href="tel:2392729166"
