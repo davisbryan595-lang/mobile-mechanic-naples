@@ -21,12 +21,6 @@ export const Reviews = () => {
           </p>
         </div>
 
-        {/* Elfsight Facebook Reviews Embed */}
-        <div className="max-w-6xl mx-auto mb-16">
-          <h3 className="text-2xl md:text-3xl font-bold mb-8 text-gray-900">Facebook Reviews</h3>
-          <div className="elfsight-app-8003ef0a-f922-4112-b81c-09c2f48e6d97" data-elfsight-app-lazy></div>
-        </div>
-
         {/* Elfsight Google Reviews Embed */}
         <div className="max-w-6xl mx-auto">
           <h3 className="text-2xl md:text-3xl font-bold mb-8 text-gray-900">Google Reviews</h3>
