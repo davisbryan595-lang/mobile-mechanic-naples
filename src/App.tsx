@@ -30,20 +30,12 @@ const App = () => (
           <Route path="/admin/login" element={<LoginAdmin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
-          {/* City-Specific Pages */}
-          {/* Fort Myers Pages */}
-          <Route path="/fort-myers-home-mechanic-service" element={<CityHome />} />
-          <Route path="/fort-myers-about-mechanic-service" element={<CityAbout />} />
-          <Route path="/fort-myers-gallery-mechanic-service" element={<CityGallery />} />
-          <Route path="/fort-myers-services" element={<CityServices />} />
-          <Route path="/fort-myers-contact" element={<CityContact />} />
-
-          {/* Naples Pages */}
-          <Route path="/naples-home-mechanic-service" element={<CityHome />} />
-          <Route path="/naples-about-mechanic-service" element={<CityAbout />} />
-          <Route path="/naples-gallery-mechanic-service" element={<CityGallery />} />
-          <Route path="/naples-services" element={<CityServices />} />
-          <Route path="/naples-contact" element={<CityContact />} />
+          {/* City-Specific Pages with Dynamic Routes */}
+          <Route path="/:citySlug-home-mechanic-service" element={<CityHome />} />
+          <Route path="/:citySlug-about-mechanic-service" element={<CityAbout />} />
+          <Route path="/:citySlug-gallery-mechanic-service" element={<CityGallery />} />
+          <Route path="/:citySlug-services" element={<CityServices />} />
+          <Route path="/:citySlug-contact" element={<CityContact />} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
