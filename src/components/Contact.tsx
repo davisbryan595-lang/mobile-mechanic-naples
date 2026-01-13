@@ -17,7 +17,8 @@ export const Contact = () => {
     name: "",
     email: "",
     phone: "",
-    service: "",
+    vehicleType: "",
+    address: "",
     message: "",
     agree: false,
   });
