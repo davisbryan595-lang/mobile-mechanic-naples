@@ -17,7 +17,8 @@ export const Contact = () => {
     name: "",
     email: "",
     phone: "",
-    service: "",
+    vehicleType: "",
+    address: "",
     message: "",
     agree: false,
   });
@@ -46,7 +47,8 @@ export const Contact = () => {
       name: "",
       email: "",
       phone: "",
-      service: "",
+      vehicleType: "",
+      address: "",
       message: "",
       agree: false,
     });
@@ -178,20 +180,30 @@ export const Contact = () => {
               </div>
 
               <div>
-                <Label htmlFor="service" className="font-orbitron">Service Type</Label>
-                <Select value={formData.service} onValueChange={(value) => setFormData({ ...formData, service: value })}>
+                <Label htmlFor="vehicleType" className="font-orbitron">Vehicle Type</Label>
+                <Select value={formData.vehicleType} onValueChange={(value) => setFormData({ ...formData, vehicleType: value })}>
                   <SelectTrigger className="bg-background border-border mt-2">
-                    <SelectValue placeholder="Select a service" />
+                    <SelectValue placeholder="Select vehicle type" />
                   </SelectTrigger>
                   <SelectContent className="bg-background border-border">
-                    <SelectItem value="ac-repair">A/C Repair</SelectItem>
-                    <SelectItem value="brake-service">Brake Service</SelectItem>
-                    <SelectItem value="diagnostics">Diagnostics</SelectItem>
-                    <SelectItem value="starter-alternator">Starter/Alternator</SelectItem>
-                    <SelectItem value="battery">Battery</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="passenger-car">Passenger Car</SelectItem>
+                    <SelectItem value="suv">SUV</SelectItem>
+                    <SelectItem value="truck">Truck</SelectItem>
+                    <SelectItem value="van-commercial">Van / Commercial</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="address" className="font-orbitron">Address</Label>
+                <Input
+                  id="address"
+                  value={formData.address}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  required
+                  className="bg-background border-border mt-2"
+                  placeholder="Service location address"
+                />
               </div>
 
               <div>

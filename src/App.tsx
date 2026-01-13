@@ -9,6 +9,11 @@ import LoginAdmin from "./pages/admin/LoginAdmin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import { CityHome } from "./pages/city/CityHome";
+import { CityAbout } from "./pages/city/CityAbout";
+import { CityGallery } from "./pages/city/CityGallery";
+import { CityServices } from "./pages/city/CityServices";
+import { CityContact } from "./pages/city/CityContact";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +29,14 @@ const App = () => (
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/admin/login" element={<LoginAdmin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+          {/* City-Specific Pages with Dynamic Routes */}
+          <Route path="/:citySlug-home-mechanic-service" element={<CityHome />} />
+          <Route path="/:citySlug-about-mechanic-service" element={<CityAbout />} />
+          <Route path="/:citySlug-gallery-mechanic-service" element={<CityGallery />} />
+          <Route path="/:citySlug-services" element={<CityServices />} />
+          <Route path="/:citySlug-contact" element={<CityContact />} />
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
