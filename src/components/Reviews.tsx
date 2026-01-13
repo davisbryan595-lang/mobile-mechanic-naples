@@ -30,7 +30,7 @@ export const Reviews = () => {
         {/* Elfsight Google Reviews Embed */}
         <div className="max-w-6xl mx-auto">
           <h3 className="text-2xl md:text-3xl font-bold mb-8 text-gray-900">Google Reviews</h3>
-          <div className="elfsight-app-b8850ca7-2322-4232-831a-7851a0e6f121" data-elfsight-app-lazy></div>
+          <div className="elfsight-app-f5e40908-98c3-4e79-84ea-3da7c77a0295" data-elfsight-app-lazy></div>
         </div>
       </div>
     </section>
