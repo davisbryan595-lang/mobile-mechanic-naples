@@ -1,4 +1,5 @@
 import { useParams, Navigate } from "react-router-dom";
+import { useParams as useParamsHook } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ChatBot } from "@/components/ChatBot";
