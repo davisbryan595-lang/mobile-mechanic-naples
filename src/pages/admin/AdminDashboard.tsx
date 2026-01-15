@@ -8,6 +8,7 @@ import { adminAuth } from "@/utils/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import Customers from "./Customers";
+import Appointments from "./Appointments";
 
 interface StatsCardProps {
   label: string;
