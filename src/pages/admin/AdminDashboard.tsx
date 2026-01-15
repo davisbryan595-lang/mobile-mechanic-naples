@@ -175,12 +175,23 @@ const AdminDashboard = () => {
           .order("updated_at", { ascending: false })
           .limit(10);
 
-        if (error && error.code !== "PGRST116") throw error;
+        // If table doesn't exist, just show empty
+        if (error) {
+          if (error.code === "PGRST116") {
+            setRecentCustomers([]);
+            setLoadingCustomers(false);
+            return;
+          }
+          console.error("Error fetching customers:", error.message || error);
+          setCustomersError(true);
+          setLoadingCustomers(false);
+          return;
+        }
 
         setRecentCustomers(data || []);
         setLoadingCustomers(false);
       } catch (error) {
-        console.error("Error fetching customers:", error);
+        console.error("Error fetching customers:", error instanceof Error ? error.message : String(error));
         setCustomersError(true);
         setLoadingCustomers(false);
       }
