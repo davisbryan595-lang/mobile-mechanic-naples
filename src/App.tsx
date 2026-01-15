@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LoginAdmin from "./pages/admin/LoginAdmin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import CustomerDetail from "./pages/admin/CustomerDetail";
+import CustomerForm from "./pages/admin/CustomerForm";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import { CityHome } from "./pages/city/CityHome";
