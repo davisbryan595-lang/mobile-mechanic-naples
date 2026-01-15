@@ -281,7 +281,7 @@ const Customers = () => {
           <h3 className="text-xl font-semibold text-white mb-2 font-rajdhani">No customers yet</h3>
           <p className="text-gray-400 mb-6 font-rajdhani">Start by adding your first customer</p>
           <Button
-            onClick={() => navigate("/admin/customers/new")}
+            onClick={() => setIsModalOpen(true)}
             className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-rajdhani font-medium"
           >
             + Add Customer
