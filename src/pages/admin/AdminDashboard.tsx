@@ -31,6 +31,13 @@ const StatsCard = ({ label, value, icon, bgColor }: StatsCardProps) => (
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("overview");
+  const [stats, setStats] = useState({
+    todayJobs: 0,
+    weeklyRevenue: "$0",
+    pendingPayments: "$0",
+    totalCustomers: 0,
+    loadingStats: true,
+  });
 
   // Check authentication on mount
   useEffect(() => {
@@ -38,6 +45,52 @@ const AdminDashboard = () => {
       navigate("/admin/login");
     }
   }, [navigate]);
+
+  // Fetch dashboard stats from Supabase
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        // 1. Today's Jobs - Count of bookings where appointment_date is today
+        const today = new Date();
+        const todayStart = startOfDay(today).toISOString();
+        const todayEnd = endOfDay(today).toISOString();
+
+        const { count: todayCount } = await supabase
+          .from("bookings")
+          .select("*", { count: "exact", head: true })
+          .gte("appointment_date", today.toISOString().split("T")[0])
+          .lte("appointment_date", today.toISOString().split("T")[0]);
+
+        // 2. Total Customers - Count of active customers
+        const { count: customerCount } = await supabase
+          .from("customers")
+          .select("*", { count: "exact", head: true })
+          .eq("is_active", true);
+
+        // 3. Completed work orders (for reference, since we don't have invoices table yet)
+        const sevenDaysAgo = subDays(today, 7).toISOString();
+        const { data: completedOrders } = await supabase
+          .from("work_orders")
+          .select("*")
+          .gte("completed_at", sevenDaysAgo)
+          .not("completed_at", "is", null);
+
+        // Update stats
+        setStats({
+          todayJobs: todayCount || 0,
+          weeklyRevenue: "$0", // Placeholder - waiting for invoices table
+          pendingPayments: "$0", // Placeholder - waiting for invoices table
+          totalCustomers: customerCount || 0,
+          loadingStats: false,
+        });
+      } catch (error) {
+        console.error("Error fetching dashboard stats:", error);
+        setStats(prev => ({ ...prev, loadingStats: false }));
+      }
+    };
+
+    fetchStats();
+  }, []);
 
 
   const renderOverview = () => (
