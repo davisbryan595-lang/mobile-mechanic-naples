@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SidebarAdmin } from "@/components/admin/SidebarAdmin";
 import { adminAuth } from "@/utils/auth";
+import Customers from "./Customers";
 
 interface StatsCardProps {
   label: string;
