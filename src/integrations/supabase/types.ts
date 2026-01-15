@@ -401,6 +401,8 @@ export const Constants = {
         "routine_maintenance",
         "other",
       ],
+      customer_type: ["new", "repeat", "vip", "problematic"],
+      lead_source: ["google", "facebook", "referral", "yelp", "instagram", "repeat", "other"],
     },
   },
 } as const
