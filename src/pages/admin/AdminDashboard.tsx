@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import Customers from "./Customers";
 import Appointments from "./Appointments";
 import Invoices from "./Invoices";
+import History from "./History";
 
 interface StatsCardProps {
   label: string;
