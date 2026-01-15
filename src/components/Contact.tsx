@@ -52,6 +52,8 @@ export const Contact = () => {
       vehicleType: "",
       address: "",
       message: "",
+      hearAboutUs: "",
+      hearAboutUsOther: "",
       agree: false,
     });
   };
