@@ -30,6 +30,11 @@ export const SidebarAdmin = ({ activeSection, onSectionChange }: SidebarAdminPro
       icon: Calendar,
     },
     {
+      id: "form-submissions",
+      label: "Form Submissions",
+      icon: Mail,
+    },
+    {
       id: "history",
       label: "History",
       icon: History,
