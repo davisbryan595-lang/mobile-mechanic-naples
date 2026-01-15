@@ -11,8 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
-const WEB3FORMS_ACCESS_KEY = "2d60852d-45e0-45b7-b632-4221bf58d0a1";
-const RECIPIENT_EMAIL = "linkage505@gmail.com";
+const SUPABASE_EDGE_FUNCTION_URL = "https://xjhvmipqcacgkalqxkvq.supabase.co/functions/v1/form-handler";
 
 export const Contact = () => {
   const { toast } = useToast();
