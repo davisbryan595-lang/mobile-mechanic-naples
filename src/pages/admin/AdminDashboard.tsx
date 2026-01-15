@@ -91,7 +91,8 @@ const AdminDashboard = () => {
           .select("*", { count: "exact", head: true })
           .eq("appointment_date", today);
 
-        if (todayError && todayError.code !== "PGRST116") throw todayError;
+        // If table doesn't exist, todayCount will be null - that's OK
+        const jobsCount = todayError?.code === "PGRST116" ? 0 : (todayCount || 0);
 
         // Total customers
         const { count: customerCount, error: customerError } = await supabase
@@ -99,10 +100,13 @@ const AdminDashboard = () => {
           .select("*", { count: "exact", head: true })
           .eq("is_active", true);
 
-        if (customerError && customerError.code !== "PGRST116") throw customerError;
+        if (customerError && customerError.code !== "PGRST116") {
+          console.error("Error fetching customer count:", customerError.message || customerError);
+          throw customerError;
+        }
 
         setStats({
-          todayJobs: todayCount || 0,
+          todayJobs: jobsCount,
           weeklyRevenue: "$0", // Placeholder - waiting for invoices table
           pendingPayments: "$0", // Placeholder - waiting for invoices table
           totalCustomers: customerCount || 0,
@@ -110,7 +114,7 @@ const AdminDashboard = () => {
           statsError: false,
         });
       } catch (error) {
-        console.error("Error fetching stats:", error);
+        console.error("Error fetching stats:", error instanceof Error ? error.message : String(error));
         setStats(prev => ({ ...prev, loadingStats: false, statsError: true }));
       }
     };
