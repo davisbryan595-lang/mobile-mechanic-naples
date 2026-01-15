@@ -252,6 +252,76 @@ const AdminDashboard = () => {
     fetchCustomers();
   }, []);
 
+  // Fetch active work orders
+  useEffect(() => {
+    const fetchWorkOrders = async () => {
+      setLoadingWorkOrders(true);
+      setWorkOrdersError(false);
+      try {
+        const { data, error } = await supabase
+          .from("work_orders")
+          .select("id, customer_id, vehicle_id, service_type, description, status, created_at")
+          .neq("status", "completed")
+          .order("created_at", { ascending: false })
+          .limit(10);
+
+        if (error) {
+          if (error.code === "PGRST116") {
+            setWorkOrders([]);
+            setLoadingWorkOrders(false);
+            return;
+          }
+          console.error("Error fetching work orders:", error.message || error);
+          setWorkOrdersError(true);
+          setLoadingWorkOrders(false);
+          return;
+        }
+
+        // Fetch customer and vehicle info for each work order
+        const ordersWithDetails: WorkOrderWithDetails[] = [];
+        for (const order of data || []) {
+          const { data: customerData } = await supabase
+            .from("customers")
+            .select("first_name, last_name")
+            .eq("id", order.customer_id)
+            .single();
+
+          let vehicleInfo = {};
+          if (order.vehicle_id) {
+            const { data: vehicleData } = await supabase
+              .from("vehicles")
+              .select("make, model, year")
+              .eq("id", order.vehicle_id)
+              .single();
+
+            if (vehicleData) {
+              vehicleInfo = {
+                vehicle_make: vehicleData.make,
+                vehicle_model: vehicleData.model,
+                vehicle_year: vehicleData.year,
+              };
+            }
+          }
+
+          ordersWithDetails.push({
+            ...order,
+            customer_name: customerData ? `${customerData.first_name} ${customerData.last_name}` : "Unknown",
+            ...vehicleInfo,
+          });
+        }
+
+        setWorkOrders(ordersWithDetails);
+        setLoadingWorkOrders(false);
+      } catch (error) {
+        console.error("Error fetching work orders:", error instanceof Error ? error.message : String(error));
+        setWorkOrdersError(true);
+        setLoadingWorkOrders(false);
+      }
+    };
+
+    fetchWorkOrders();
+  }, []);
+
   const formatPhone = (phone: string) => {
     const cleaned = phone.replace(/\D/g, "");
     const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
