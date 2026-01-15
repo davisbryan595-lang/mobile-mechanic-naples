@@ -252,6 +252,8 @@ export type Database = {
         | "battery_replacement"
         | "routine_maintenance"
         | "other"
+      customer_type: "new" | "repeat" | "vip" | "problematic"
+      lead_source: "google" | "facebook" | "referral" | "yelp" | "instagram" | "repeat" | "other"
     }
     CompositeTypes: {
       [_ in never]: never
