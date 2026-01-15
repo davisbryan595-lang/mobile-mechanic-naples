@@ -54,25 +54,25 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatsCard
           label="Today's Jobs"
-          value={2}
+          value={0}
           icon={<Clock className="w-6 h-6 text-primary" />}
           bgColor="bg-primary/20"
         />
         <StatsCard
           label="Weekly Revenue"
-          value="$2,850"
+          value="$0"
           icon={<TrendingUp className="w-6 h-6 text-emerald-500" />}
           bgColor="bg-emerald-500/20"
         />
         <StatsCard
           label="Pending Payments"
-          value="$450"
+          value="$0"
           icon={<AlertCircle className="w-6 h-6 text-amber-500" />}
           bgColor="bg-amber-500/20"
         />
         <StatsCard
           label="Total Customers"
-          value={24}
+          value={0}
           icon={<UsersIcon className="w-6 h-6 text-blue-500" />}
           bgColor="bg-blue-500/20"
         />
