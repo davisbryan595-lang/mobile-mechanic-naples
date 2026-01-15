@@ -599,6 +599,107 @@ const AdminDashboard = () => {
             </div>
           )}
         </Card>
+
+        {/* Active Work Orders */}
+        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
+          <div className="p-6 border-b border-border/30 flex items-center justify-between">
+            <h3 className="text-xl font-orbitron font-bold text-foreground">
+              Active Work Orders
+            </h3>
+            <Button
+              onClick={() => alert("Work Order form coming soon")}
+              size="sm"
+              className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-1"
+            >
+              <Plus className="w-4 h-4" />
+              New
+            </Button>
+          </div>
+
+          {loadingWorkOrders && (
+            <div className="p-6 text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
+              <p className="text-muted-foreground font-rajdhani text-sm">Loading work orders...</p>
+            </div>
+          )}
+
+          {workOrdersError && (
+            <div className="p-6">
+              <div className="bg-red-900/20 border border-red-500 rounded-lg p-3 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                <p className="text-red-400 font-rajdhani text-sm">Failed to load work orders</p>
+              </div>
+            </div>
+          )}
+
+          {!loadingWorkOrders && !workOrdersError && workOrders.length === 0 && (
+            <div className="p-8 text-center">
+              <p className="text-muted-foreground font-rajdhani mb-3">
+                No active work orders yet. Click the button above to get started.
+              </p>
+            </div>
+          )}
+
+          {!loadingWorkOrders && !workOrdersError && workOrders.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30">
+                  <tr>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Customer
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Vehicle
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Service
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {workOrders.map((order) => (
+                    <tr
+                      key={order.id}
+                      className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
+                    >
+                      <td className="p-4 text-foreground font-rajdhani text-sm">
+                        {order.customer_name}
+                      </td>
+                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                        {order.vehicle_make && order.vehicle_model
+                          ? `${order.vehicle_make} ${order.vehicle_model} ${order.vehicle_year || ""}`
+                          : "—"}
+                      </td>
+                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani capitalize">
+                        {order.service_type.replace(/_/g, " ")}
+                      </td>
+                      <td className="p-4">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-rajdhani font-medium ${
+                            order.status === "pending"
+                              ? "bg-blue-500/20 text-blue-400"
+                              : order.status === "in_progress"
+                              ? "bg-orange-500/20 text-orange-400"
+                              : order.status === "completed"
+                              ? "bg-green-500/20 text-green-400"
+                              : order.status === "cancelled"
+                              ? "bg-red-500/20 text-red-400"
+                              : "bg-gray-500/20 text-gray-400"
+                          }`}
+                        >
+                          {order.status.charAt(0).toUpperCase() + order.status.slice(1).replace(/_/g, " ")}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </Card>
       </div>
 
       {/* Action Buttons Section */}
