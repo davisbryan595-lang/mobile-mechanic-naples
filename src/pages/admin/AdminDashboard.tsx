@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SidebarAdmin } from "@/components/admin/SidebarAdmin";
 import { adminAuth } from "@/utils/auth";
+import { supabase } from "@/integrations/supabase/client";
+import { startOfDay, endOfDay, subDays } from "date-fns";
 import Customers from "./Customers";
 
 interface StatsCardProps {
