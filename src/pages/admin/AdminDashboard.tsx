@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, TrendingUp, AlertCircle, Users as UsersIcon, Plus, CheckCircle, AlertTriangle, RefreshCw } from "lucide-react";
+import { Clock, TrendingUp, AlertCircle, Users as UsersIcon, Plus, CheckCircle, AlertTriangle, RefreshCw, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SidebarAdmin } from "@/components/admin/SidebarAdmin";
@@ -39,6 +39,20 @@ interface CustomerData {
   updated_at: string;
 }
 
+interface FormSubmissionData {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  message: string;
+  vehicle_type?: string;
+  preferred_date?: string;
+  how_heard_about_us?: string;
+  other_source?: string;
+  created_at: string;
+}
+
 const StatsCard = ({ label, value, icon, bgColor }: StatsCardProps) => (
   <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-6 flex flex-col gap-4">
     <div className="flex items-start justify-between">
@@ -74,6 +88,11 @@ const AdminDashboard = () => {
   const [recentCustomers, setRecentCustomers] = useState<CustomerData[]>([]);
   const [loadingCustomers, setLoadingCustomers] = useState(true);
   const [customersError, setCustomersError] = useState(false);
+
+  // Form Submissions state
+  const [formSubmissions, setFormSubmissions] = useState<FormSubmissionData[]>([]);
+  const [loadingFormSubmissions, setLoadingFormSubmissions] = useState(true);
+  const [formSubmissionsError, setFormSubmissionsError] = useState(false);
 
   // Work Orders state
   interface WorkOrderData {
@@ -253,6 +272,37 @@ const AdminDashboard = () => {
     fetchCustomers();
   }, []);
 
+  // Fetch form submissions
+  useEffect(() => {
+    const fetchFormSubmissions = async () => {
+      setLoadingFormSubmissions(true);
+      setFormSubmissionsError(false);
+      try {
+        const { data, error } = await supabase
+          .from("form_submissions")
+          .select("id, name, email, phone, address, message, vehicle_type, preferred_date, how_heard_about_us, other_source, created_at")
+          .order("created_at", { ascending: false })
+          .limit(50);
+
+        if (error) {
+          console.error("Error fetching form submissions:", error.message || error);
+          setFormSubmissionsError(true);
+          setLoadingFormSubmissions(false);
+          return;
+        }
+
+        setFormSubmissions(data || []);
+        setLoadingFormSubmissions(false);
+      } catch (error) {
+        console.error("Error fetching form submissions:", error instanceof Error ? error.message : String(error));
+        setFormSubmissionsError(true);
+        setLoadingFormSubmissions(false);
+      }
+    };
+
+    fetchFormSubmissions();
+  }, []);
+
   // Fetch active work orders
   useEffect(() => {
     const fetchWorkOrders = async () => {
@@ -364,6 +414,110 @@ const AdminDashboard = () => {
         return "bg-amber-500/20 text-amber-400";
     }
   };
+
+  const renderFormSubmissions = () => (
+    <div className="space-y-6">
+      <div className="mb-8">
+        <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-foreground mb-2">
+          Form Submissions
+        </h2>
+        <p className="text-muted-foreground font-rajdhani">
+          All customer inquiries from your website contact form
+        </p>
+      </div>
+
+      <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
+        {loadingFormSubmissions && (
+          <div className="p-6 text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
+            <p className="text-muted-foreground font-rajdhani text-sm">Loading submissions...</p>
+          </div>
+        )}
+
+        {formSubmissionsError && (
+          <div className="p-6">
+            <div className="bg-red-900/20 border border-red-500 rounded-lg p-3 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
+              <p className="text-red-400 font-rajdhani text-sm">Failed to load form submissions</p>
+            </div>
+          </div>
+        )}
+
+        {!loadingFormSubmissions && !formSubmissionsError && formSubmissions.length === 0 && (
+          <div className="p-8 text-center">
+            <Mail className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
+            <p className="text-muted-foreground font-rajdhani">
+              No form submissions yet. They will appear here when customers submit the contact form.
+            </p>
+          </div>
+        )}
+
+        {!loadingFormSubmissions && !formSubmissionsError && formSubmissions.length > 0 && (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="border-b border-border/30 bg-secondary/30 sticky top-0">
+                <tr>
+                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    Name
+                  </th>
+                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    Email
+                  </th>
+                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    Phone
+                  </th>
+                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    Vehicle
+                  </th>
+                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    Address
+                  </th>
+                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    Date
+                  </th>
+                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    Message
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {formSubmissions.map((submission) => (
+                  <tr
+                    key={submission.id}
+                    className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
+                  >
+                    <td className="p-4 text-foreground font-rajdhani font-medium">{submission.name}</td>
+                    <td className="p-4 text-primary text-sm font-rajdhani">
+                      <a href={`mailto:${submission.email}`} className="hover:underline">
+                        {submission.email}
+                      </a>
+                    </td>
+                    <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      <a href={`tel:${submission.phone}`} className="hover:text-primary transition-colors">
+                        {submission.phone}
+                      </a>
+                    </td>
+                    <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      {submission.vehicle_type || "—"}
+                    </td>
+                    <td className="p-4 text-muted-foreground text-sm font-rajdhani max-w-xs truncate">
+                      {submission.address}
+                    </td>
+                    <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      {format(new Date(submission.created_at), "MMM d, yyyy")}
+                    </td>
+                    <td className="p-4 text-muted-foreground text-sm font-rajdhani max-w-xs truncate">
+                      {submission.message}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Card>
+    </div>
+  );
 
   const renderOverview = () => (
     <div className="space-y-8">
@@ -755,6 +909,9 @@ const AdminDashboard = () => {
     }
     if (activeSection === "history") {
       return <History />;
+    }
+    if (activeSection === "form-submissions") {
+      return renderFormSubmissions();
     }
     return (
       <div className="p-8">

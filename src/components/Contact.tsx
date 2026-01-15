@@ -11,8 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
-const WEB3FORMS_ACCESS_KEY = "2d60852d-45e0-45b7-b632-4221bf58d0a1";
-const RECIPIENT_EMAIL = "linkage505@gmail.com";
+const SUPABASE_EDGE_FUNCTION_URL = "https://xjhvmipqcacgkalqxkvq.supabase.co/functions/v1/form-handler";
 
 export const Contact = () => {
   const { toast } = useToast();
@@ -54,34 +53,26 @@ export const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const submissionData = {
-        access_key: WEB3FORMS_ACCESS_KEY,
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        vehicle_type: formData.vehicleType,
-        address: formData.address,
-        message: formData.message,
-        preferred_date: date ? format(date, "PPP") : "Not specified",
-        how_heard_about_us: formData.hearAboutUs,
-        other_source: formData.hearAboutUsOther,
-        recipient_email: RECIPIENT_EMAIL,
-      };
+      const submissionData = new FormData();
+      submissionData.append("name", formData.name);
+      submissionData.append("email", formData.email);
+      submissionData.append("phone", formData.phone);
+      submissionData.append("vehicle_type", formData.vehicleType);
+      submissionData.append("address", formData.address);
+      submissionData.append("message", formData.message);
+      submissionData.append("preferred_date", date ? format(date, "PPP") : "Not specified");
+      submissionData.append("how_heard_about_us", formData.hearAboutUs);
+      submissionData.append("other_source", formData.hearAboutUsOther);
 
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch(SUPABASE_EDGE_FUNCTION_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(submissionData),
+        body: submissionData,
       });
 
-      const result = await response.json();
-
-      if (result.success) {
+      if (response.ok) {
         toast({
-          title: "Message Sent!",
-          description: "We'll get back to you as soon as possible.",
+          title: "Success",
+          description: "Thank you! Your message has been sent. We'll get back to you soon.",
         });
 
         // Reset form
@@ -100,7 +91,7 @@ export const Contact = () => {
       } else {
         toast({
           title: "Error",
-          description: result.message || "Failed to send message. Please try again.",
+          description: "Something went wrong. Please try again or call us directly.",
           variant: "destructive",
         });
       }
@@ -108,7 +99,7 @@ export const Contact = () => {
       console.error("Form submission error:", error);
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again or call us directly.",
+        description: "Something went wrong. Please try again or call us directly.",
         variant: "destructive",
       });
     } finally {
