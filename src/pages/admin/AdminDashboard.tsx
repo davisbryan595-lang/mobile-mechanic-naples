@@ -129,15 +129,27 @@ const AdminDashboard = () => {
           .select("id, full_name, vehicle_make, vehicle_model, service_type, appointment_date, appointment_time, status")
           .gte("appointment_date", new Date().toISOString().split("T")[0])
           .order("appointment_date", { ascending: true })
-          .order("appointment_time", { ascending: true })
           .limit(10);
 
-        if (error && error.code !== "PGRST116") throw error;
+        // Handle errors - if table doesn't exist, just show empty state
+        if (error) {
+          // PGRST116 = relation does not exist, which is OK - just show empty
+          if (error.code === "PGRST116") {
+            setAppointments([]);
+            setLoadingAppointments(false);
+            return;
+          }
+          // For other errors, log and show error state
+          console.error("Error fetching appointments:", error.message || error);
+          setAppointmentsError(true);
+          setLoadingAppointments(false);
+          return;
+        }
 
         setAppointments(data || []);
         setLoadingAppointments(false);
       } catch (error) {
-        console.error("Error fetching appointments:", error);
+        console.error("Error fetching appointments:", error instanceof Error ? error.message : String(error));
         setAppointmentsError(true);
         setLoadingAppointments(false);
       }
