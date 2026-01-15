@@ -39,6 +39,20 @@ interface CustomerData {
   updated_at: string;
 }
 
+interface FormSubmissionData {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  message: string;
+  vehicle_type?: string;
+  preferred_date?: string;
+  how_heard_about_us?: string;
+  other_source?: string;
+  created_at: string;
+}
+
 const StatsCard = ({ label, value, icon, bgColor }: StatsCardProps) => (
   <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-6 flex flex-col gap-4">
     <div className="flex items-start justify-between">
