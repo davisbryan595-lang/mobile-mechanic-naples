@@ -45,7 +45,7 @@ const EVENT_LABELS = {
 };
 
 const EVENT_ICONS = {
-  work_order_completed: Tool,
+  work_order_completed: Wrench,
   invoice_paid: DollarSign,
   appointment_scheduled: Calendar,
   appointment_completed: CheckCircle,
