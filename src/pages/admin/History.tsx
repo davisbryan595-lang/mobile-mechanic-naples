@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AlertTriangle, RefreshCw, ChevronLeft, ChevronRight, CheckCircle, DollarSign, Calendar, User, Tool } from "lucide-react";
+import { AlertTriangle, RefreshCw, ChevronLeft, ChevronRight, CheckCircle, DollarSign, Calendar, User, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
