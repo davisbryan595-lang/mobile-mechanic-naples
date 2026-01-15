@@ -74,6 +74,28 @@ const AdminDashboard = () => {
   const [loadingCustomers, setLoadingCustomers] = useState(true);
   const [customersError, setCustomersError] = useState(false);
 
+  // Work Orders state
+  interface WorkOrderData {
+    id: string;
+    customer_id: string;
+    vehicle_id: string | null;
+    service_type: string;
+    description: string | null;
+    status: string;
+    created_at: string;
+  }
+
+  interface WorkOrderWithDetails extends WorkOrderData {
+    customer_name: string;
+    vehicle_make?: string;
+    vehicle_model?: string;
+    vehicle_year?: number;
+  }
+
+  const [workOrders, setWorkOrders] = useState<WorkOrderWithDetails[]>([]);
+  const [loadingWorkOrders, setLoadingWorkOrders] = useState(true);
+  const [workOrdersError, setWorkOrdersError] = useState(false);
+
   // Check authentication on mount
   useEffect(() => {
     if (!adminAuth.isAuthenticated()) {
