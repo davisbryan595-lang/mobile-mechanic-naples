@@ -6,10 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { MessageCircle, Phone, MapPin, Facebook, Instagram, Music, CalendarIcon } from "lucide-react";
+import { MessageCircle, Phone, MapPin, Facebook, Instagram, Music, CalendarIcon, Loader } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+
+const WEB3FORMS_ACCESS_KEY = "2d60852d-45e0-45b7-b632-4221bf58d0a1";
+const RECIPIENT_EMAIL = "linkage505@gmail.com";
 
 export const Contact = () => {
   const { toast } = useToast();
@@ -25,10 +28,11 @@ export const Contact = () => {
     agree: false,
   });
   const [date, setDate] = useState<Date>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.agree) {
       toast({
         title: "Agreement Required",
@@ -38,24 +42,78 @@ export const Contact = () => {
       return;
     }
 
-    // Here you would typically send the form data to your backend
-    toast({
-      title: "Message Sent!",
-      description: "We'll get back to you as soon as possible.",
-    });
+    if (!formData.name || !formData.email || !formData.phone || !formData.address || !formData.message) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      vehicleType: "",
-      address: "",
-      message: "",
-      hearAboutUs: "",
-      hearAboutUsOther: "",
-      agree: false,
-    });
+    setIsSubmitting(true);
+
+    try {
+      const submissionData = {
+        access_key: WEB3FORMS_ACCESS_KEY,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        vehicle_type: formData.vehicleType,
+        address: formData.address,
+        message: formData.message,
+        preferred_date: date ? format(date, "PPP") : "Not specified",
+        how_heard_about_us: formData.hearAboutUs,
+        other_source: formData.hearAboutUsOther,
+        recipient_email: RECIPIENT_EMAIL,
+      };
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submissionData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Message Sent!",
+          description: "We'll get back to you as soon as possible.",
+        });
+
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          vehicleType: "",
+          address: "",
+          message: "",
+          hearAboutUs: "",
+          hearAboutUsOther: "",
+          agree: false,
+        });
+        setDate(undefined);
+      } else {
+        toast({
+          title: "Error",
+          description: result.message || "Failed to send message. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again or call us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
