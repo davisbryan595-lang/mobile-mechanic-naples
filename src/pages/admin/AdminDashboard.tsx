@@ -1,16 +1,42 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Clock, TrendingUp, AlertCircle, Users as UsersIcon, Plus, CheckCircle } from "lucide-react";
+import { Clock, TrendingUp, AlertCircle, Users as UsersIcon, Plus, CheckCircle, AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SidebarAdmin } from "@/components/admin/SidebarAdmin";
 import { adminAuth } from "@/utils/auth";
+import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
+import Customers from "./Customers";
+import Appointments from "./Appointments";
+import Invoices from "./Invoices";
+import History from "./History";
 
 interface StatsCardProps {
   label: string;
   value: string | number;
   icon: React.ReactNode;
   bgColor: string;
+}
+
+interface AppointmentData {
+  id: string;
+  full_name: string;
+  vehicle_make?: string;
+  vehicle_model?: string;
+  service_type: string;
+  appointment_date: string;
+  appointment_time: string;
+  status: string;
+}
+
+interface CustomerData {
+  id: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  email?: string;
+  updated_at: string;
 }
 
 const StatsCard = ({ label, value, icon, bgColor }: StatsCardProps) => (
@@ -29,6 +55,48 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("overview");
 
+  // Stats state
+  const [stats, setStats] = useState({
+    todayJobs: 0,
+    weeklyRevenue: "$0",
+    pendingPayments: "$0",
+    totalCustomers: 0,
+    loadingStats: true,
+    statsError: false,
+  });
+
+  // Appointments state
+  const [appointments, setAppointments] = useState<AppointmentData[]>([]);
+  const [loadingAppointments, setLoadingAppointments] = useState(true);
+  const [appointmentsError, setAppointmentsError] = useState(false);
+
+  // Customers state
+  const [recentCustomers, setRecentCustomers] = useState<CustomerData[]>([]);
+  const [loadingCustomers, setLoadingCustomers] = useState(true);
+  const [customersError, setCustomersError] = useState(false);
+
+  // Work Orders state
+  interface WorkOrderData {
+    id: string;
+    customer_id: string;
+    vehicle_id: string | null;
+    service_type: string;
+    description: string | null;
+    status: string;
+    created_at: string;
+  }
+
+  interface WorkOrderWithDetails extends WorkOrderData {
+    customer_name: string;
+    vehicle_make?: string;
+    vehicle_model?: string;
+    vehicle_year?: number;
+  }
+
+  const [workOrders, setWorkOrders] = useState<WorkOrderWithDetails[]>([]);
+  const [loadingWorkOrders, setLoadingWorkOrders] = useState(true);
+  const [workOrdersError, setWorkOrdersError] = useState(false);
+
   // Check authentication on mount
   useEffect(() => {
     if (!adminAuth.isAuthenticated()) {
@@ -36,81 +104,266 @@ const AdminDashboard = () => {
     }
   }, [navigate]);
 
-  // Sample data for upcoming appointments
-  const upcomingAppointments = [
-    {
-      id: 1,
-      customer: "John Smith",
-      vehicle: "2021 Toyota Camry",
-      service: "Brake Service",
-      time: "Today, 2:00 PM",
-      status: "Scheduled",
-    },
-    {
-      id: 2,
-      customer: "Sarah Johnson",
-      vehicle: "2019 Honda Civic",
-      service: "Oil Change",
-      time: "Today, 4:30 PM",
-      status: "In Progress",
-    },
-    {
-      id: 3,
-      customer: "Michael Davis",
-      vehicle: "2022 Ford F-150",
-      service: "Transmission Check",
-      time: "Tomorrow, 10:00 AM",
-      status: "Scheduled",
-    },
-    {
-      id: 4,
-      customer: "Emily Wilson",
-      vehicle: "2020 Chevrolet Malibu",
-      service: "Air Filter Replacement",
-      time: "Tomorrow, 1:00 PM",
-      status: "Scheduled",
-    },
-    {
-      id: 5,
-      customer: "James Brown",
-      vehicle: "2018 Nissan Altima",
-      service: "Battery Replacement",
-      time: "Dec 26, 3:00 PM",
-      status: "Pending",
-    },
-  ];
+  // Fetch stats
+  useEffect(() => {
+    const fetchStats = async () => {
+      setStats(prev => ({ ...prev, loadingStats: true, statsError: false }));
+      try {
+        // Today's jobs - count bookings for today
+        const today = new Date().toISOString().split("T")[0];
+        const { count: todayCount, error: todayError } = await supabase
+          .from("bookings")
+          .select("*", { count: "exact", head: true })
+          .eq("appointment_date", today);
 
-  // Sample data for recent customers
-  const recentCustomers = [
-    {
-      id: 1,
-      name: "John Smith",
-      phone: "(239) 272-9166",
-      lastService: "Brake Service - Dec 19",
-      notes: "Requested weekend availability",
-    },
-    {
-      id: 2,
-      name: "Sarah Johnson",
-      phone: "(239) 456-7890",
-      lastService: "Oil Change - Dec 18",
-      notes: "Repeat customer, very satisfied",
-    },
-    {
-      id: 3,
-      name: "Michael Davis",
-      phone: "(239) 555-1234",
-      lastService: "Transmission Check - Dec 17",
-      notes: "Interested in maintenance package",
-    },
-    {
-      id: 4,
-      name: "Emily Wilson",
-      phone: "(239) 789-0123",
-      lastService: "Air Filter - Dec 10",
-      notes: "New customer, referred by John S.",
-    },
-  ];
+        // If table doesn't exist, todayCount will be null - that's OK
+        const jobsCount = todayError?.code === "PGRST116" ? 0 : (todayCount || 0);
+
+        // Total customers
+        const { count: customerCount, error: customerError } = await supabase
+          .from("customers")
+          .select("*", { count: "exact", head: true })
+          .eq("is_active", true);
+
+        if (customerError && customerError.code !== "PGRST116") {
+          console.error("Error fetching customer count:", customerError.message || customerError);
+          throw customerError;
+        }
+
+        // Weekly Revenue - sum of invoices from the past 7 days
+        const weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        const weekAgoDate = weekAgo.toISOString().split("T")[0];
+
+        const { data: weeklyInvoices, error: weeklyError } = await supabase
+          .from("invoices")
+          .select("amount")
+          .gte("issued_date", weekAgoDate);
+
+        let weeklyRevenue = "$0";
+        if (!weeklyError || weeklyError.code === "PGRST116") {
+          const total = weeklyInvoices?.reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0;
+          weeklyRevenue = `$${total.toFixed(2)}`;
+        }
+
+        // Pending Payments - sum of invoices with status 'pending'
+        const { data: pendingInvoices, error: pendingError } = await supabase
+          .from("invoices")
+          .select("amount")
+          .eq("status", "pending");
+
+        let pendingPayments = "$0";
+        if (!pendingError || pendingError.code === "PGRST116") {
+          const total = pendingInvoices?.reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0;
+          pendingPayments = `$${total.toFixed(2)}`;
+        }
+
+        setStats({
+          todayJobs: jobsCount,
+          weeklyRevenue: weeklyRevenue,
+          pendingPayments: pendingPayments,
+          totalCustomers: customerCount || 0,
+          loadingStats: false,
+          statsError: false,
+        });
+      } catch (error) {
+        console.error("Error fetching stats:", error instanceof Error ? error.message : String(error));
+        setStats(prev => ({ ...prev, loadingStats: false, statsError: true }));
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  // Fetch upcoming appointments
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      setLoadingAppointments(true);
+      setAppointmentsError(false);
+      try {
+        const { data, error } = await supabase
+          .from("bookings")
+          .select("id, full_name, vehicle_make, vehicle_model, service_type, appointment_date, appointment_time, status")
+          .gte("appointment_date", new Date().toISOString().split("T")[0])
+          .order("appointment_date", { ascending: true })
+          .limit(10);
+
+        // Handle errors - if table doesn't exist, just show empty state
+        if (error) {
+          // PGRST116 = relation does not exist, which is OK - just show empty
+          if (error.code === "PGRST116") {
+            setAppointments([]);
+            setLoadingAppointments(false);
+            return;
+          }
+          // For other errors, log and show error state
+          console.error("Error fetching appointments:", error.message || error);
+          setAppointmentsError(true);
+          setLoadingAppointments(false);
+          return;
+        }
+
+        setAppointments(data || []);
+        setLoadingAppointments(false);
+      } catch (error) {
+        console.error("Error fetching appointments:", error instanceof Error ? error.message : String(error));
+        setAppointmentsError(true);
+        setLoadingAppointments(false);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
+
+  // Fetch recent customers
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      setLoadingCustomers(true);
+      setCustomersError(false);
+      try {
+        const { data, error } = await supabase
+          .from("customers")
+          .select("id, first_name, last_name, phone, email, updated_at")
+          .eq("is_active", true)
+          .order("updated_at", { ascending: false })
+          .limit(10);
+
+        // If table doesn't exist, just show empty
+        if (error) {
+          if (error.code === "PGRST116") {
+            setRecentCustomers([]);
+            setLoadingCustomers(false);
+            return;
+          }
+          console.error("Error fetching customers:", error.message || error);
+          setCustomersError(true);
+          setLoadingCustomers(false);
+          return;
+        }
+
+        setRecentCustomers(data || []);
+        setLoadingCustomers(false);
+      } catch (error) {
+        console.error("Error fetching customers:", error instanceof Error ? error.message : String(error));
+        setCustomersError(true);
+        setLoadingCustomers(false);
+      }
+    };
+
+    fetchCustomers();
+  }, []);
+
+  // Fetch active work orders
+  useEffect(() => {
+    const fetchWorkOrders = async () => {
+      setLoadingWorkOrders(true);
+      setWorkOrdersError(false);
+      try {
+        const { data, error } = await supabase
+          .from("work_orders")
+          .select("id, customer_id, vehicle_id, service_type, description, status, created_at")
+          .neq("status", "completed")
+          .order("created_at", { ascending: false })
+          .limit(10);
+
+        if (error) {
+          if (error.code === "PGRST116") {
+            setWorkOrders([]);
+            setLoadingWorkOrders(false);
+            return;
+          }
+          console.error("Error fetching work orders:", error.message || error);
+          setWorkOrdersError(true);
+          setLoadingWorkOrders(false);
+          return;
+        }
+
+        // Fetch customer and vehicle info for each work order
+        const ordersWithDetails: WorkOrderWithDetails[] = [];
+        for (const order of data || []) {
+          const { data: customerData } = await supabase
+            .from("customers")
+            .select("first_name, last_name")
+            .eq("id", order.customer_id)
+            .single();
+
+          let vehicleInfo = {};
+          if (order.vehicle_id) {
+            const { data: vehicleData } = await supabase
+              .from("vehicles")
+              .select("make, model, year")
+              .eq("id", order.vehicle_id)
+              .single();
+
+            if (vehicleData) {
+              vehicleInfo = {
+                vehicle_make: vehicleData.make,
+                vehicle_model: vehicleData.model,
+                vehicle_year: vehicleData.year,
+              };
+            }
+          }
+
+          ordersWithDetails.push({
+            ...order,
+            customer_name: customerData ? `${customerData.first_name} ${customerData.last_name}` : "Unknown",
+            ...vehicleInfo,
+          });
+        }
+
+        setWorkOrders(ordersWithDetails);
+        setLoadingWorkOrders(false);
+      } catch (error) {
+        console.error("Error fetching work orders:", error instanceof Error ? error.message : String(error));
+        setWorkOrdersError(true);
+        setLoadingWorkOrders(false);
+      }
+    };
+
+    fetchWorkOrders();
+  }, []);
+
+  const formatPhone = (phone: string) => {
+    const cleaned = phone.replace(/\D/g, "");
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    return match ? `(${match[1]}) ${match[2]}-${match[3]}` : phone;
+  };
+
+  const formatAppointmentTime = (date: string, time: string) => {
+    try {
+      const dateObj = new Date(date);
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      let dateStr = format(dateObj, "MMM d");
+      if (dateObj.toDateString() === today.toDateString()) {
+        dateStr = "Today";
+      } else if (dateObj.toDateString() === tomorrow.toDateString()) {
+        dateStr = "Tomorrow";
+      }
+
+      return `${dateStr}, ${time}`;
+    } catch {
+      return `${date}, ${time}`;
+    }
+  };
+
+  const getStatusBadgeColor = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case "scheduled":
+        return "bg-blue-500/20 text-blue-400";
+      case "in_progress":
+      case "in progress":
+        return "bg-primary/20 text-primary";
+      case "completed":
+        return "bg-green-500/20 text-green-400";
+      case "cancelled":
+        return "bg-red-500/20 text-red-400";
+      default:
+        return "bg-amber-500/20 text-amber-400";
+    }
+  };
 
   const renderOverview = () => (
     <div className="space-y-8">
@@ -128,147 +381,325 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatsCard
           label="Today's Jobs"
-          value={2}
+          value={stats.loadingStats ? "—" : stats.todayJobs}
           icon={<Clock className="w-6 h-6 text-primary" />}
           bgColor="bg-primary/20"
         />
         <StatsCard
           label="Weekly Revenue"
-          value="$2,850"
+          value={stats.loadingStats ? "—" : stats.weeklyRevenue}
           icon={<TrendingUp className="w-6 h-6 text-emerald-500" />}
           bgColor="bg-emerald-500/20"
         />
         <StatsCard
           label="Pending Payments"
-          value="$450"
+          value={stats.loadingStats ? "—" : stats.pendingPayments}
           icon={<AlertCircle className="w-6 h-6 text-amber-500" />}
           bgColor="bg-amber-500/20"
         />
         <StatsCard
           label="Total Customers"
-          value={24}
+          value={stats.loadingStats ? "—" : stats.totalCustomers}
           icon={<UsersIcon className="w-6 h-6 text-blue-500" />}
           bgColor="bg-blue-500/20"
         />
       </div>
 
+      {/* Error State for Stats */}
+      {stats.statsError && (
+        <div className="bg-red-900/20 border border-red-500 rounded-lg p-4 flex items-center gap-3">
+          <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0" />
+          <p className="text-red-400 font-rajdhani flex-1">Failed to load statistics</p>
+          <Button
+            onClick={() => window.location.reload()}
+            size="sm"
+            variant="outline"
+            className="border-red-500 text-red-400 hover:bg-red-500/10"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </Button>
+        </div>
+      )}
+
       {/* Tables Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Upcoming Appointments Table */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Upcoming Appointments */}
         <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
-          <div className="p-6 border-b border-border/30 flex items-center justify-between">
+          <div className="p-6 border-b border-border/30">
             <h3 className="text-xl font-orbitron font-bold text-foreground">
               Upcoming Appointments
             </h3>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-rajdhani font-medium h-9 gap-2 glow-orange">
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Add Booking</span>
-            </Button>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="border-b border-border/30 bg-secondary/30">
-                <tr>
-                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground">
-                    Customer
-                  </th>
-                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground">
-                    Vehicle
-                  </th>
-                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground">
-                    Service
-                  </th>
-                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground">
-                    Time
-                  </th>
-                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {upcomingAppointments.map((appointment) => (
-                  <tr
-                    key={appointment.id}
-                    className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
-                  >
-                    <td className="p-4 text-foreground font-rajdhani">{appointment.customer}</td>
-                    <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
-                      {appointment.vehicle}
-                    </td>
-                    <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
-                      {appointment.service}
-                    </td>
-                    <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
-                      {appointment.time}
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-rajdhani font-medium ${
-                          appointment.status === "Scheduled"
-                            ? "bg-blue-500/20 text-blue-400"
-                            : appointment.status === "In Progress"
-                              ? "bg-primary/20 text-primary"
-                              : "bg-amber-500/20 text-amber-400"
-                        }`}
-                      >
-                        {appointment.status === "In Progress" && (
-                          <CheckCircle className="w-3 h-3" />
-                        )}
-                        {appointment.status}
-                      </span>
-                    </td>
+
+          {loadingAppointments && (
+            <div className="p-6 text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
+              <p className="text-muted-foreground font-rajdhani text-sm">Loading appointments...</p>
+            </div>
+          )}
+
+          {appointmentsError && (
+            <div className="p-6">
+              <div className="bg-red-900/20 border border-red-500 rounded-lg p-3 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                <p className="text-red-400 font-rajdhani text-sm">Failed to load appointments</p>
+              </div>
+            </div>
+          )}
+
+          {!loadingAppointments && !appointmentsError && appointments.length === 0 && (
+            <div className="p-8 text-center">
+              <p className="text-muted-foreground font-rajdhani">
+                No appointments scheduled yet. Start adding bookings to track customer services.
+              </p>
+            </div>
+          )}
+
+          {!loadingAppointments && !appointmentsError && appointments.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30">
+                  <tr>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Customer
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Vehicle
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Service
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Time
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Status
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {appointments.map((apt) => (
+                    <tr
+                      key={apt.id}
+                      className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
+                    >
+                      <td className="p-4 text-foreground font-rajdhani">{apt.full_name}</td>
+                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                        {apt.vehicle_make && apt.vehicle_model
+                          ? `${apt.vehicle_make} ${apt.vehicle_model}`
+                          : "—"}
+                      </td>
+                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                        {apt.service_type}
+                      </td>
+                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                        {formatAppointmentTime(apt.appointment_date, apt.appointment_time)}
+                      </td>
+                      <td className="p-4">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-rajdhani font-medium ${getStatusBadgeColor(
+                            apt.status
+                          )}`}
+                        >
+                          {apt.status.charAt(0).toUpperCase() + apt.status.slice(1)}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </Card>
 
-        {/* Recent Customers Table */}
+        {/* Recent Customers */}
         <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
           <div className="p-6 border-b border-border/30">
             <h3 className="text-xl font-orbitron font-bold text-foreground">Recent Customers</h3>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="border-b border-border/30 bg-secondary/30">
-                <tr>
-                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground">
-                    Name
-                  </th>
-                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground">
-                    Phone
-                  </th>
-                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground">
-                    Last Service
-                  </th>
-                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground">
-                    Notes
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentCustomers.map((customer) => (
-                  <tr
-                    key={customer.id}
-                    className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
-                  >
-                    <td className="p-4 text-foreground font-rajdhani">{customer.name}</td>
-                    <td className="p-4 text-muted-foreground text-sm font-rajdhani">
-                      {customer.phone}
-                    </td>
-                    <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
-                      {customer.lastService}
-                    </td>
-                    <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
-                      {customer.notes}
-                    </td>
+
+          {loadingCustomers && (
+            <div className="p-6 text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
+              <p className="text-muted-foreground font-rajdhani text-sm">Loading customers...</p>
+            </div>
+          )}
+
+          {customersError && (
+            <div className="p-6">
+              <div className="bg-red-900/20 border border-red-500 rounded-lg p-3 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                <p className="text-red-400 font-rajdhani text-sm">Failed to load customers</p>
+              </div>
+            </div>
+          )}
+
+          {!loadingCustomers && !customersError && recentCustomers.length === 0 && (
+            <div className="p-8 text-center">
+              <p className="text-muted-foreground font-rajdhani">
+                No customers yet. Add your first customer to get started.
+              </p>
+            </div>
+          )}
+
+          {!loadingCustomers && !customersError && recentCustomers.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30">
+                  <tr>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Name
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Phone
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Email
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Added
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {recentCustomers.map((customer) => (
+                    <tr
+                      key={customer.id}
+                      className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
+                    >
+                      <td className="p-4 text-foreground font-rajdhani">
+                        {customer.first_name} {customer.last_name}
+                      </td>
+                      <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                        <a
+                          href={`tel:${customer.phone}`}
+                          className="hover:text-primary transition-colors"
+                        >
+                          {formatPhone(customer.phone)}
+                        </a>
+                      </td>
+                      <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                        {customer.email ? (
+                          <a
+                            href={`mailto:${customer.email}`}
+                            className="hover:text-primary transition-colors"
+                          >
+                            {customer.email}
+                          </a>
+                        ) : (
+                          "—"
+                        )}
+                      </td>
+                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                        {format(new Date(customer.updated_at), "MMM d")}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </Card>
+
+        {/* Active Work Orders */}
+        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
+          <div className="p-6 border-b border-border/30 flex items-center justify-between">
+            <h3 className="text-xl font-orbitron font-bold text-foreground">
+              Active Work Orders
+            </h3>
+            <Button
+              onClick={() => alert("Work Order form coming soon")}
+              size="sm"
+              className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-1"
+            >
+              <Plus className="w-4 h-4" />
+              New
+            </Button>
           </div>
+
+          {loadingWorkOrders && (
+            <div className="p-6 text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
+              <p className="text-muted-foreground font-rajdhani text-sm">Loading work orders...</p>
+            </div>
+          )}
+
+          {workOrdersError && (
+            <div className="p-6">
+              <div className="bg-red-900/20 border border-red-500 rounded-lg p-3 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                <p className="text-red-400 font-rajdhani text-sm">Failed to load work orders</p>
+              </div>
+            </div>
+          )}
+
+          {!loadingWorkOrders && !workOrdersError && workOrders.length === 0 && (
+            <div className="p-8 text-center">
+              <p className="text-muted-foreground font-rajdhani mb-3">
+                No active work orders yet. Click the button above to get started.
+              </p>
+            </div>
+          )}
+
+          {!loadingWorkOrders && !workOrdersError && workOrders.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30">
+                  <tr>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Customer
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Vehicle
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Service
+                    </th>
+                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {workOrders.map((order) => (
+                    <tr
+                      key={order.id}
+                      className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
+                    >
+                      <td className="p-4 text-foreground font-rajdhani text-sm">
+                        {order.customer_name}
+                      </td>
+                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                        {order.vehicle_make && order.vehicle_model
+                          ? `${order.vehicle_make} ${order.vehicle_model} ${order.vehicle_year || ""}`
+                          : "—"}
+                      </td>
+                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani capitalize">
+                        {order.service_type.replace(/_/g, " ")}
+                      </td>
+                      <td className="p-4">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-rajdhani font-medium ${
+                            order.status === "pending"
+                              ? "bg-blue-500/20 text-blue-400"
+                              : order.status === "in_progress"
+                              ? "bg-orange-500/20 text-orange-400"
+                              : order.status === "completed"
+                              ? "bg-green-500/20 text-green-400"
+                              : order.status === "cancelled"
+                              ? "bg-red-500/20 text-red-400"
+                              : "bg-gray-500/20 text-gray-400"
+                          }`}
+                        >
+                          {order.status.charAt(0).toUpperCase() + order.status.slice(1).replace(/_/g, " ")}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </Card>
       </div>
 
@@ -276,18 +707,32 @@ const AdminDashboard = () => {
       <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-6">
         <h3 className="text-lg font-orbitron font-bold text-foreground mb-4">Quick Actions</h3>
         <div className="flex flex-wrap gap-3">
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-rajdhani font-medium gap-2 glow-orange">
+          <Button
+            onClick={() => alert("Booking form coming soon")}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-rajdhani font-medium gap-2 glow-orange"
+          >
             <Plus className="w-4 h-4" />
             Add Booking
           </Button>
-          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-rajdhani font-medium gap-2">
+          <Button
+            onClick={() => alert("Select a job first")}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-rajdhani font-medium gap-2"
+          >
             <CheckCircle className="w-4 h-4" />
             Mark Complete
           </Button>
-          <Button variant="outline" className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium">
+          <Button
+            variant="outline"
+            className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium"
+            onClick={() => setActiveSection("appointments")}
+          >
             View All Appointments
           </Button>
-          <Button variant="outline" className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium">
+          <Button
+            variant="outline"
+            className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium"
+            onClick={() => setActiveSection("customers")}
+          >
             Manage Customers
           </Button>
         </div>
@@ -298,6 +743,18 @@ const AdminDashboard = () => {
   const renderSection = () => {
     if (activeSection === "overview") {
       return renderOverview();
+    }
+    if (activeSection === "customers") {
+      return <Customers />;
+    }
+    if (activeSection === "appointments") {
+      return <Appointments />;
+    }
+    if (activeSection === "invoices") {
+      return <Invoices />;
+    }
+    if (activeSection === "history") {
+      return <History />;
     }
     return (
       <div className="p-8">

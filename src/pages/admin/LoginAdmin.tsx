@@ -96,16 +96,6 @@ const LoginAdmin = () => {
             </Button>
           </form>
 
-          {/* Test Credentials Hint */}
-          <div className="mt-8 pt-6 border-t border-border/30">
-            <p className="text-xs text-muted-foreground text-center font-rajdhani">
-              <strong>Test Credentials (Development Only):</strong>
-              <br />
-              Email: davisbryan595@gmail.com
-              <br />
-              Password: 1234566
-            </p>
-          </div>
         </div>
       </Card>
     </div>

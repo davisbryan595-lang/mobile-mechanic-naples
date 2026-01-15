@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LoginAdmin from "./pages/admin/LoginAdmin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import CustomerDetail from "./pages/admin/CustomerDetail";
+import CustomerForm from "./pages/admin/CustomerForm";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import { CityHome } from "./pages/city/CityHome";
@@ -29,6 +31,9 @@ const App = () => (
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/admin/login" element={<LoginAdmin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/customers/new" element={<CustomerForm />} />
+          <Route path="/admin/customers/:id" element={<CustomerDetail />} />
+          <Route path="/admin/customers/:id/edit" element={<CustomerForm />} />
 
           {/* City-Specific Pages with Dynamic Routes */}
           <Route path="/:citySlug-home-mechanic-service" element={<CityHome />} />
