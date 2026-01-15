@@ -105,10 +105,38 @@ const AdminDashboard = () => {
           throw customerError;
         }
 
+        // Weekly Revenue - sum of invoices from the past 7 days
+        const weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        const weekAgoDate = weekAgo.toISOString().split("T")[0];
+
+        const { data: weeklyInvoices, error: weeklyError } = await supabase
+          .from("invoices")
+          .select("amount")
+          .gte("issued_date", weekAgoDate);
+
+        let weeklyRevenue = "$0";
+        if (!weeklyError || weeklyError.code === "PGRST116") {
+          const total = weeklyInvoices?.reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0;
+          weeklyRevenue = `$${total.toFixed(2)}`;
+        }
+
+        // Pending Payments - sum of invoices with status 'pending'
+        const { data: pendingInvoices, error: pendingError } = await supabase
+          .from("invoices")
+          .select("amount")
+          .eq("status", "pending");
+
+        let pendingPayments = "$0";
+        if (!pendingError || pendingError.code === "PGRST116") {
+          const total = pendingInvoices?.reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0;
+          pendingPayments = `$${total.toFixed(2)}`;
+        }
+
         setStats({
           todayJobs: jobsCount,
-          weeklyRevenue: "$0", // Placeholder - waiting for invoices table
-          pendingPayments: "$0", // Placeholder - waiting for invoices table
+          weeklyRevenue: weeklyRevenue,
+          pendingPayments: pendingPayments,
           totalCustomers: customerCount || 0,
           loadingStats: false,
           statsError: false,
