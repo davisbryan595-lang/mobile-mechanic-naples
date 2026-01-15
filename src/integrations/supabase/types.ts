@@ -77,6 +77,155 @@ export type Database = {
         }
         Relationships: []
       }
+      customers: {
+        Row: {
+          id: string
+          first_name: string
+          last_name: string
+          phone: string
+          email: string | null
+          service_address: string | null
+          city: string | null
+          state: string | null
+          zip_code: string | null
+          customer_type: Database["public"]["Enums"]["customer_type"]
+          lead_source: Database["public"]["Enums"]["lead_source"]
+          tags: string[] | null
+          notes: string | null
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          first_name: string
+          last_name: string
+          phone: string
+          email?: string | null
+          service_address?: string | null
+          city?: string | null
+          state?: string | null
+          zip_code?: string | null
+          customer_type?: Database["public"]["Enums"]["customer_type"]
+          lead_source?: Database["public"]["Enums"]["lead_source"]
+          tags?: string[] | null
+          notes?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          first_name?: string
+          last_name?: string
+          phone?: string
+          email?: string | null
+          service_address?: string | null
+          city?: string | null
+          state?: string | null
+          zip_code?: string | null
+          customer_type?: Database["public"]["Enums"]["customer_type"]
+          lead_source?: Database["public"]["Enums"]["lead_source"]
+          tags?: string[] | null
+          notes?: string | null
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      vehicles: {
+        Row: {
+          id: string
+          customer_id: string
+          make: string
+          model: string
+          year: number
+          vin: string | null
+          license_plate: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          customer_id: string
+          make: string
+          model: string
+          year: number
+          vin?: string | null
+          license_plate?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          customer_id?: string
+          make?: string
+          model?: string
+          year?: number
+          vin?: string | null
+          license_plate?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicles_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      work_orders: {
+        Row: {
+          id: string
+          customer_id: string
+          vehicle_id: string | null
+          service_type: string
+          description: string | null
+          completed_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          customer_id: string
+          vehicle_id?: string | null
+          service_type: string
+          description?: string | null
+          completed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          customer_id?: string
+          vehicle_id?: string | null
+          service_type?: string
+          description?: string | null
+          completed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_orders_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
