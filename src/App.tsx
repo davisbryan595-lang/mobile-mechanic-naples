@@ -31,6 +31,9 @@ const App = () => (
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/admin/login" element={<LoginAdmin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/customers/new" element={<CustomerForm />} />
+          <Route path="/admin/customers/:id" element={<CustomerDetail />} />
+          <Route path="/admin/customers/:id/edit" element={<CustomerForm />} />
 
           {/* City-Specific Pages with Dynamic Routes */}
           <Route path="/:citySlug-home-mechanic-service" element={<CityHome />} />
