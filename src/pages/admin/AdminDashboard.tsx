@@ -89,6 +89,11 @@ const AdminDashboard = () => {
   const [loadingCustomers, setLoadingCustomers] = useState(true);
   const [customersError, setCustomersError] = useState(false);
 
+  // Form Submissions state
+  const [formSubmissions, setFormSubmissions] = useState<FormSubmissionData[]>([]);
+  const [loadingFormSubmissions, setLoadingFormSubmissions] = useState(true);
+  const [formSubmissionsError, setFormSubmissionsError] = useState(false);
+
   // Work Orders state
   interface WorkOrderData {
     id: string;
