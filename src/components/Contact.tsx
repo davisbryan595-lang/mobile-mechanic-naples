@@ -250,6 +250,40 @@ export const Contact = () => {
                 />
               </div>
 
+              <div className="pt-4 border-t border-border/30">
+                <Label htmlFor="hearAboutUs" className="font-rajdhani text-sm text-muted-foreground">
+                  How did you hear about us? <span className="text-xs">(optional - helps us improve!)</span>
+                </Label>
+                <Select value={formData.hearAboutUs} onValueChange={(value) => setFormData({ ...formData, hearAboutUs: value })}>
+                  <SelectTrigger className="bg-background border-border mt-2">
+                    <SelectValue placeholder="-- Select one --" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border-border">
+                    <SelectItem value="google-search">Google Search</SelectItem>
+                    <SelectItem value="facebook-instagram">Facebook / Instagram</SelectItem>
+                    <SelectItem value="referral">Referral / Friend / Family</SelectItem>
+                    <SelectItem value="yelp-reviews">Yelp / Google Reviews</SelectItem>
+                    <SelectItem value="walk-in">Walk-in / Drive-by</SelectItem>
+                    <SelectItem value="sign-advertisement">Sign / Advertisement / Flyer</SelectItem>
+                    <SelectItem value="other">Other (please specify)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground mt-1.5">This helps us know which marketing works best — thank you!</p>
+              </div>
+
+              {formData.hearAboutUs === "other" && (
+                <div>
+                  <Input
+                    id="hearAboutUsOther"
+                    type="text"
+                    value={formData.hearAboutUsOther}
+                    onChange={(e) => setFormData({ ...formData, hearAboutUsOther: e.target.value })}
+                    placeholder="Please tell us more..."
+                    className="bg-background border-border"
+                  />
+                </div>
+              )}
+
               <div className="flex items-start gap-2">
                 <input
                   type="checkbox"
