@@ -272,6 +272,37 @@ const AdminDashboard = () => {
     fetchCustomers();
   }, []);
 
+  // Fetch form submissions
+  useEffect(() => {
+    const fetchFormSubmissions = async () => {
+      setLoadingFormSubmissions(true);
+      setFormSubmissionsError(false);
+      try {
+        const { data, error } = await supabase
+          .from("form_submissions")
+          .select("id, name, email, phone, address, message, vehicle_type, preferred_date, how_heard_about_us, other_source, created_at")
+          .order("created_at", { ascending: false })
+          .limit(50);
+
+        if (error) {
+          console.error("Error fetching form submissions:", error.message || error);
+          setFormSubmissionsError(true);
+          setLoadingFormSubmissions(false);
+          return;
+        }
+
+        setFormSubmissions(data || []);
+        setLoadingFormSubmissions(false);
+      } catch (error) {
+        console.error("Error fetching form submissions:", error instanceof Error ? error.message : String(error));
+        setFormSubmissionsError(true);
+        setLoadingFormSubmissions(false);
+      }
+    };
+
+    fetchFormSubmissions();
+  }, []);
+
   // Fetch active work orders
   useEffect(() => {
     const fetchWorkOrders = async () => {
