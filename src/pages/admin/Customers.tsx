@@ -171,13 +171,20 @@ const Customers = () => {
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-3xl font-orbitron font-bold text-foreground">Customers</h2>
         <Button
-          onClick={() => navigate("/admin/customers/new")}
+          onClick={() => setIsModalOpen(true)}
           className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-2 glow-orange"
         >
           <Plus className="w-4 h-4" />
           Add Customer
         </Button>
       </div>
+
+      {/* Add Customer Modal */}
+      <AddCustomerModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={fetchCustomers}
+      />
 
       {/* Error State */}
       {error && (
