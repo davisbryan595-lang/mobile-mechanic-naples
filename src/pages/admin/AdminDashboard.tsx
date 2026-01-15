@@ -300,6 +300,9 @@ const AdminDashboard = () => {
     if (activeSection === "overview") {
       return renderOverview();
     }
+    if (activeSection === "customers") {
+      return <Customers />;
+    }
     return (
       <div className="p-8">
         <h2 className="text-3xl font-orbitron font-bold text-foreground mb-4">
