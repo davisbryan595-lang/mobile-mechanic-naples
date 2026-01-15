@@ -556,6 +556,9 @@ const AdminDashboard = () => {
     if (activeSection === "appointments") {
       return <Appointments />;
     }
+    if (activeSection === "invoices") {
+      return <Invoices />;
+    }
     return (
       <div className="p-8">
         <h2 className="text-3xl font-orbitron font-bold text-foreground mb-4">
