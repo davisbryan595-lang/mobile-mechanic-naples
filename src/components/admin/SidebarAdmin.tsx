@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, X, BarChart3, Users, Calendar, History, FileText, LogOut } from "lucide-react";
+import { Menu, X, BarChart3, Users, Calendar, History, FileText, LogOut, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { adminAuth } from "@/utils/auth";
 
