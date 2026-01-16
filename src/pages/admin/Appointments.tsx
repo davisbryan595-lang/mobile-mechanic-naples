@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Plus, AlertTriangle, RefreshCw, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ThemedSelect } from "@/components/ui/select-themed";
+import { StatusSelect } from "@/components/ui/status-select";
 import { supabase } from "@/integrations/supabase/client";
 import { AddBookingModal } from "@/components/admin/AddBookingModal";
 import { format } from "date-fns";
