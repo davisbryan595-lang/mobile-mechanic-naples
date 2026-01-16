@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { AddCustomerModal } from "@/components/admin/AddCustomerModal";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
+import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription";
+import { toast } from "sonner";
 
 type Customer = Tables<"customers">;
 
