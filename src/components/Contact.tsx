@@ -44,6 +44,22 @@ export const Contact = () => {
     return selectedServices.reduce((total, service) => total + service.price, 0);
   };
 
+  const toggleService = (serviceId: string, serviceName: string) => {
+    setSelectedServices((prev) => {
+      const existingService = prev.find((s) => s.id === serviceId);
+      if (existingService) {
+        return prev.filter((s) => s.id !== serviceId);
+      } else {
+        const price = getServicePrice(serviceId);
+        return [...prev, { id: serviceId, name: serviceName, price }];
+      }
+    });
+  };
+
+  const removeService = (serviceId: string) => {
+    setSelectedServices((prev) => prev.filter((s) => s.id !== serviceId));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
