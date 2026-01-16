@@ -6,10 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { MessageCircle, Phone, MapPin, Facebook, Instagram, Music, CalendarIcon, Loader } from "lucide-react";
+import { MessageCircle, Phone, MapPin, Facebook, Instagram, Music, CalendarIcon, Loader, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { SERVICES, SERVICE_CATEGORIES } from "@/data/services";
+import { getServicePrice } from "@/utils/service-pricing";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const SUPABASE_EDGE_FUNCTION_URL = "https://xjhvmipqcacgkalqxkvq.supabase.co/functions/v1/form-handler";
 
