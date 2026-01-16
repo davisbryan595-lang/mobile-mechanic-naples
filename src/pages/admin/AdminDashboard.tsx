@@ -1237,20 +1237,20 @@ const AdminDashboard = () => {
           )}
 
           {!loadingWorkOrders && !workOrdersError && workOrders.length > 0 && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b border-border/30 bg-secondary/30">
+            <div className="overflow-x-auto flex-1">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30 sticky top-0">
                   <tr>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Customer
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden sm:table-cell">
                       Vehicle
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden md:table-cell">
                       Service
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Status
                     </th>
                   </tr>
@@ -1261,18 +1261,18 @@ const AdminDashboard = () => {
                       key={order.id}
                       className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
                     >
-                      <td className="p-4 text-foreground font-rajdhani text-sm">
+                      <td className="p-2 sm:p-3 md:p-4 text-foreground font-rajdhani text-xs sm:text-sm font-medium">
                         {order.customer_name}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden sm:table-cell font-rajdhani">
                         {order.vehicle_make && order.vehicle_model
                           ? `${order.vehicle_make} ${order.vehicle_model} ${order.vehicle_year || ""}`
                           : "—"}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani capitalize">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden md:table-cell font-rajdhani capitalize">
                         {order.service_type.replace(/_/g, " ")}
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 sm:p-3 md:p-4">
                         <StatusSelect
                           value={order.status}
                           onValueChange={(value) => updateWorkOrderStatus(order.id, value)}
@@ -1289,33 +1289,35 @@ const AdminDashboard = () => {
       </div>
 
       {/* Action Buttons Section */}
-      <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-6">
-        <h3 className="text-lg font-orbitron font-bold text-foreground mb-4">Quick Actions</h3>
-        <div className="flex flex-wrap gap-3">
+      <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-4 sm:p-6">
+        <h3 className="text-base sm:text-lg font-orbitron font-bold text-foreground mb-4">Quick Actions</h3>
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
           <Button
             onClick={() => alert("Booking form coming soon")}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-rajdhani font-medium gap-2 glow-orange"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-rajdhani font-medium gap-2 min-h-10 flex-1 sm:flex-initial"
           >
             <Plus className="w-4 h-4" />
-            Add Booking
+            <span className="hidden sm:inline">Add Booking</span>
+            <span className="sm:hidden">Booking</span>
           </Button>
           <Button
             onClick={() => alert("Select a job first")}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-rajdhani font-medium gap-2"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-rajdhani font-medium gap-2 min-h-10 flex-1 sm:flex-initial"
           >
             <CheckCircle className="w-4 h-4" />
-            Mark Complete
+            <span className="hidden sm:inline">Mark Complete</span>
+            <span className="sm:hidden">Complete</span>
           </Button>
           <Button
             variant="outline"
-            className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium"
+            className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium min-h-10 flex-1 sm:flex-initial"
             onClick={() => setActiveSection("appointments")}
           >
-            View All Appointments
+            View Appointments
           </Button>
           <Button
             variant="outline"
-            className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium"
+            className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium min-h-10 flex-1 sm:flex-initial"
             onClick={() => setActiveSection("customers")}
           >
             Manage Customers
