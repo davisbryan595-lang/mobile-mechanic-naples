@@ -1353,12 +1353,12 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex flex-col md:flex-row">
       <SidebarAdmin activeSection={activeSection} onSectionChange={setActiveSection} />
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
-        <div className="p-4 md:p-8">
+      <main className="flex-1 overflow-auto w-full">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
           {renderSection()}
         </div>
       </main>
