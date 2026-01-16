@@ -1099,30 +1099,32 @@ const AdminDashboard = () => {
         </Card>
 
         {/* Recent Customers */}
-        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
-          <div className="p-6 border-b border-border/30">
-            <h3 className="text-xl font-orbitron font-bold text-foreground">Recent Customers</h3>
+        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col h-full">
+          <div className="p-4 sm:p-5 md:p-6 border-b border-border/30">
+            <h3 className="text-lg sm:text-xl font-orbitron font-bold text-foreground">Recent Customers</h3>
           </div>
 
           {loadingCustomers && (
-            <div className="p-6 text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
-              <p className="text-muted-foreground font-rajdhani text-sm">Loading customers...</p>
+            <div className="p-4 sm:p-6 text-center flex-1 flex items-center justify-center">
+              <div>
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
+                <p className="text-muted-foreground font-rajdhani text-xs sm:text-sm">Loading customers...</p>
+              </div>
             </div>
           )}
 
           {customersError && (
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               <div className="bg-red-900/20 border border-red-500 rounded-lg p-3 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
-                <p className="text-red-400 font-rajdhani text-sm">Failed to load customers</p>
+                <p className="text-red-400 font-rajdhani text-xs sm:text-sm">Failed to load customers</p>
               </div>
             </div>
           )}
 
           {!loadingCustomers && !customersError && recentCustomers.length === 0 && (
-            <div className="p-8 text-center">
-              <p className="text-muted-foreground font-rajdhani">
+            <div className="p-6 sm:p-8 text-center">
+              <p className="text-muted-foreground font-rajdhani text-sm sm:text-base">
                 No customers yet. Add your first customer to get started.
               </p>
             </div>
