@@ -243,7 +243,7 @@ const Customers = () => {
           <select
             value={filters.status}
             onChange={(e) => handleFilterChange("status", e.target.value)}
-            className="px-4 py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer"
+            className="px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer text-sm min-h-10"
           >
             <option value="all">Status: All</option>
             <option value="active">Active</option>
@@ -254,7 +254,7 @@ const Customers = () => {
           <select
             value={filters.type}
             onChange={(e) => handleFilterChange("type", e.target.value)}
-            className="px-4 py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer"
+            className="px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer text-sm min-h-10"
           >
             <option value="all">Type: All</option>
             <option value="new">New</option>
@@ -267,7 +267,7 @@ const Customers = () => {
           <select
             value={filters.source}
             onChange={(e) => handleFilterChange("source", e.target.value)}
-            className="px-4 py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer"
+            className="px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer text-sm min-h-10"
           >
             <option value="all">Source: All</option>
             <option value="google">Google</option>
