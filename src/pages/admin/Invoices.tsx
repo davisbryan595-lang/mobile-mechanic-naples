@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Plus, AlertTriangle, RefreshCw, ChevronLeft, ChevronRight, Eye, Download, CheckCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ThemedSelect } from "@/components/ui/select-themed";
+import { StatusSelect } from "@/components/ui/status-select";
 import { supabase } from "@/integrations/supabase/client";
 import { AddInvoiceModal } from "@/components/admin/AddInvoiceModal";
 import { format } from "date-fns";
@@ -371,13 +371,12 @@ const Invoices = () => {
                         {formatCurrency(invoice.amount)}
                       </td>
                       <td className="p-4">
-                        <ThemedSelect
+                        <StatusSelect
                           value={invoice.status}
-                          onChange={(e) => {
-                            // Update status via Supabase
+                          onValueChange={(newStatus) => {
                             supabase
                               .from("invoices")
-                              .update({ status: e.target.value })
+                              .update({ status: newStatus })
                               .eq("id", invoice.id)
                               .then(() => {
                                 toast.success("Invoice updated");
@@ -388,13 +387,7 @@ const Invoices = () => {
                               });
                           }}
                           statusType="invoice"
-                        >
-                          <option value="draft">Draft</option>
-                          <option value="sent">Sent</option>
-                          <option value="paid">Paid</option>
-                          <option value="partial">Partial</option>
-                          <option value="overdue">Overdue</option>
-                        </ThemedSelect>
+                        />
                       </td>
                       <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
                         {formatDate(invoice.issued_date)}

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Clock, TrendingUp, AlertCircle, Users as UsersIcon, Plus, CheckCircle, AlertTriangle, RefreshCw, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ThemedSelect } from "@/components/ui/select-themed";
+import { StatusSelect } from "@/components/ui/status-select";
 import { SidebarAdmin } from "@/components/admin/SidebarAdmin";
 import { adminAuth } from "@/utils/auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription";
 import { getServicePrice, getServiceDescription } from "@/utils/service-pricing";
+import { extractServiceFromMessage } from "@/utils/extract-service-from-message";
 import Customers from "./Customers";
 import Appointments from "./Appointments";
 import Invoices from "./Invoices";
@@ -249,6 +250,105 @@ const AdminDashboard = () => {
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to update work order";
       toast.error("Error updating work order", {
+        description: message,
+        duration: 3000,
+        position: "top-right",
+      });
+    }
+  };
+
+  // Function to create job and appointment from form submission
+  const createJobFromSubmission = async (submission: FormSubmissionData) => {
+    try {
+      // Extract service from message
+      const extractedService = extractServiceFromMessage(submission.message);
+
+      // Get or create customer
+      let customerId: string | null = null;
+
+      const { data: existingCustomers } = await supabase
+        .from("customers")
+        .select("id")
+        .eq("email", submission.email)
+        .limit(1);
+
+      if (existingCustomers && existingCustomers.length > 0) {
+        customerId = existingCustomers[0].id;
+      } else {
+        const { data: newCustomer, error: customerError } = await supabase
+          .from("customers")
+          .insert([
+            {
+              first_name: submission.name.split(" ")[0] || submission.name,
+              last_name: submission.name.split(" ").slice(1).join(" ") || "",
+              email: submission.email,
+              phone: submission.phone,
+              address: submission.address,
+              is_active: true,
+            },
+          ])
+          .select("id")
+          .single();
+
+        if (customerError) throw customerError;
+        customerId = newCustomer?.id || null;
+      }
+
+      if (!customerId) throw new Error("Failed to get or create customer");
+
+      // Parse preferred date
+      const appointmentDate = submission.preferred_date
+        ? submission.preferred_date.split("T")[0]
+        : new Date().toISOString().split("T")[0];
+
+      // Create booking
+      const { error: bookingError } = await supabase.from("bookings").insert([
+        {
+          customer_id: customerId,
+          service_type: extractedService,
+          appointment_date: appointmentDate,
+          appointment_time: "09:00 AM",
+          status: "pending",
+          notes: submission.message,
+        },
+      ]);
+
+      if (bookingError) throw bookingError;
+
+      // Create work order
+      const { error: workOrderError } = await supabase
+        .from("work_orders")
+        .insert([
+          {
+            customer_id: customerId,
+            vehicle_id: null,
+            service_type: extractedService,
+            description: `${submission.message}\n\nVehicle Type: ${submission.vehicle_type || "Not specified"}\nPreferred Date: ${submission.preferred_date || "Not specified"}`,
+            status: "pending",
+          },
+        ]);
+
+      if (workOrderError) throw workOrderError;
+
+      toast.success("Job & Appointment created successfully", {
+        duration: 2000,
+        position: "top-right",
+      });
+
+      // Refresh form submissions
+      const { data, error } = await supabase
+        .from("form_submissions")
+        .select("id, name, email, phone, address, message, vehicle_type, preferred_date, how_heard_about_us, other_source, created_at")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (!error) {
+        setFormSubmissions(data || []);
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error creating job from submission:", message);
+      toast.error("Failed to create job & appointment", {
         description: message,
         duration: 3000,
         position: "top-right",
@@ -796,6 +896,9 @@ const AdminDashboard = () => {
                   <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                     Message
                   </th>
+                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -826,6 +929,15 @@ const AdminDashboard = () => {
                     </td>
                     <td className="p-4 text-muted-foreground text-sm font-rajdhani max-w-xs truncate">
                       {submission.message}
+                    </td>
+                    <td className="p-4">
+                      <Button
+                        size="sm"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-rajdhani font-medium text-xs"
+                        onClick={() => createJobFromSubmission(submission)}
+                      >
+                        Create Job & Appointment
+                      </Button>
                     </td>
                   </tr>
                 ))}
@@ -1155,16 +1267,11 @@ const AdminDashboard = () => {
                         {order.service_type.replace(/_/g, " ")}
                       </td>
                       <td className="p-4">
-                        <ThemedSelect
+                        <StatusSelect
                           value={order.status}
-                          onChange={(e) => updateWorkOrderStatus(order.id, e.target.value)}
+                          onValueChange={(value) => updateWorkOrderStatus(order.id, value)}
                           statusType="work-order"
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="in_progress">In Progress</option>
-                          <option value="completed">Completed</option>
-                          <option value="cancelled">Cancelled</option>
-                        </ThemedSelect>
+                        />
                       </td>
                     </tr>
                   ))}
