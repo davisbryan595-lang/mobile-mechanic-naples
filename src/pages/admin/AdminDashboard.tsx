@@ -1040,23 +1040,23 @@ const AdminDashboard = () => {
           )}
 
           {!loadingAppointments && !appointmentsError && appointments.length > 0 && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b border-border/30 bg-secondary/30">
+            <div className="overflow-x-auto flex-1">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30 sticky top-0">
                   <tr>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Customer
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden sm:table-cell">
                       Vehicle
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden md:table-cell">
                       Service
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Time
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Status
                     </th>
                   </tr>
@@ -1067,21 +1067,23 @@ const AdminDashboard = () => {
                       key={apt.id}
                       className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
                     >
-                      <td className="p-4 text-foreground font-rajdhani">{apt.full_name}</td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-foreground font-rajdhani text-xs sm:text-sm font-medium">
+                        {apt.full_name}
+                      </td>
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden sm:table-cell font-rajdhani">
                         {apt.vehicle_make && apt.vehicle_model
                           ? `${apt.vehicle_make} ${apt.vehicle_model}`
                           : "—"}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden md:table-cell font-rajdhani">
                         {apt.service_type}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs sm:text-sm font-rajdhani">
                         {formatAppointmentTime(apt.appointment_date, apt.appointment_time)}
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 sm:p-3 md:p-4">
                         <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-rajdhani font-medium ${getStatusBadgeColor(
+                          className={`inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-xs font-rajdhani font-medium ${getStatusBadgeColor(
                             apt.status
                           )}`}
                         >
