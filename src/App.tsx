@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LoginAdmin from "./pages/admin/LoginAdmin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import CustomerDetail from "./pages/admin/CustomerDetail";
+import CustomerForm from "./pages/admin/CustomerForm";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import { CityHome } from "./pages/city/CityHome";
@@ -14,8 +16,22 @@ import { CityAbout } from "./pages/city/CityAbout";
 import { CityGallery } from "./pages/city/CityGallery";
 import { CityServices } from "./pages/city/CityServices";
 import { CityContact } from "./pages/city/CityContact";
+import { ProtectedAdminRoute } from "./components/ProtectedAdminRoute";
+import { useSubdomain } from "./hooks/use-subdomain";
 
 const queryClient = new QueryClient();
+
+const RootRoute = () => {
+  const { isCrmDomain } = useSubdomain();
+
+  // If on CRM subdomain, show login page at root
+  if (isCrmDomain) {
+    return <LoginAdmin />;
+  }
+
+  // Otherwise, show the normal home page
+  return <Index />;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -24,11 +40,49 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<RootRoute />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
-          <Route path="/admin/login" element={<LoginAdmin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route
+            path="/admin/login"
+            element={
+              <ProtectedAdminRoute>
+                <LoginAdmin />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboard />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/customers/new"
+            element={
+              <ProtectedAdminRoute>
+                <CustomerForm />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/customers/:id"
+            element={
+              <ProtectedAdminRoute>
+                <CustomerDetail />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/customers/:id/edit"
+            element={
+              <ProtectedAdminRoute>
+                <CustomerForm />
+              </ProtectedAdminRoute>
+            }
+          />
 
           {/* City-Specific Pages with Dynamic Routes */}
           <Route path="/:citySlug-home-mechanic-service" element={<CityHome />} />

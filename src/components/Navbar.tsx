@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music, LogIn } from "lucide-react";
+import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
@@ -108,15 +108,6 @@ export const Navbar = () => {
               <img src={logo} alt="Mobile Service" className="h-12 w-auto" />
 
               <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-primary hover:text-primary-foreground hover:bg-primary"
-                  onClick={() => navigate("/admin/login")}
-                >
-                  <LogIn className="w-4 h-4 mr-1" />
-                  Admin Login
-                </Button>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -272,19 +263,6 @@ export const Navbar = () => {
                         })}
                       </div>
                     </div>
-
-                    {/* Mobile Admin Login Button */}
-                    <Button
-                      size="sm"
-                      className="w-full bg-primary hover:bg-primary/90 text-white font-rajdhani font-medium mb-2 gap-2 text-sm"
-                      onClick={() => {
-                        navigate("/admin/login");
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <LogIn className="w-4 h-4" />
-                      Admin Login
-                    </Button>
 
                     {/* Mobile Call Button */}
                     <Button
