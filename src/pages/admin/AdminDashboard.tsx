@@ -1006,7 +1006,7 @@ const AdminDashboard = () => {
       )}
 
       {/* Tables Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
         {/* Upcoming Appointments */}
         <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
           <div className="p-6 border-b border-border/30">
