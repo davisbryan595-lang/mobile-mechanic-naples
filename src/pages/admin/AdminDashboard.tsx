@@ -796,6 +796,9 @@ const AdminDashboard = () => {
                   <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                     Message
                   </th>
+                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -826,6 +829,15 @@ const AdminDashboard = () => {
                     </td>
                     <td className="p-4 text-muted-foreground text-sm font-rajdhani max-w-xs truncate">
                       {submission.message}
+                    </td>
+                    <td className="p-4">
+                      <Button
+                        size="sm"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-rajdhani font-medium text-xs"
+                        onClick={() => createJobFromSubmission(submission)}
+                      >
+                        Create Job & Appointment
+                      </Button>
                     </td>
                   </tr>
                 ))}
