@@ -231,20 +231,20 @@ const Appointments = () => {
   const totalPages = Math.ceil(bookings.length / pageSize);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-foreground">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-foreground">
             Appointments
           </h2>
-          <p className="text-muted-foreground font-rajdhani text-sm mt-1">
+          <p className="text-xs sm:text-sm text-muted-foreground font-rajdhani mt-1">
             Manage and track all customer service appointments
           </p>
         </div>
         <Button
           onClick={() => setShowModal(true)}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-2 glow-orange"
+          className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-2 glow-orange min-h-10 w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           Add Booking
@@ -252,11 +252,11 @@ const Appointments = () => {
       </div>
 
       {/* Filters Bar */}
-      <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-6 space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-4 sm:p-6 space-y-3 sm:space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           {/* Search */}
           <div>
-            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-2">
+            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-1.5 sm:mb-2">
               Search
             </label>
             <input
@@ -264,19 +264,19 @@ const Appointments = () => {
               placeholder="Customer, vehicle, or service..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 bg-secondary border border-border/30 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-primary font-rajdhani text-sm"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary border border-border/30 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-primary font-rajdhani text-sm min-h-10"
             />
           </div>
 
           {/* Status Filter */}
           <div>
-            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-2">
+            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-1.5 sm:mb-2">
               Status
             </label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-secondary border border-border/30 rounded-lg text-white focus:outline-none focus:border-primary font-rajdhani text-sm cursor-pointer"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary border border-border/30 rounded-lg text-white focus:outline-none focus:border-primary font-rajdhani text-sm cursor-pointer min-h-10"
             >
               <option value="all">All Statuses</option>
               <option value="pending">Pending</option>
@@ -289,13 +289,13 @@ const Appointments = () => {
 
           {/* Date Filter */}
           <div>
-            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-2">
+            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-1.5 sm:mb-2">
               Date Range
             </label>
             <select
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-secondary border border-border/30 rounded-lg text-white focus:outline-none focus:border-primary font-rajdhani text-sm cursor-pointer"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary border border-border/30 rounded-lg text-white focus:outline-none focus:border-primary font-rajdhani text-sm cursor-pointer min-h-10"
             >
               <option value="all">All Dates</option>
               <option value="today">Today</option>
@@ -349,27 +349,27 @@ const Appointments = () => {
       {/* Appointments Table */}
       {!loading && !error && bookings.length > 0 && (
         <>
-          <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b border-border/30 bg-secondary/30">
+          <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col">
+            <div className="overflow-x-auto flex-1">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30 sticky top-0">
                   <tr>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Customer
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden sm:table-cell">
                       Vehicle
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden md:table-cell">
                       Service Type
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Date & Time
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Status
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Actions
                     </th>
                   </tr>
@@ -380,30 +380,30 @@ const Appointments = () => {
                       key={booking.id}
                       className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
                     >
-                      <td className="p-4 text-foreground font-rajdhani font-medium">
+                      <td className="p-2 sm:p-3 md:p-4 text-foreground font-rajdhani font-medium text-xs sm:text-sm">
                         {booking.full_name}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden sm:table-cell font-rajdhani">
                         {booking.vehicle_make} {booking.vehicle_model}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani capitalize">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden md:table-cell font-rajdhani capitalize">
                         {booking.service_type.replace(/_/g, " ")}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs sm:text-sm font-rajdhani">
                         {formatAppointmentTime(booking.appointment_date, booking.appointment_time)}
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 sm:p-3 md:p-4">
                         <StatusSelect
                           value={booking.status}
                           onValueChange={(newStatus) => handleStatusChange(booking.id, newStatus)}
                           statusType="booking"
                         />
                       </td>
-                      <td className="p-4">
-                        <div className="flex gap-2">
+                      <td className="p-2 sm:p-3 md:p-4">
+                        <div className="flex gap-1 sm:gap-2">
                           <button
                             onClick={() => handleDeleteBooking(booking.id)}
-                            className="px-3 py-1 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg text-xs font-rajdhani font-medium transition-colors"
+                            className="px-2 sm:px-3 py-1 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg text-xs font-rajdhani font-medium transition-colors min-h-9"
                           >
                             Delete
                           </button>
@@ -417,29 +417,29 @@ const Appointments = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between p-4 border-t border-border/30 bg-secondary/20">
-                <p className="text-sm text-muted-foreground font-rajdhani">
-                  Showing {(currentPage - 1) * pageSize + 1} to {Math.min(currentPage * pageSize, bookings.length)} of {bookings.length} appointments
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 border-t border-border/30 bg-secondary/20">
+                <p className="text-xs sm:text-sm text-muted-foreground font-rajdhani">
+                  Showing {(currentPage - 1) * pageSize + 1} to {Math.min(currentPage * pageSize, bookings.length)} of {bookings.length}
                 </p>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
                   <Button
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
                     size="sm"
                     variant="outline"
-                    className="border-border/30"
+                    className="border-border/30 min-h-9 px-2"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </Button>
-                  <span className="text-sm text-muted-foreground font-rajdhani px-4 py-2">
-                    Page {currentPage} of {totalPages}
+                  <span className="text-xs sm:text-sm text-muted-foreground font-rajdhani px-2 sm:px-4 py-1.5 sm:py-2">
+                    {currentPage} / {totalPages}
                   </span>
                   <Button
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
                     size="sm"
                     variant="outline"
-                    className="border-border/30"
+                    className="border-border/30 min-h-9 px-2"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </Button>

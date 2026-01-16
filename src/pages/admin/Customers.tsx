@@ -183,11 +183,11 @@ const Customers = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-3xl font-orbitron font-bold text-foreground">Customers</h2>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 sm:mb-8">
+        <h2 className="text-2xl sm:text-3xl font-orbitron font-bold text-foreground">Customers</h2>
         <Button
           onClick={() => setIsModalOpen(true)}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-2 glow-orange"
+          className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-2 glow-orange min-h-10 w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           Add Customer
@@ -222,28 +222,28 @@ const Customers = () => {
       )}
 
       {/* Filters Bar */}
-      <div className="space-y-4">
-        <div className="flex flex-col md:flex-row gap-4">
+      <div className="space-y-3 sm:space-y-4">
+        <div className="flex flex-col gap-3 sm:gap-4">
           {/* Search Input */}
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <div className="flex-1 relative w-full">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search by name, phone, or email..."
               value={filters.search}
               onChange={(e) => handleFilterChange("search", e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani placeholder:text-muted-foreground"
+              className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani placeholder:text-muted-foreground text-sm"
             />
           </div>
         </div>
 
         {/* Filter Dropdowns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           {/* Status Filter */}
           <select
             value={filters.status}
             onChange={(e) => handleFilterChange("status", e.target.value)}
-            className="px-4 py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer"
+            className="px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer text-sm min-h-10"
           >
             <option value="all">Status: All</option>
             <option value="active">Active</option>
@@ -254,7 +254,7 @@ const Customers = () => {
           <select
             value={filters.type}
             onChange={(e) => handleFilterChange("type", e.target.value)}
-            className="px-4 py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer"
+            className="px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer text-sm min-h-10"
           >
             <option value="all">Type: All</option>
             <option value="new">New</option>
@@ -267,7 +267,7 @@ const Customers = () => {
           <select
             value={filters.source}
             onChange={(e) => handleFilterChange("source", e.target.value)}
-            className="px-4 py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer"
+            className="px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary text-foreground rounded-lg border border-border/30 focus:outline-none focus:border-primary font-rajdhani cursor-pointer text-sm min-h-10"
           >
             <option value="all">Source: All</option>
             <option value="google">Google</option>
@@ -309,28 +309,28 @@ const Customers = () => {
         <>
           <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b border-border/30 bg-secondary/30">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30 sticky top-0">
                   <tr>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Name
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden sm:table-cell">
                       Phone
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden md:table-cell">
                       Email
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Type
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden lg:table-cell">
                       Vehicles
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden lg:table-cell">
                       Last Service
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Actions
                     </th>
                   </tr>
@@ -342,10 +342,10 @@ const Customers = () => {
                       className="border-b border-border/30 hover:bg-secondary/20 transition-colors cursor-pointer"
                       onClick={() => navigate(`/admin/customers/${customer.id}`)}
                     >
-                      <td className="p-4 text-foreground font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-foreground font-rajdhani text-xs sm:text-sm font-medium">
                         {customer.first_name} {customer.last_name}
                       </td>
-                      <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden sm:table-cell font-rajdhani">
                         <a
                           href={`tel:${customer.phone}`}
                           onClick={(e) => e.stopPropagation()}
@@ -354,7 +354,7 @@ const Customers = () => {
                           {formatPhone(customer.phone)}
                         </a>
                       </td>
-                      <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden md:table-cell font-rajdhani">
                         {customer.email ? (
                           <a
                             href={`mailto:${customer.email}`}
@@ -367,9 +367,9 @@ const Customers = () => {
                           "—"
                         )}
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 sm:p-3 md:p-4">
                         <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-rajdhani font-medium ${
+                          className={`inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-xs font-rajdhani font-medium ${
                             customerTypeColors[customer.customer_type] ||
                             "bg-gray-500/20 text-gray-400"
                           }`}
@@ -378,36 +378,37 @@ const Customers = () => {
                             customer.customer_type.slice(1)}
                         </span>
                       </td>
-                      <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden lg:table-cell font-rajdhani">
                         {getVehicleInfo(customer.vehicles)}
                       </td>
-                      <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden lg:table-cell font-rajdhani">
                         {getLastService(customer.work_orders)}
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 sm:p-3 md:p-4">
                         <div className="relative">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               setActiveDropdown(activeDropdown === customer.id ? null : customer.id);
                             }}
-                            className="p-2 hover:bg-secondary/50 rounded-lg transition-colors"
+                            className="p-2 min-h-10 min-w-10 hover:bg-secondary/50 rounded-lg transition-colors flex items-center justify-center"
+                            aria-label="Customer actions"
                           >
                             <MoreVertical className="w-4 h-4 text-muted-foreground" />
                           </button>
 
                           {/* Dropdown Menu */}
                           {activeDropdown === customer.id && (
-                            <div className="absolute right-0 mt-2 w-48 bg-secondary border border-border/30 rounded-lg shadow-lg z-50">
+                            <div className="absolute right-0 mt-2 w-44 sm:w-48 bg-secondary border border-border/30 rounded-lg shadow-lg z-50">
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   navigate(`/admin/customers/${customer.id}`);
                                   setActiveDropdown(null);
                                 }}
-                                className="w-full flex items-center gap-3 px-4 py-2 hover:bg-secondary-foreground/10 text-foreground font-rajdhani text-sm transition-colors border-b border-border/30"
+                                className="w-full flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-2 hover:bg-secondary-foreground/10 text-foreground font-rajdhani text-xs sm:text-sm transition-colors border-b border-border/30 min-h-10"
                               >
-                                <Eye className="w-4 h-4" />
+                                <Eye className="w-4 h-4 flex-shrink-0" />
                                 View Details
                               </button>
                               <button
@@ -416,9 +417,9 @@ const Customers = () => {
                                   navigate(`/admin/customers/${customer.id}/edit`);
                                   setActiveDropdown(null);
                                 }}
-                                className="w-full flex items-center gap-3 px-4 py-2 hover:bg-secondary-foreground/10 text-foreground font-rajdhani text-sm transition-colors border-b border-border/30"
+                                className="w-full flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-2 hover:bg-secondary-foreground/10 text-foreground font-rajdhani text-xs sm:text-sm transition-colors border-b border-border/30 min-h-10"
                               >
-                                <Edit className="w-4 h-4" />
+                                <Edit className="w-4 h-4 flex-shrink-0" />
                                 Edit Customer
                               </button>
                               <button
@@ -426,9 +427,9 @@ const Customers = () => {
                                   e.stopPropagation();
                                   handleDeleteCustomer(customer.id);
                                 }}
-                                className="w-full flex items-center gap-3 px-4 py-2 hover:bg-red-500/10 text-red-400 font-rajdhani text-sm transition-colors"
+                                className="w-full flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-2 hover:bg-red-500/10 text-red-400 font-rajdhani text-xs sm:text-sm transition-colors min-h-10"
                               >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className="w-4 h-4 flex-shrink-0" />
                                 Delete Customer
                               </button>
                             </div>
@@ -443,41 +444,45 @@ const Customers = () => {
           </Card>
 
           {/* Pagination */}
-          <div className="flex items-center justify-between">
-            <p className="text-muted-foreground font-rajdhani text-sm">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 bg-secondary/20 border-t border-border/30 rounded-b-lg">
+            <p className="text-muted-foreground font-rajdhani text-xs sm:text-sm">
               Showing {startIndex} to {endIndex} of {totalCount} customers
             </p>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2 flex-wrap justify-center sm:justify-end">
               <Button
                 onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
                 disabled={currentPage === 0}
                 variant="outline"
                 size="sm"
-                className="border-border/30"
+                className="border-border/30 text-xs sm:text-sm min-h-9 px-2 sm:px-3"
               >
-                Previous
+                Prev
               </Button>
-              {Array.from({ length: totalPages }).map((_, i) => (
-                <Button
-                  key={i}
-                  onClick={() => setCurrentPage(i)}
-                  variant={currentPage === i ? "default" : "outline"}
-                  size="sm"
-                  className={
-                    currentPage === i
-                      ? "bg-orange-500 hover:bg-orange-600"
-                      : "border-border/30"
-                  }
-                >
-                  {i + 1}
-                </Button>
-              ))}
+              {Array.from({ length: Math.min(totalPages, 5) }).map((_, i) => {
+                const pageNum = i + Math.max(0, currentPage - 2);
+                if (pageNum >= totalPages) return null;
+                return (
+                  <Button
+                    key={pageNum}
+                    onClick={() => setCurrentPage(pageNum)}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    className={`text-xs sm:text-sm min-h-9 px-2.5 sm:px-3 ${
+                      currentPage === pageNum
+                        ? "bg-orange-500 hover:bg-orange-600"
+                        : "border-border/30"
+                    }`}
+                  >
+                    {pageNum + 1}
+                  </Button>
+                );
+              })}
               <Button
                 onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
                 disabled={currentPage === totalPages - 1}
                 variant="outline"
                 size="sm"
-                className="border-border/30"
+                className="border-border/30 text-xs sm:text-sm min-h-9 px-2 sm:px-3"
               >
                 Next
               </Button>

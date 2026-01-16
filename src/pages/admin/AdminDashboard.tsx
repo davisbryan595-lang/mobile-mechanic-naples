@@ -59,13 +59,13 @@ interface FormSubmissionData {
 }
 
 const StatsCard = ({ label, value, icon, bgColor }: StatsCardProps) => (
-  <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-6 flex flex-col gap-4">
-    <div className="flex items-start justify-between">
-      <div className="flex-1">
-        <p className="text-muted-foreground text-sm font-rajdhani mb-2">{label}</p>
-        <p className="text-2xl md:text-3xl font-orbitron font-bold text-foreground">{value}</p>
+  <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-4 sm:p-5 md:p-6 flex flex-col gap-3 sm:gap-4 h-full">
+    <div className="flex items-start justify-between gap-2">
+      <div className="flex-1 min-w-0">
+        <p className="text-muted-foreground text-xs sm:text-sm font-rajdhani mb-1 sm:mb-2">{label}</p>
+        <p className="text-xl sm:text-2xl md:text-3xl font-orbitron font-bold text-foreground break-words">{value}</p>
       </div>
-      <div className={`p-3 rounded-lg ${bgColor}`}>{icon}</div>
+      <div className={`p-2 sm:p-3 rounded-lg flex-shrink-0 ${bgColor}`}>{icon}</div>
     </div>
   </Card>
 );
@@ -950,19 +950,19 @@ const AdminDashboard = () => {
   );
 
   const renderOverview = () => (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Welcome Section */}
-      <div className="mb-8">
-        <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-foreground mb-2">
+      <div className="mb-6 sm:mb-8">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-foreground mb-1 sm:mb-2">
           Welcome back, Bryan
         </h2>
-        <p className="text-muted-foreground font-rajdhani">
+        <p className="text-sm sm:text-base text-muted-foreground font-rajdhani">
           Mobile Mechanic CRM – Your dashboard overview
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatsCard
           label="Today's Jobs"
           value={stats.loadingStats ? "—" : stats.todayJobs}
@@ -1006,57 +1006,57 @@ const AdminDashboard = () => {
       )}
 
       {/* Tables Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
         {/* Upcoming Appointments */}
-        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
-          <div className="p-6 border-b border-border/30">
-            <h3 className="text-xl font-orbitron font-bold text-foreground">
+        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col h-full">
+          <div className="p-4 sm:p-5 md:p-6 border-b border-border/30">
+            <h3 className="text-lg sm:text-xl font-orbitron font-bold text-foreground">
               Upcoming Appointments
             </h3>
           </div>
 
           {loadingAppointments && (
-            <div className="p-6 text-center">
+            <div className="p-4 sm:p-6 text-center">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
-              <p className="text-muted-foreground font-rajdhani text-sm">Loading appointments...</p>
+              <p className="text-muted-foreground font-rajdhani text-xs sm:text-sm">Loading appointments...</p>
             </div>
           )}
 
           {appointmentsError && (
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               <div className="bg-red-900/20 border border-red-500 rounded-lg p-3 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
-                <p className="text-red-400 font-rajdhani text-sm">Failed to load appointments</p>
+                <p className="text-red-400 font-rajdhani text-xs sm:text-sm">Failed to load appointments</p>
               </div>
             </div>
           )}
 
           {!loadingAppointments && !appointmentsError && appointments.length === 0 && (
-            <div className="p-8 text-center">
-              <p className="text-muted-foreground font-rajdhani">
+            <div className="p-6 sm:p-8 text-center">
+              <p className="text-muted-foreground font-rajdhani text-sm sm:text-base">
                 No appointments scheduled yet. Start adding bookings to track customer services.
               </p>
             </div>
           )}
 
           {!loadingAppointments && !appointmentsError && appointments.length > 0 && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b border-border/30 bg-secondary/30">
+            <div className="overflow-x-auto flex-1">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30 sticky top-0">
                   <tr>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Customer
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden sm:table-cell">
                       Vehicle
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden md:table-cell">
                       Service
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Time
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Status
                     </th>
                   </tr>
@@ -1067,21 +1067,23 @@ const AdminDashboard = () => {
                       key={apt.id}
                       className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
                     >
-                      <td className="p-4 text-foreground font-rajdhani">{apt.full_name}</td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-foreground font-rajdhani text-xs sm:text-sm font-medium">
+                        {apt.full_name}
+                      </td>
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden sm:table-cell font-rajdhani">
                         {apt.vehicle_make && apt.vehicle_model
                           ? `${apt.vehicle_make} ${apt.vehicle_model}`
                           : "—"}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden md:table-cell font-rajdhani">
                         {apt.service_type}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs sm:text-sm font-rajdhani">
                         {formatAppointmentTime(apt.appointment_date, apt.appointment_time)}
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 sm:p-3 md:p-4">
                         <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-rajdhani font-medium ${getStatusBadgeColor(
+                          className={`inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-xs font-rajdhani font-medium ${getStatusBadgeColor(
                             apt.status
                           )}`}
                         >
@@ -1097,50 +1099,52 @@ const AdminDashboard = () => {
         </Card>
 
         {/* Recent Customers */}
-        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
-          <div className="p-6 border-b border-border/30">
-            <h3 className="text-xl font-orbitron font-bold text-foreground">Recent Customers</h3>
+        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col h-full">
+          <div className="p-4 sm:p-5 md:p-6 border-b border-border/30">
+            <h3 className="text-lg sm:text-xl font-orbitron font-bold text-foreground">Recent Customers</h3>
           </div>
 
           {loadingCustomers && (
-            <div className="p-6 text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
-              <p className="text-muted-foreground font-rajdhani text-sm">Loading customers...</p>
+            <div className="p-4 sm:p-6 text-center flex-1 flex items-center justify-center">
+              <div>
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
+                <p className="text-muted-foreground font-rajdhani text-xs sm:text-sm">Loading customers...</p>
+              </div>
             </div>
           )}
 
           {customersError && (
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               <div className="bg-red-900/20 border border-red-500 rounded-lg p-3 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
-                <p className="text-red-400 font-rajdhani text-sm">Failed to load customers</p>
+                <p className="text-red-400 font-rajdhani text-xs sm:text-sm">Failed to load customers</p>
               </div>
             </div>
           )}
 
           {!loadingCustomers && !customersError && recentCustomers.length === 0 && (
-            <div className="p-8 text-center">
-              <p className="text-muted-foreground font-rajdhani">
+            <div className="p-6 sm:p-8 text-center">
+              <p className="text-muted-foreground font-rajdhani text-sm sm:text-base">
                 No customers yet. Add your first customer to get started.
               </p>
             </div>
           )}
 
           {!loadingCustomers && !customersError && recentCustomers.length > 0 && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b border-border/30 bg-secondary/30">
+            <div className="overflow-x-auto flex-1">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30 sticky top-0">
                   <tr>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Name
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden sm:table-cell">
                       Phone
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden md:table-cell">
                       Email
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Added
                     </th>
                   </tr>
@@ -1151,10 +1155,10 @@ const AdminDashboard = () => {
                       key={customer.id}
                       className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
                     >
-                      <td className="p-4 text-foreground font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-foreground font-rajdhani text-xs sm:text-sm font-medium">
                         {customer.first_name} {customer.last_name}
                       </td>
-                      <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden sm:table-cell font-rajdhani">
                         <a
                           href={`tel:${customer.phone}`}
                           className="hover:text-primary transition-colors"
@@ -1162,7 +1166,7 @@ const AdminDashboard = () => {
                           {formatPhone(customer.phone)}
                         </a>
                       </td>
-                      <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden md:table-cell font-rajdhani">
                         {customer.email ? (
                           <a
                             href={`mailto:${customer.email}`}
@@ -1174,7 +1178,7 @@ const AdminDashboard = () => {
                           "—"
                         )}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs sm:text-sm font-rajdhani">
                         {format(new Date(customer.updated_at), "MMM d")}
                       </td>
                     </tr>
@@ -1186,65 +1190,67 @@ const AdminDashboard = () => {
         </Card>
 
         {/* Pending Jobs / Upcoming Work */}
-        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
-          <div className="p-6 border-b border-border/30 flex items-center justify-between">
+        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col h-full">
+          <div className="p-4 sm:p-5 md:p-6 border-b border-border/30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h3 className="text-xl font-orbitron font-bold text-foreground">
-                Pending Jobs & Work Orders
+              <h3 className="text-lg sm:text-xl font-orbitron font-bold text-foreground">
+                Pending Jobs
               </h3>
               <p className="text-xs text-muted-foreground font-rajdhani mt-1">
-                Active and upcoming work - click status to update
+                Active work orders - click to update
               </p>
             </div>
             <Button
               onClick={() => alert("Work Order form coming soon")}
               size="sm"
-              className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-1"
+              className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-1 w-full sm:w-auto min-h-10"
             >
               <Plus className="w-4 h-4" />
-              New
+              <span className="hidden sm:inline">New</span>
             </Button>
           </div>
 
           {loadingWorkOrders && (
-            <div className="p-6 text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
-              <p className="text-muted-foreground font-rajdhani text-sm">Loading work orders...</p>
+            <div className="p-4 sm:p-6 text-center flex-1 flex items-center justify-center">
+              <div>
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
+                <p className="text-muted-foreground font-rajdhani text-xs sm:text-sm">Loading work orders...</p>
+              </div>
             </div>
           )}
 
           {workOrdersError && (
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               <div className="bg-red-900/20 border border-red-500 rounded-lg p-3 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
-                <p className="text-red-400 font-rajdhani text-sm">Failed to load work orders</p>
+                <p className="text-red-400 font-rajdhani text-xs sm:text-sm">Failed to load work orders</p>
               </div>
             </div>
           )}
 
           {!loadingWorkOrders && !workOrdersError && workOrders.length === 0 && (
-            <div className="p-8 text-center">
-              <p className="text-muted-foreground font-rajdhani mb-3">
+            <div className="p-6 sm:p-8 text-center">
+              <p className="text-muted-foreground font-rajdhani text-sm sm:text-base mb-3">
                 No active work orders yet. Click the button above to get started.
               </p>
             </div>
           )}
 
           {!loadingWorkOrders && !workOrdersError && workOrders.length > 0 && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b border-border/30 bg-secondary/30">
+            <div className="overflow-x-auto flex-1">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30 sticky top-0">
                   <tr>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Customer
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden sm:table-cell">
                       Vehicle
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden md:table-cell">
                       Service
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Status
                     </th>
                   </tr>
@@ -1255,18 +1261,18 @@ const AdminDashboard = () => {
                       key={order.id}
                       className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
                     >
-                      <td className="p-4 text-foreground font-rajdhani text-sm">
+                      <td className="p-2 sm:p-3 md:p-4 text-foreground font-rajdhani text-xs sm:text-sm font-medium">
                         {order.customer_name}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden sm:table-cell font-rajdhani">
                         {order.vehicle_make && order.vehicle_model
                           ? `${order.vehicle_make} ${order.vehicle_model} ${order.vehicle_year || ""}`
                           : "—"}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani capitalize">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden md:table-cell font-rajdhani capitalize">
                         {order.service_type.replace(/_/g, " ")}
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 sm:p-3 md:p-4">
                         <StatusSelect
                           value={order.status}
                           onValueChange={(value) => updateWorkOrderStatus(order.id, value)}
@@ -1283,33 +1289,35 @@ const AdminDashboard = () => {
       </div>
 
       {/* Action Buttons Section */}
-      <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-6">
-        <h3 className="text-lg font-orbitron font-bold text-foreground mb-4">Quick Actions</h3>
-        <div className="flex flex-wrap gap-3">
+      <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-4 sm:p-6">
+        <h3 className="text-base sm:text-lg font-orbitron font-bold text-foreground mb-4">Quick Actions</h3>
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
           <Button
             onClick={() => alert("Booking form coming soon")}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-rajdhani font-medium gap-2 glow-orange"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-rajdhani font-medium gap-2 min-h-10 flex-1 sm:flex-initial"
           >
             <Plus className="w-4 h-4" />
-            Add Booking
+            <span className="hidden sm:inline">Add Booking</span>
+            <span className="sm:hidden">Booking</span>
           </Button>
           <Button
             onClick={() => alert("Select a job first")}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-rajdhani font-medium gap-2"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-rajdhani font-medium gap-2 min-h-10 flex-1 sm:flex-initial"
           >
             <CheckCircle className="w-4 h-4" />
-            Mark Complete
+            <span className="hidden sm:inline">Mark Complete</span>
+            <span className="sm:hidden">Complete</span>
           </Button>
           <Button
             variant="outline"
-            className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium"
+            className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium min-h-10 flex-1 sm:flex-initial"
             onClick={() => setActiveSection("appointments")}
           >
-            View All Appointments
+            View Appointments
           </Button>
           <Button
             variant="outline"
-            className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium"
+            className="border-border/50 text-foreground hover:bg-secondary/50 font-rajdhani font-medium min-h-10 flex-1 sm:flex-initial"
             onClick={() => setActiveSection("customers")}
           >
             Manage Customers
@@ -1353,12 +1361,12 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex flex-col md:flex-row">
       <SidebarAdmin activeSection={activeSection} onSectionChange={setActiveSection} />
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
-        <div className="p-4 md:p-8">
+      <main className="flex-1 overflow-auto w-full">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
           {renderSection()}
         </div>
       </main>
