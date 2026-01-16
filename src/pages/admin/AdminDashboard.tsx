@@ -950,19 +950,19 @@ const AdminDashboard = () => {
   );
 
   const renderOverview = () => (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Welcome Section */}
-      <div className="mb-8">
-        <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-foreground mb-2">
+      <div className="mb-6 sm:mb-8">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-foreground mb-1 sm:mb-2">
           Welcome back, Bryan
         </h2>
-        <p className="text-muted-foreground font-rajdhani">
+        <p className="text-sm sm:text-base text-muted-foreground font-rajdhani">
           Mobile Mechanic CRM – Your dashboard overview
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatsCard
           label="Today's Jobs"
           value={stats.loadingStats ? "—" : stats.todayJobs}
