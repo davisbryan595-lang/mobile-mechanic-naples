@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription";
 import { getServicePrice, getServiceDescription } from "@/utils/service-pricing";
+import { extractServiceFromMessage } from "@/utils/extract-service-from-message";
 import Customers from "./Customers";
 import Appointments from "./Appointments";
 import Invoices from "./Invoices";
