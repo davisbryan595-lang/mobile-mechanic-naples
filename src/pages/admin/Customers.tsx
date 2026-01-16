@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { AddCustomerModal } from "@/components/admin/AddCustomerModal";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
+import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription";
+import { toast } from "sonner";
 
 type Customer = Tables<"customers">;
 
@@ -134,6 +136,19 @@ const Customers = () => {
   useEffect(() => {
     fetchCustomers();
   }, [fetchCustomers]);
+
+  // Real-time subscription for new customers
+  useRealtimeSubscription({
+    event: "INSERT",
+    table: "customers",
+    onPayload: (payload) => {
+      fetchCustomers();
+      toast.success("New lead added", {
+        duration: 3000,
+        position: "top-right",
+      });
+    },
+  });
 
   const handleFilterChange = (key: keyof FilterState, value: string) => {
     setFilters((prev) => ({

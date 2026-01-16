@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Plus, AlertTriangle, RefreshCw, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AddBookingModal } from "@/components/admin/AddBookingModal";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription";
 
 interface BookingData {
   id: string;
@@ -50,7 +51,7 @@ const Appointments = () => {
   const [pageSize] = useState(10);
 
   // Fetch bookings
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     setLoading(true);
     setError(false);
     try {
@@ -132,13 +133,38 @@ const Appointments = () => {
       setError(true);
       setLoading(false);
     }
-  };
+  }, [statusFilter, dateFilter, searchQuery]);
 
   // Fetch on filter changes
   useEffect(() => {
     setCurrentPage(1); // Reset to first page on filter change
     fetchBookings();
-  }, [statusFilter, dateFilter, searchQuery]);
+  }, [fetchBookings]);
+
+  // Real-time subscriptions for appointments
+  useRealtimeSubscription({
+    event: "INSERT",
+    table: "bookings",
+    onPayload: () => {
+      fetchBookings();
+      toast.success("New appointment added", {
+        duration: 3000,
+        position: "top-right",
+      });
+    },
+  });
+
+  useRealtimeSubscription({
+    event: "UPDATE",
+    table: "bookings",
+    onPayload: () => {
+      fetchBookings();
+      toast.info("Appointment updated", {
+        duration: 3000,
+        position: "top-right",
+      });
+    },
+  });
 
   const handleDeleteBooking = async (id: string) => {
     if (!confirm("Are you sure you want to delete this booking?")) return;

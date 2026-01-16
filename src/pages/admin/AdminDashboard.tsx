@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Clock, TrendingUp, AlertCircle, Users as UsersIcon, Plus, CheckCircle, AlertTriangle, RefreshCw, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,8 @@ import { SidebarAdmin } from "@/components/admin/SidebarAdmin";
 import { adminAuth } from "@/utils/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+import { toast } from "sonner";
+import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription";
 import Customers from "./Customers";
 import Appointments from "./Appointments";
 import Invoices from "./Invoices";
@@ -122,6 +124,89 @@ const AdminDashboard = () => {
       navigate("/admin/login");
     }
   }, [navigate]);
+
+  // Function to update work order status
+  const updateWorkOrderStatus = async (id: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from("work_orders")
+        .update({ status: newStatus })
+        .eq("id", id);
+
+      if (error) throw error;
+
+      toast.success("Work order updated", {
+        duration: 2000,
+        position: "top-right",
+      });
+
+      // Refresh work orders list
+      const fetchActiveWorkOrders = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("work_orders")
+            .select("id, customer_id, vehicle_id, service_type, description, status, created_at")
+            .neq("status", "completed")
+            .order("created_at", { ascending: false })
+            .limit(10);
+
+          if (error) {
+            if (error.code === "PGRST116") {
+              setWorkOrders([]);
+              return;
+            }
+            throw error;
+          }
+
+          // Fetch customer and vehicle info for each work order
+          const ordersWithDetails: WorkOrderWithDetails[] = [];
+          for (const order of data || []) {
+            const { data: customerData } = await supabase
+              .from("customers")
+              .select("first_name, last_name")
+              .eq("id", order.customer_id)
+              .single();
+
+            let vehicleInfo = {};
+            if (order.vehicle_id) {
+              const { data: vehicleData } = await supabase
+                .from("vehicles")
+                .select("make, model, year")
+                .eq("id", order.vehicle_id)
+                .single();
+
+              if (vehicleData) {
+                vehicleInfo = {
+                  vehicle_make: vehicleData.make,
+                  vehicle_model: vehicleData.model,
+                  vehicle_year: vehicleData.year,
+                };
+              }
+            }
+
+            ordersWithDetails.push({
+              ...order,
+              customer_name: customerData ? `${customerData.first_name} ${customerData.last_name}` : "Unknown",
+              ...vehicleInfo,
+            });
+          }
+
+          setWorkOrders(ordersWithDetails);
+        } catch (error) {
+          console.error("Error fetching work orders:", error instanceof Error ? error.message : String(error));
+        }
+      };
+
+      fetchActiveWorkOrders();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to update work order";
+      toast.error("Error updating work order", {
+        description: message,
+        duration: 3000,
+        position: "top-right",
+      });
+    }
+  };
 
   // Fetch stats
   useEffect(() => {
@@ -372,6 +457,177 @@ const AdminDashboard = () => {
 
     fetchWorkOrders();
   }, []);
+
+  // Real-time subscriptions for overview dashboard
+  useRealtimeSubscription({
+    event: "INSERT",
+    table: "customers",
+    onPayload: () => {
+      setStats(prev => ({
+        ...prev,
+        totalCustomers: (prev.totalCustomers || 0) + 1,
+      }));
+      // Refresh recent customers
+      const fetchRecentCustomers = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("customers")
+            .select("id, first_name, last_name, phone, email, updated_at")
+            .eq("is_active", true)
+            .order("updated_at", { ascending: false })
+            .limit(10);
+
+          if (error && error.code !== "PGRST116") {
+            throw error;
+          }
+
+          setRecentCustomers(data || []);
+        } catch (error) {
+          console.error("Error fetching recent customers:", error instanceof Error ? error.message : String(error));
+        }
+      };
+
+      fetchRecentCustomers();
+      toast.success("New lead added", {
+        duration: 3000,
+        position: "top-right",
+      });
+    },
+  });
+
+  useRealtimeSubscription({
+    event: "INSERT",
+    table: "work_orders",
+    onPayload: () => {
+      const fetchPendingWorkOrders = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("work_orders")
+            .select("id, customer_id, vehicle_id, service_type, description, status, created_at")
+            .neq("status", "completed")
+            .order("created_at", { ascending: false })
+            .limit(10);
+
+          if (error) {
+            if (error.code === "PGRST116") {
+              setWorkOrders([]);
+              return;
+            }
+            throw error;
+          }
+
+          const ordersWithDetails: WorkOrderWithDetails[] = [];
+          for (const order of data || []) {
+            const { data: customerData } = await supabase
+              .from("customers")
+              .select("first_name, last_name")
+              .eq("id", order.customer_id)
+              .single();
+
+            let vehicleInfo = {};
+            if (order.vehicle_id) {
+              const { data: vehicleData } = await supabase
+                .from("vehicles")
+                .select("make, model, year")
+                .eq("id", order.vehicle_id)
+                .single();
+
+              if (vehicleData) {
+                vehicleInfo = {
+                  vehicle_make: vehicleData.make,
+                  vehicle_model: vehicleData.model,
+                  vehicle_year: vehicleData.year,
+                };
+              }
+            }
+
+            ordersWithDetails.push({
+              ...order,
+              customer_name: customerData ? `${customerData.first_name} ${customerData.last_name}` : "Unknown",
+              ...vehicleInfo,
+            });
+          }
+
+          setWorkOrders(ordersWithDetails);
+        } catch (error) {
+          console.error("Error fetching work orders:", error instanceof Error ? error.message : String(error));
+        }
+      };
+
+      fetchPendingWorkOrders();
+      toast.success("New pending job added", {
+        duration: 3000,
+        position: "top-right",
+      });
+    },
+  });
+
+  useRealtimeSubscription({
+    event: "UPDATE",
+    table: "work_orders",
+    onPayload: () => {
+      const fetchPendingWorkOrders = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("work_orders")
+            .select("id, customer_id, vehicle_id, service_type, description, status, created_at")
+            .neq("status", "completed")
+            .order("created_at", { ascending: false })
+            .limit(10);
+
+          if (error) {
+            if (error.code === "PGRST116") {
+              setWorkOrders([]);
+              return;
+            }
+            throw error;
+          }
+
+          const ordersWithDetails: WorkOrderWithDetails[] = [];
+          for (const order of data || []) {
+            const { data: customerData } = await supabase
+              .from("customers")
+              .select("first_name, last_name")
+              .eq("id", order.customer_id)
+              .single();
+
+            let vehicleInfo = {};
+            if (order.vehicle_id) {
+              const { data: vehicleData } = await supabase
+                .from("vehicles")
+                .select("make, model, year")
+                .eq("id", order.vehicle_id)
+                .single();
+
+              if (vehicleData) {
+                vehicleInfo = {
+                  vehicle_make: vehicleData.make,
+                  vehicle_model: vehicleData.model,
+                  vehicle_year: vehicleData.year,
+                };
+              }
+            }
+
+            ordersWithDetails.push({
+              ...order,
+              customer_name: customerData ? `${customerData.first_name} ${customerData.last_name}` : "Unknown",
+              ...vehicleInfo,
+            });
+          }
+
+          setWorkOrders(ordersWithDetails);
+        } catch (error) {
+          console.error("Error fetching work orders:", error instanceof Error ? error.message : String(error));
+        }
+      };
+
+      fetchPendingWorkOrders();
+      toast.info("Pending job updated", {
+        duration: 3000,
+        position: "top-right",
+      });
+    },
+  });
 
   const formatPhone = (phone: string) => {
     const cleaned = phone.replace(/\D/g, "");
@@ -755,12 +1011,17 @@ const AdminDashboard = () => {
           )}
         </Card>
 
-        {/* Active Work Orders */}
+        {/* Pending Jobs / Upcoming Work */}
         <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
           <div className="p-6 border-b border-border/30 flex items-center justify-between">
-            <h3 className="text-xl font-orbitron font-bold text-foreground">
-              Active Work Orders
-            </h3>
+            <div>
+              <h3 className="text-xl font-orbitron font-bold text-foreground">
+                Pending Jobs & Work Orders
+              </h3>
+              <p className="text-xs text-muted-foreground font-rajdhani mt-1">
+                Active and upcoming work - click status to update
+              </p>
+            </div>
             <Button
               onClick={() => alert("Work Order form coming soon")}
               size="sm"
@@ -832,8 +1093,10 @@ const AdminDashboard = () => {
                         {order.service_type.replace(/_/g, " ")}
                       </td>
                       <td className="p-4">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-rajdhani font-medium ${
+                        <select
+                          value={order.status}
+                          onChange={(e) => updateWorkOrderStatus(order.id, e.target.value)}
+                          className={`px-3 py-1 rounded-full text-xs font-rajdhani font-medium border-0 focus:outline-none cursor-pointer ${
                             order.status === "pending"
                               ? "bg-blue-500/20 text-blue-400"
                               : order.status === "in_progress"
@@ -845,8 +1108,11 @@ const AdminDashboard = () => {
                               : "bg-gray-500/20 text-gray-400"
                           }`}
                         >
-                          {order.status.charAt(0).toUpperCase() + order.status.slice(1).replace(/_/g, " ")}
-                        </span>
+                          <option value="pending">Pending</option>
+                          <option value="in_progress">In Progress</option>
+                          <option value="completed">Completed</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
                       </td>
                     </tr>
                   ))}
