@@ -59,13 +59,13 @@ interface FormSubmissionData {
 }
 
 const StatsCard = ({ label, value, icon, bgColor }: StatsCardProps) => (
-  <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-6 flex flex-col gap-4">
-    <div className="flex items-start justify-between">
-      <div className="flex-1">
-        <p className="text-muted-foreground text-sm font-rajdhani mb-2">{label}</p>
-        <p className="text-2xl md:text-3xl font-orbitron font-bold text-foreground">{value}</p>
+  <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-4 sm:p-5 md:p-6 flex flex-col gap-3 sm:gap-4 h-full">
+    <div className="flex items-start justify-between gap-2">
+      <div className="flex-1 min-w-0">
+        <p className="text-muted-foreground text-xs sm:text-sm font-rajdhani mb-1 sm:mb-2">{label}</p>
+        <p className="text-xl sm:text-2xl md:text-3xl font-orbitron font-bold text-foreground break-words">{value}</p>
       </div>
-      <div className={`p-3 rounded-lg ${bgColor}`}>{icon}</div>
+      <div className={`p-2 sm:p-3 rounded-lg flex-shrink-0 ${bgColor}`}>{icon}</div>
     </div>
   </Card>
 );
