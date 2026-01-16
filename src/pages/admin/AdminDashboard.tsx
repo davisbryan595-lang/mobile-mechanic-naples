@@ -932,8 +932,22 @@ const AdminDashboard = () => {
                     <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
                       {format(new Date(submission.created_at), "MMM d, yyyy")}
                     </td>
-                    <td className="p-4 text-muted-foreground text-sm font-rajdhani max-w-xs truncate">
-                      {submission.message}
+                    <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      {submission.selected_services ? (() => {
+                        try {
+                          const services = JSON.parse(submission.selected_services);
+                          return <span className="text-primary font-medium">{services.length} service(s)</span>;
+                        } catch {
+                          return <span>—</span>;
+                        }
+                      })() : <span>—</span>}
+                    </td>
+                    <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      {submission.estimated_total ? (
+                        <span className="text-emerald-400 font-semibold">${submission.estimated_total.toFixed(2)}</span>
+                      ) : (
+                        <span>—</span>
+                      )}
                     </td>
                     <td className="p-4">
                       <Button
