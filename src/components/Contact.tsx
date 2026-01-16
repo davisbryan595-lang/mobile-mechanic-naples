@@ -282,6 +282,84 @@ export const Contact = () => {
               </div>
 
               <div>
+                <Label className="font-orbitron">Services & Packages <span className="text-xs text-muted-foreground">(optional)</span></Label>
+                <div className="mt-3 space-y-3 max-h-64 overflow-y-auto border border-border/30 rounded-lg p-4 bg-background/50">
+                  {SERVICE_CATEGORIES.length > 0 ? (
+                    SERVICE_CATEGORIES.map((category) => {
+                      const categoryServices = SERVICES.filter((s) => s.category === category);
+                      return (
+                        <div key={category} className="border-b border-border/20 pb-3 last:border-0">
+                          <button
+                            type="button"
+                            onClick={() => setExpandedCategory(expandedCategory === category ? null : category)}
+                            className="w-full text-left font-rajdhani text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                          >
+                            {category}
+                          </button>
+                          {expandedCategory === category && (
+                            <div className="mt-2 space-y-2 ml-2">
+                              {categoryServices.map((service) => {
+                                const isSelected = selectedServices.some((s) => s.id === service.id);
+                                return (
+                                  <div key={service.id} className="flex items-start gap-2">
+                                    <Checkbox
+                                      id={service.id}
+                                      checked={isSelected}
+                                      onCheckedChange={() => toggleService(service.id, service.name)}
+                                      className="mt-1"
+                                    />
+                                    <label
+                                      htmlFor={service.id}
+                                      className="text-xs cursor-pointer flex-1 leading-tight"
+                                    >
+                                      <span className="font-rajdhani">{service.name}</span>
+                                      <br />
+                                      <span className="text-muted-foreground text-xs">
+                                        ${getServicePrice(service.id).toFixed(2)}
+                                      </span>
+                                    </label>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })
+                  ) : null}
+                </div>
+
+                {selectedServices.length > 0 && (
+                  <div className="mt-3 p-3 bg-primary/10 border border-primary/30 rounded-lg">
+                    <p className="font-rajdhani text-sm font-semibold mb-2">Selected Services:</p>
+                    <div className="space-y-1 mb-3">
+                      {selectedServices.map((service) => (
+                        <div key={service.id} className="flex items-center justify-between text-xs">
+                          <span>{service.name}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">${service.price.toFixed(2)}</span>
+                            <button
+                              type="button"
+                              onClick={() => removeService(service.id)}
+                              className="text-muted-foreground hover:text-destructive transition-colors"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="border-t border-primary/30 pt-2">
+                      <p className="flex items-center justify-between font-orbitron text-sm">
+                        <span>Estimated Total:</span>
+                        <span className="text-primary font-bold">${calculateTotalPrice().toFixed(2)}</span>
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div>
                 <Label htmlFor="address" className="font-orbitron">Address</Label>
                 <Input
                   id="address"
