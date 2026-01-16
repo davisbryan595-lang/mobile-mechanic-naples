@@ -252,11 +252,11 @@ const Appointments = () => {
       </div>
 
       {/* Filters Bar */}
-      <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-6 space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-4 sm:p-6 space-y-3 sm:space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           {/* Search */}
           <div>
-            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-2">
+            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-1.5 sm:mb-2">
               Search
             </label>
             <input
@@ -264,19 +264,19 @@ const Appointments = () => {
               placeholder="Customer, vehicle, or service..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 bg-secondary border border-border/30 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-primary font-rajdhani text-sm"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary border border-border/30 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-primary font-rajdhani text-sm min-h-10"
             />
           </div>
 
           {/* Status Filter */}
           <div>
-            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-2">
+            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-1.5 sm:mb-2">
               Status
             </label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-secondary border border-border/30 rounded-lg text-white focus:outline-none focus:border-primary font-rajdhani text-sm cursor-pointer"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary border border-border/30 rounded-lg text-white focus:outline-none focus:border-primary font-rajdhani text-sm cursor-pointer min-h-10"
             >
               <option value="all">All Statuses</option>
               <option value="pending">Pending</option>
