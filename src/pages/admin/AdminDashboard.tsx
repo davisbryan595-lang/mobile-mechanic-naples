@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription";
+import { getServicePrice, getServiceDescription } from "@/utils/service-pricing";
 import Customers from "./Customers";
 import Appointments from "./Appointments";
 import Invoices from "./Invoices";
