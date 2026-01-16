@@ -340,7 +340,7 @@ const AdminDashboard = () => {
       // Refresh form submissions
       const { data, error } = await supabase
         .from("form_submissions")
-        .select("id, name, email, phone, address, message, vehicle_type, preferred_date, how_heard_about_us, other_source, created_at")
+        .select("id, name, email, phone, address, message, vehicle_type, preferred_date, how_heard_about_us, other_source, selected_services, estimated_total, created_at")
         .order("created_at", { ascending: false })
         .limit(50);
 
