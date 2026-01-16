@@ -1088,8 +1088,10 @@ const AdminDashboard = () => {
                         {order.service_type.replace(/_/g, " ")}
                       </td>
                       <td className="p-4">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-rajdhani font-medium ${
+                        <select
+                          value={order.status}
+                          onChange={(e) => updateWorkOrderStatus(order.id, e.target.value)}
+                          className={`px-3 py-1 rounded-full text-xs font-rajdhani font-medium border-0 focus:outline-none cursor-pointer ${
                             order.status === "pending"
                               ? "bg-blue-500/20 text-blue-400"
                               : order.status === "in_progress"
@@ -1101,8 +1103,11 @@ const AdminDashboard = () => {
                               : "bg-gray-500/20 text-gray-400"
                           }`}
                         >
-                          {order.status.charAt(0).toUpperCase() + order.status.slice(1).replace(/_/g, " ")}
-                        </span>
+                          <option value="pending">Pending</option>
+                          <option value="in_progress">In Progress</option>
+                          <option value="completed">Completed</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
                       </td>
                     </tr>
                   ))}
