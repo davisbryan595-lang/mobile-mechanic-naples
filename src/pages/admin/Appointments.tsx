@@ -349,27 +349,27 @@ const Appointments = () => {
       {/* Appointments Table */}
       {!loading && !error && bookings.length > 0 && (
         <>
-          <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b border-border/30 bg-secondary/30">
+          <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col">
+            <div className="overflow-x-auto flex-1">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30 sticky top-0">
                   <tr>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Customer
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden sm:table-cell">
                       Vehicle
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden md:table-cell">
                       Service Type
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Date & Time
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Status
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Actions
                     </th>
                   </tr>
@@ -380,30 +380,30 @@ const Appointments = () => {
                       key={booking.id}
                       className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
                     >
-                      <td className="p-4 text-foreground font-rajdhani font-medium">
+                      <td className="p-2 sm:p-3 md:p-4 text-foreground font-rajdhani font-medium text-xs sm:text-sm">
                         {booking.full_name}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden sm:table-cell font-rajdhani">
                         {booking.vehicle_make} {booking.vehicle_model}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani capitalize">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden md:table-cell font-rajdhani capitalize">
                         {booking.service_type.replace(/_/g, " ")}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs sm:text-sm font-rajdhani">
                         {formatAppointmentTime(booking.appointment_date, booking.appointment_time)}
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 sm:p-3 md:p-4">
                         <StatusSelect
                           value={booking.status}
                           onValueChange={(newStatus) => handleStatusChange(booking.id, newStatus)}
                           statusType="booking"
                         />
                       </td>
-                      <td className="p-4">
-                        <div className="flex gap-2">
+                      <td className="p-2 sm:p-3 md:p-4">
+                        <div className="flex gap-1 sm:gap-2">
                           <button
                             onClick={() => handleDeleteBooking(booking.id)}
-                            className="px-3 py-1 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg text-xs font-rajdhani font-medium transition-colors"
+                            className="px-2 sm:px-3 py-1 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg text-xs font-rajdhani font-medium transition-colors min-h-9"
                           >
                             Delete
                           </button>
