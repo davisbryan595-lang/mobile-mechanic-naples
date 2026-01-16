@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Clock, TrendingUp, AlertCircle, Users as UsersIcon, Plus, CheckCircle, AlertTriangle, RefreshCw, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,8 @@ import { SidebarAdmin } from "@/components/admin/SidebarAdmin";
 import { adminAuth } from "@/utils/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+import { toast } from "sonner";
+import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription";
 import Customers from "./Customers";
 import Appointments from "./Appointments";
 import Invoices from "./Invoices";
