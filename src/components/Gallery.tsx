@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { X, Facebook, Instagram } from "lucide-react";
+import { X, Facebook, Instagram, Play } from "lucide-react";
 
 interface InstagramEmbedWrapperProps {
   postId: string;
@@ -8,104 +8,54 @@ interface InstagramEmbedWrapperProps {
 }
 
 const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [showEmbed, setShowEmbed] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const url = `https://www.instagram.com/p/${postId}/`;
 
-  useEffect(() => {
-    const attemptEmbed = () => {
-      if (!containerRef.current) return;
-
-      try {
-        // Clear container
-        containerRef.current.innerHTML = "";
-
-        // Create blockquote
-        const blockquote = document.createElement("blockquote");
-        blockquote.className = "instagram-media";
-        blockquote.setAttribute("data-instgrm-permalink", `${url}?utm_source=ig_embed&utm_campaign=loading`);
-        blockquote.setAttribute("data-instgrm-version", "14");
-
-        const link = document.createElement("a");
-        link.href = `${url}?utm_source=ig_embed&utm_campaign=loading`;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.textContent = "View on Instagram";
-
-        blockquote.appendChild(link);
-        containerRef.current.appendChild(blockquote);
-
-        // Process with Instagram script multiple times
-        const processEmbed = () => {
-          if ((window as any).instgrm && (window as any).instgrm.Embed) {
-            try {
-              (window as any).instgrm.Embed.process();
-              setShowEmbed(true);
-              return true;
-            } catch (e) {
-              return false;
-            }
-          }
-          return false;
-        };
-
-        // Try processing immediately and with delays
-        if (processEmbed()) return;
-
-        setTimeout(() => processEmbed(), 100);
-        setTimeout(() => processEmbed(), 500);
-        setTimeout(() => processEmbed(), 1000);
-
-        // If script not loaded, load it
-        if (!(window as any).instgrm) {
-          const script = document.createElement("script");
-          script.src = "https://www.instagram.com/embed.js";
-          script.async = true;
-          script.onload = () => {
-            setTimeout(() => processEmbed(), 200);
-          };
-          document.body.appendChild(script);
-        }
-      } catch (e) {
-        console.error("Instagram embed error:", e);
-        setShowEmbed(false);
-      }
-    };
-
-    // Attempt embed
-    const timer = setTimeout(attemptEmbed, 100);
-    return () => clearTimeout(timer);
-  }, [postId, url]);
-
   return (
-    <div
-      ref={containerRef}
-      className="flex justify-center animate-slide-up"
-      style={{ animationDelay: `${index * 0.1}s` }}
-    >
-      {!showEmbed && (
-        <div className="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-background via-card to-background rounded-xl border-2 border-border hover:border-primary transition-all transform hover:scale-105 duration-300 min-h-64 shadow-lg w-full max-w-sm">
-          <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 mb-4">
-            <Instagram className="w-10 h-10 text-primary" />
+    <>
+      <div
+        className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up h-64 bg-gradient-to-br from-background via-card to-background"
+        style={{ animationDelay: `${index * 0.1}s` }}
+        onClick={() => setIsOpen(true)}
+      >
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all flex items-center justify-center">
+          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/80 group-hover:bg-primary transition-colors">
+            <Play className="w-8 h-8 text-white fill-white" />
           </div>
-          <h3 className="font-rajdhani font-bold text-xl text-center mb-3">
-            Instagram Post {index + 1}
-          </h3>
-          <p className="text-muted-foreground text-sm text-center mb-6 max-w-xs leading-relaxed">
-            Follow us on Instagram to see our latest mobile mechanic service updates and customer stories.
-          </p>
-          <Button
-            asChild
-            className="bg-gradient-primary text-white hover:opacity-90 font-bold px-8 py-2 rounded-lg transition-all transform hover:scale-105"
+        </div>
+      </div>
+
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setIsOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-2xl bg-black rounded-lg overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
           >
-            <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-              View on Instagram
-              <span className="text-lg">↗</span>
-            </a>
-          </Button>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-primary transition-colors z-10 bg-black/50 rounded-full p-2 hover:bg-black/70"
+              aria-label="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <iframe
+              src={`https://www.instagram.com/p/${postId}/embed/captioned/`}
+              width="100%"
+              style={{ minHeight: "600px" }}
+              frameBorder="0"
+              scrolling="no"
+              allowFullScreen={true}
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              title={`Instagram Post ${index + 1}`}
+            ></iframe>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
@@ -113,33 +63,6 @@ export const Gallery = () => {
   const [activeTab, setActiveTab] = useState<"work" | "facebook" | "instagram">("work");
   const [showAll, setShowAll] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  // Load Instagram embed script once on component mount
-  useEffect(() => {
-    // Check if script is already loaded
-    if (!(window as any).instgrm) {
-      const script = document.createElement("script");
-      script.src = "https://www.instagram.com/embed.js";
-      script.async = true;
-      script.onload = () => {
-        console.log("Instagram embed script loaded");
-      };
-      document.body.appendChild(script);
-    }
-  }, []);
-
-  // Process embeds when Instagram tab becomes active
-  useEffect(() => {
-    if (activeTab === "instagram") {
-      // Give the DOM time to render, then process
-      const timer = setTimeout(() => {
-        if ((window as any).instgrm && (window as any).instgrm.Embed) {
-          (window as any).instgrm.Embed.process();
-        }
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [activeTab]);
 
   const facebookPostIds = [
     "1063659892535347",
@@ -161,7 +84,7 @@ export const Gallery = () => {
       alt: "Headlight Restoration & Polishing",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F9cb02518bcef4375a06d9d062f807b90?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F2911595d1b0a42268e17b328e8d1cd31?format=webp&width=800",
       alt: "Professional Brake Service",
     },
     {
@@ -173,11 +96,11 @@ export const Gallery = () => {
       alt: "Transmission & CV Axle Work",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F52eb1b8329084e2fbf312d7bf2067645?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F86aa742a714b4c3683563ef2b20f4864?format=webp&width=800",
       alt: "Vehicle on Lift Service",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fad22e439ef4a4d5b8474e5fe238e0428?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F904dea1c0c2148f2809f7a8ae0458a7f?format=webp&width=800",
       alt: "Professional Headlight Detail",
     },
     {
@@ -189,15 +112,15 @@ export const Gallery = () => {
       alt: "Advanced Engine Diagnostics",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fdd9c1c91d1cc40879c4cda1344144f34?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F4c133a74774947f6bb1fe43017fef144?format=webp&width=800",
       alt: "Transmission Service Setup",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F7c2cd6ce0d1642ee92d718f59b845be5?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F8fd8f184b96c45baa7af6d6daf2334e7?format=webp&width=800",
       alt: "Suspension Component Work",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F313d55b89f744049905289ac1c60323f?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Fbbca93c367854547a000d1896b2d4ed9?format=webp&width=800",
       alt: "Professional Engine Service",
     },
     {
@@ -205,11 +128,11 @@ export const Gallery = () => {
       alt: "Battery & Electrical Service",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F0192521194b946ba81c7e379f89dd014?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Ff6fcd8f5b0d44c43b3c70cf7cd747e3d?format=webp&width=800",
       alt: "Vehicle Maintenance Detail",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fe9610e8724a8434c8d86f49a1de0ea58?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Fa79df58b31f8455c97ae3b661017fd4a?format=webp&width=800",
       alt: "Complete Engine Inspection",
     },
     {
@@ -237,11 +160,11 @@ export const Gallery = () => {
       alt: "Vehicle Hood Service",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F7c02c5fe623c4ea79f0509926e04d4ed?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F218ad3ec2e4a4412a89eddb546f7fcea?format=webp&width=800",
       alt: "Professional Vehicle Maintenance",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Faba83b904b6e4634bbe755e0547cf10d?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F88f40f97d3674714973cc3748c8fe777?format=webp&width=800",
       alt: "Engine Compartment Work",
     },
     {
@@ -257,7 +180,7 @@ export const Gallery = () => {
       alt: "Professional Engine Rebuild",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fd11f2793911447959105d0af3a92476e?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Ffbd9332073c047f79ce18749a0f8f7ee?format=webp&width=800",
       alt: "Undercarriage Service Work",
     },
     {
@@ -269,7 +192,7 @@ export const Gallery = () => {
       alt: "Engine Block Inspection",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F72a613ca175b401a8a2db91e539ad062?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F502d572387d240d5a2f5c09fc90bc3b5?format=webp&width=800",
       alt: "Professional Parts Replacement",
     },
     {
@@ -301,7 +224,7 @@ export const Gallery = () => {
       alt: "Professional Mechanic Working",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F3a49128b69e5433bab1d08fd66c04681?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Fcbc9a9cf985048dba5b9c82a68c0f576?format=webp&width=800",
       alt: "Engine Diagnostics Service",
     },
     {

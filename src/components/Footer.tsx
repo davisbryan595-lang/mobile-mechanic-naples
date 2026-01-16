@@ -21,10 +21,10 @@ export const Footer = () => {
           <div>
             <h3 className="font-orbitron font-bold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              {["Home", "Services", "Pricing", "Reviews", "Contact"].map((link) => (
+              {["Home", "Services", "Pricing", "Reviews", "Blog", "Contact"].map((link) => (
                 <li key={link}>
                   <a
-                    href={`#${link.toLowerCase()}`}
+                    href={link === "Blog" ? "/blog" : `#${link.toLowerCase()}`}
                     className="text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link}
@@ -79,7 +79,7 @@ export const Footer = () => {
               </div>
               <div className="flex gap-3 pt-2">
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/share/1GmBcnPumP/?mibextid=wwXIfr"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 bg-secondary rounded-lg hover:bg-primary/20 transition-colors"
@@ -87,7 +87,7 @@ export const Footer = () => {
                   <Facebook className="w-5 h-5 text-primary" />
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/mobilemechanicservice_?igsh=MWtoNGl5NXhxNGgzcw%3D%3D"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 bg-secondary rounded-lg hover:bg-primary/20 transition-colors"
