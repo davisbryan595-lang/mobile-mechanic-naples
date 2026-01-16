@@ -444,41 +444,45 @@ const Customers = () => {
           </Card>
 
           {/* Pagination */}
-          <div className="flex items-center justify-between">
-            <p className="text-muted-foreground font-rajdhani text-sm">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 bg-secondary/20 border-t border-border/30 rounded-b-lg">
+            <p className="text-muted-foreground font-rajdhani text-xs sm:text-sm">
               Showing {startIndex} to {endIndex} of {totalCount} customers
             </p>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2 flex-wrap justify-center sm:justify-end">
               <Button
                 onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
                 disabled={currentPage === 0}
                 variant="outline"
                 size="sm"
-                className="border-border/30"
+                className="border-border/30 text-xs sm:text-sm min-h-9 px-2 sm:px-3"
               >
-                Previous
+                Prev
               </Button>
-              {Array.from({ length: totalPages }).map((_, i) => (
-                <Button
-                  key={i}
-                  onClick={() => setCurrentPage(i)}
-                  variant={currentPage === i ? "default" : "outline"}
-                  size="sm"
-                  className={
-                    currentPage === i
-                      ? "bg-orange-500 hover:bg-orange-600"
-                      : "border-border/30"
-                  }
-                >
-                  {i + 1}
-                </Button>
-              ))}
+              {Array.from({ length: Math.min(totalPages, 5) }).map((_, i) => {
+                const pageNum = i + Math.max(0, currentPage - 2);
+                if (pageNum >= totalPages) return null;
+                return (
+                  <Button
+                    key={pageNum}
+                    onClick={() => setCurrentPage(pageNum)}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    className={`text-xs sm:text-sm min-h-9 px-2.5 sm:px-3 ${
+                      currentPage === pageNum
+                        ? "bg-orange-500 hover:bg-orange-600"
+                        : "border-border/30"
+                    }`}
+                  >
+                    {pageNum + 1}
+                  </Button>
+                );
+              })}
               <Button
                 onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
                 disabled={currentPage === totalPages - 1}
                 variant="outline"
                 size="sm"
-                className="border-border/30"
+                className="border-border/30 text-xs sm:text-sm min-h-9 px-2 sm:px-3"
               >
                 Next
               </Button>
