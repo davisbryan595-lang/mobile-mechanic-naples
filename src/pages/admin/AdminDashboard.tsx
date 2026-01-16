@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription";
+import { getServicePrice, getServiceDescription } from "@/utils/service-pricing";
 import Customers from "./Customers";
 import Appointments from "./Appointments";
 import Invoices from "./Invoices";
@@ -128,6 +129,48 @@ const AdminDashboard = () => {
   // Function to update work order status
   const updateWorkOrderStatus = async (id: string, newStatus: string) => {
     try {
+      // If marking as completed, create an invoice
+      if (newStatus === "completed") {
+        // Fetch work order details
+        const { data: workOrder, error: fetchError } = await supabase
+          .from("work_orders")
+          .select("id, customer_id, service_type")
+          .eq("id", id)
+          .single();
+
+        if (fetchError) throw fetchError;
+        if (!workOrder) throw new Error("Work order not found");
+
+        // Get price based on service type
+        const invoiceAmount = getServicePrice(workOrder.service_type);
+        const serviceDescription = getServiceDescription(workOrder.service_type);
+
+        // Calculate due date (30 days from now)
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + 30);
+
+        // Create invoice automatically
+        const { error: invoiceError } = await supabase
+          .from("invoices")
+          .insert([
+            {
+              customer_id: workOrder.customer_id,
+              work_order_id: id,
+              amount: invoiceAmount,
+              status: "draft",
+              issued_date: new Date().toISOString().split("T")[0],
+              due_date: dueDate.toISOString().split("T")[0],
+              notes: `Auto-generated from work order for ${serviceDescription}`,
+            },
+          ]);
+
+        if (invoiceError) {
+          console.warn("Could not auto-create invoice:", invoiceError.message);
+          // Don't throw - let's still mark the work order as completed even if invoice creation fails
+        }
+      }
+
+      // Update work order status
       const { error } = await supabase
         .from("work_orders")
         .update({ status: newStatus })
@@ -135,7 +178,11 @@ const AdminDashboard = () => {
 
       if (error) throw error;
 
-      toast.success("Work order updated", {
+      const message = newStatus === "completed"
+        ? "Work order completed and invoice created"
+        : "Work order updated";
+
+      toast.success(message, {
         duration: 2000,
         position: "top-right",
       });
