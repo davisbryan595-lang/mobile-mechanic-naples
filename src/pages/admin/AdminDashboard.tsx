@@ -55,6 +55,8 @@ interface FormSubmissionData {
   preferred_date?: string;
   how_heard_about_us?: string;
   other_source?: string;
+  selected_services?: string;
+  estimated_total?: number;
   created_at: string;
 }
 
@@ -338,7 +340,7 @@ const AdminDashboard = () => {
       // Refresh form submissions
       const { data, error } = await supabase
         .from("form_submissions")
-        .select("id, name, email, phone, address, message, vehicle_type, preferred_date, how_heard_about_us, other_source, created_at")
+        .select("id, name, email, phone, address, message, vehicle_type, preferred_date, how_heard_about_us, other_source, selected_services, estimated_total, created_at")
         .order("created_at", { ascending: false })
         .limit(50);
 
@@ -527,7 +529,7 @@ const AdminDashboard = () => {
       try {
         const { data, error } = await supabase
           .from("form_submissions")
-          .select("id, name, email, phone, address, message, vehicle_type, preferred_date, how_heard_about_us, other_source, created_at")
+          .select("id, name, email, phone, address, message, vehicle_type, preferred_date, how_heard_about_us, other_source, selected_services, estimated_total, created_at")
           .order("created_at", { ascending: false })
           .limit(50);
 
@@ -894,7 +896,10 @@ const AdminDashboard = () => {
                     Date
                   </th>
                   <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
-                    Message
+                    Services
+                  </th>
+                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    Est. Total
                   </th>
                   <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                     Actions
@@ -927,8 +932,22 @@ const AdminDashboard = () => {
                     <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
                       {format(new Date(submission.created_at), "MMM d, yyyy")}
                     </td>
-                    <td className="p-4 text-muted-foreground text-sm font-rajdhani max-w-xs truncate">
-                      {submission.message}
+                    <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      {submission.selected_services ? (() => {
+                        try {
+                          const services = JSON.parse(submission.selected_services);
+                          return <span className="text-primary font-medium">{services.length} service(s)</span>;
+                        } catch {
+                          return <span>—</span>;
+                        }
+                      })() : <span>—</span>}
+                    </td>
+                    <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      {submission.estimated_total ? (
+                        <span className="text-emerald-400 font-semibold">${submission.estimated_total.toFixed(2)}</span>
+                      ) : (
+                        <span>—</span>
+                      )}
                     </td>
                     <td className="p-4">
                       <Button
