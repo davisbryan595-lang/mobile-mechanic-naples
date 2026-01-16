@@ -371,7 +371,7 @@ const Invoices = () => {
                         {formatCurrency(invoice.amount)}
                       </td>
                       <td className="p-4">
-                        <select
+                        <ThemedSelect
                           value={invoice.status}
                           onChange={(e) => {
                             // Update status via Supabase
@@ -387,17 +387,14 @@ const Invoices = () => {
                                 toast.error("Failed to update invoice");
                               });
                           }}
-                          className={`px-3 py-1 rounded-full text-xs font-rajdhani font-medium border-0 focus:outline-none cursor-pointer ${
-                            STATUS_BADGES[invoice.status as keyof typeof STATUS_BADGES] ||
-                            "bg-gray-500/20 text-gray-400"
-                          }`}
+                          statusType="invoice"
                         >
                           <option value="draft">Draft</option>
                           <option value="sent">Sent</option>
                           <option value="paid">Paid</option>
                           <option value="partial">Partial</option>
                           <option value="overdue">Overdue</option>
-                        </select>
+                        </ThemedSelect>
                       </td>
                       <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
                         {formatDate(invoice.issued_date)}
