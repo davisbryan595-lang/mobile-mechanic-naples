@@ -391,23 +391,24 @@ const Customers = () => {
                               e.stopPropagation();
                               setActiveDropdown(activeDropdown === customer.id ? null : customer.id);
                             }}
-                            className="p-2 hover:bg-secondary/50 rounded-lg transition-colors"
+                            className="p-2 min-h-10 min-w-10 hover:bg-secondary/50 rounded-lg transition-colors flex items-center justify-center"
+                            aria-label="Customer actions"
                           >
                             <MoreVertical className="w-4 h-4 text-muted-foreground" />
                           </button>
 
                           {/* Dropdown Menu */}
                           {activeDropdown === customer.id && (
-                            <div className="absolute right-0 mt-2 w-48 bg-secondary border border-border/30 rounded-lg shadow-lg z-50">
+                            <div className="absolute right-0 mt-2 w-44 sm:w-48 bg-secondary border border-border/30 rounded-lg shadow-lg z-50">
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   navigate(`/admin/customers/${customer.id}`);
                                   setActiveDropdown(null);
                                 }}
-                                className="w-full flex items-center gap-3 px-4 py-2 hover:bg-secondary-foreground/10 text-foreground font-rajdhani text-sm transition-colors border-b border-border/30"
+                                className="w-full flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-2 hover:bg-secondary-foreground/10 text-foreground font-rajdhani text-xs sm:text-sm transition-colors border-b border-border/30 min-h-10"
                               >
-                                <Eye className="w-4 h-4" />
+                                <Eye className="w-4 h-4 flex-shrink-0" />
                                 View Details
                               </button>
                               <button
@@ -416,9 +417,9 @@ const Customers = () => {
                                   navigate(`/admin/customers/${customer.id}/edit`);
                                   setActiveDropdown(null);
                                 }}
-                                className="w-full flex items-center gap-3 px-4 py-2 hover:bg-secondary-foreground/10 text-foreground font-rajdhani text-sm transition-colors border-b border-border/30"
+                                className="w-full flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-2 hover:bg-secondary-foreground/10 text-foreground font-rajdhani text-xs sm:text-sm transition-colors border-b border-border/30 min-h-10"
                               >
-                                <Edit className="w-4 h-4" />
+                                <Edit className="w-4 h-4 flex-shrink-0" />
                                 Edit Customer
                               </button>
                               <button
@@ -426,9 +427,9 @@ const Customers = () => {
                                   e.stopPropagation();
                                   handleDeleteCustomer(customer.id);
                                 }}
-                                className="w-full flex items-center gap-3 px-4 py-2 hover:bg-red-500/10 text-red-400 font-rajdhani text-sm transition-colors"
+                                className="w-full flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-2 hover:bg-red-500/10 text-red-400 font-rajdhani text-xs sm:text-sm transition-colors min-h-10"
                               >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className="w-4 h-4 flex-shrink-0" />
                                 Delete Customer
                               </button>
                             </div>
