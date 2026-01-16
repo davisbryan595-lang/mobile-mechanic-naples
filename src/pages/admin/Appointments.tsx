@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { Plus, AlertTriangle, RefreshCw, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, AlertTriangle, RefreshCw, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ThemedSelect } from "@/components/ui/select-themed";
 import { supabase } from "@/integrations/supabase/client";
 import { AddBookingModal } from "@/components/admin/AddBookingModal";
 import { format } from "date-fns";
@@ -392,20 +393,17 @@ const Appointments = () => {
                         {formatAppointmentTime(booking.appointment_date, booking.appointment_time)}
                       </td>
                       <td className="p-4">
-                        <select
+                        <ThemedSelect
                           value={booking.status}
                           onChange={(e) => handleStatusChange(booking.id, e.target.value)}
-                          className={`px-3 py-1 rounded-full text-xs font-rajdhani font-medium border-0 focus:outline-none cursor-pointer ${
-                            STATUS_BADGES[booking.status as keyof typeof STATUS_BADGES] ||
-                            "bg-gray-500/20 text-gray-400"
-                          }`}
+                          statusType="booking"
                         >
                           <option value="pending">Pending</option>
                           <option value="confirmed">Confirmed</option>
                           <option value="in_progress">In Progress</option>
                           <option value="completed">Completed</option>
                           <option value="cancelled">Cancelled</option>
-                        </select>
+                        </ThemedSelect>
                       </td>
                       <td className="p-4">
                         <div className="flex gap-2">

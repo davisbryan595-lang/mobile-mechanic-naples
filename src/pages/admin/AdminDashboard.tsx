@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Clock, TrendingUp, AlertCircle, Users as UsersIcon, Plus, CheckCircle, AlertTriangle, RefreshCw, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ThemedSelect } from "@/components/ui/select-themed";
 import { SidebarAdmin } from "@/components/admin/SidebarAdmin";
 import { adminAuth } from "@/utils/auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -297,15 +298,29 @@ const AdminDashboard = () => {
           weeklyRevenue = `$${total.toFixed(2)}`;
         }
 
-        // Pending Payments - sum of invoices with status 'pending'
+        // Pending Payments - sum of invoices that are NOT paid (draft, sent, partial, overdue)
         const { data: pendingInvoices, error: pendingError } = await supabase
           .from("invoices")
-          .select("amount")
-          .eq("status", "pending");
+          .select("amount, status, due_date")
+          .neq("status", "paid");
 
         let pendingPayments = "$0";
+        let overdueCount = 0;
+        let upcomingCount = 0;
+
         if (!pendingError || pendingError.code === "PGRST116") {
-          const total = pendingInvoices?.reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0;
+          const today = new Date().toISOString().split("T")[0];
+
+          const total = pendingInvoices?.reduce((sum, inv) => {
+            // Count overdue vs upcoming
+            if (inv.due_date < today) {
+              overdueCount++;
+            } else {
+              upcomingCount++;
+            }
+            return sum + (inv.amount || 0);
+          }, 0) || 0;
+
           pendingPayments = `$${total.toFixed(2)}`;
         }
 
@@ -1140,26 +1155,16 @@ const AdminDashboard = () => {
                         {order.service_type.replace(/_/g, " ")}
                       </td>
                       <td className="p-4">
-                        <select
+                        <ThemedSelect
                           value={order.status}
                           onChange={(e) => updateWorkOrderStatus(order.id, e.target.value)}
-                          className={`px-3 py-1 rounded-full text-xs font-rajdhani font-medium border-0 focus:outline-none cursor-pointer ${
-                            order.status === "pending"
-                              ? "bg-blue-500/20 text-blue-400"
-                              : order.status === "in_progress"
-                              ? "bg-orange-500/20 text-orange-400"
-                              : order.status === "completed"
-                              ? "bg-green-500/20 text-green-400"
-                              : order.status === "cancelled"
-                              ? "bg-red-500/20 text-red-400"
-                              : "bg-gray-500/20 text-gray-400"
-                          }`}
+                          statusType="work-order"
                         >
                           <option value="pending">Pending</option>
                           <option value="in_progress">In Progress</option>
                           <option value="completed">Completed</option>
                           <option value="cancelled">Cancelled</option>
-                        </select>
+                        </ThemedSelect>
                       </td>
                     </tr>
                   ))}
