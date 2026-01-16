@@ -183,11 +183,11 @@ const Customers = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-3xl font-orbitron font-bold text-foreground">Customers</h2>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 sm:mb-8">
+        <h2 className="text-2xl sm:text-3xl font-orbitron font-bold text-foreground">Customers</h2>
         <Button
           onClick={() => setIsModalOpen(true)}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-2 glow-orange"
+          className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-2 glow-orange min-h-10 w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           Add Customer
