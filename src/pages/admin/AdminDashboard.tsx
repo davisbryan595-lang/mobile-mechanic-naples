@@ -1131,20 +1131,20 @@ const AdminDashboard = () => {
           )}
 
           {!loadingCustomers && !customersError && recentCustomers.length > 0 && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b border-border/30 bg-secondary/30">
+            <div className="overflow-x-auto flex-1">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="border-b border-border/30 bg-secondary/30 sticky top-0">
                   <tr>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Name
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden sm:table-cell">
                       Phone
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs hidden md:table-cell">
                       Email
                     </th>
-                    <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    <th className="text-left p-2 sm:p-3 md:p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                       Added
                     </th>
                   </tr>
@@ -1155,10 +1155,10 @@ const AdminDashboard = () => {
                       key={customer.id}
                       className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
                     >
-                      <td className="p-4 text-foreground font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-foreground font-rajdhani text-xs sm:text-sm font-medium">
                         {customer.first_name} {customer.last_name}
                       </td>
-                      <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden sm:table-cell font-rajdhani">
                         <a
                           href={`tel:${customer.phone}`}
                           className="hover:text-primary transition-colors"
@@ -1166,7 +1166,7 @@ const AdminDashboard = () => {
                           {formatPhone(customer.phone)}
                         </a>
                       </td>
-                      <td className="p-4 text-muted-foreground text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs hidden md:table-cell font-rajdhani">
                         {customer.email ? (
                           <a
                             href={`mailto:${customer.email}`}
@@ -1178,7 +1178,7 @@ const AdminDashboard = () => {
                           "—"
                         )}
                       </td>
-                      <td className="p-4 text-muted-foreground text-xs md:text-sm font-rajdhani">
+                      <td className="p-2 sm:p-3 md:p-4 text-muted-foreground text-xs sm:text-sm font-rajdhani">
                         {format(new Date(customer.updated_at), "MMM d")}
                       </td>
                     </tr>
