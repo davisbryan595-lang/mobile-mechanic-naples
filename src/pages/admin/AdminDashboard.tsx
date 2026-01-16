@@ -458,6 +458,177 @@ const AdminDashboard = () => {
     fetchWorkOrders();
   }, []);
 
+  // Real-time subscriptions for overview dashboard
+  useRealtimeSubscription({
+    event: "INSERT",
+    table: "customers",
+    onPayload: () => {
+      setStats(prev => ({
+        ...prev,
+        totalCustomers: (prev.totalCustomers || 0) + 1,
+      }));
+      // Refresh recent customers
+      const fetchRecentCustomers = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("customers")
+            .select("id, first_name, last_name, phone, email, updated_at")
+            .eq("is_active", true)
+            .order("updated_at", { ascending: false })
+            .limit(10);
+
+          if (error && error.code !== "PGRST116") {
+            throw error;
+          }
+
+          setRecentCustomers(data || []);
+        } catch (error) {
+          console.error("Error fetching recent customers:", error instanceof Error ? error.message : String(error));
+        }
+      };
+
+      fetchRecentCustomers();
+      toast.success("New lead added", {
+        duration: 3000,
+        position: "top-right",
+      });
+    },
+  });
+
+  useRealtimeSubscription({
+    event: "INSERT",
+    table: "work_orders",
+    onPayload: () => {
+      const fetchPendingWorkOrders = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("work_orders")
+            .select("id, customer_id, vehicle_id, service_type, description, status, created_at")
+            .neq("status", "completed")
+            .order("created_at", { ascending: false })
+            .limit(10);
+
+          if (error) {
+            if (error.code === "PGRST116") {
+              setWorkOrders([]);
+              return;
+            }
+            throw error;
+          }
+
+          const ordersWithDetails: WorkOrderWithDetails[] = [];
+          for (const order of data || []) {
+            const { data: customerData } = await supabase
+              .from("customers")
+              .select("first_name, last_name")
+              .eq("id", order.customer_id)
+              .single();
+
+            let vehicleInfo = {};
+            if (order.vehicle_id) {
+              const { data: vehicleData } = await supabase
+                .from("vehicles")
+                .select("make, model, year")
+                .eq("id", order.vehicle_id)
+                .single();
+
+              if (vehicleData) {
+                vehicleInfo = {
+                  vehicle_make: vehicleData.make,
+                  vehicle_model: vehicleData.model,
+                  vehicle_year: vehicleData.year,
+                };
+              }
+            }
+
+            ordersWithDetails.push({
+              ...order,
+              customer_name: customerData ? `${customerData.first_name} ${customerData.last_name}` : "Unknown",
+              ...vehicleInfo,
+            });
+          }
+
+          setWorkOrders(ordersWithDetails);
+        } catch (error) {
+          console.error("Error fetching work orders:", error instanceof Error ? error.message : String(error));
+        }
+      };
+
+      fetchPendingWorkOrders();
+      toast.success("New pending job added", {
+        duration: 3000,
+        position: "top-right",
+      });
+    },
+  });
+
+  useRealtimeSubscription({
+    event: "UPDATE",
+    table: "work_orders",
+    onPayload: () => {
+      const fetchPendingWorkOrders = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("work_orders")
+            .select("id, customer_id, vehicle_id, service_type, description, status, created_at")
+            .neq("status", "completed")
+            .order("created_at", { ascending: false })
+            .limit(10);
+
+          if (error) {
+            if (error.code === "PGRST116") {
+              setWorkOrders([]);
+              return;
+            }
+            throw error;
+          }
+
+          const ordersWithDetails: WorkOrderWithDetails[] = [];
+          for (const order of data || []) {
+            const { data: customerData } = await supabase
+              .from("customers")
+              .select("first_name, last_name")
+              .eq("id", order.customer_id)
+              .single();
+
+            let vehicleInfo = {};
+            if (order.vehicle_id) {
+              const { data: vehicleData } = await supabase
+                .from("vehicles")
+                .select("make, model, year")
+                .eq("id", order.vehicle_id)
+                .single();
+
+              if (vehicleData) {
+                vehicleInfo = {
+                  vehicle_make: vehicleData.make,
+                  vehicle_model: vehicleData.model,
+                  vehicle_year: vehicleData.year,
+                };
+              }
+            }
+
+            ordersWithDetails.push({
+              ...order,
+              customer_name: customerData ? `${customerData.first_name} ${customerData.last_name}` : "Unknown",
+              ...vehicleInfo,
+            });
+          }
+
+          setWorkOrders(ordersWithDetails);
+        } catch (error) {
+          console.error("Error fetching work orders:", error instanceof Error ? error.message : String(error));
+        }
+      };
+
+      fetchPendingWorkOrders();
+      toast.info("Pending job updated", {
+        duration: 3000,
+        position: "top-right",
+      });
+    },
+  });
+
   const formatPhone = (phone: string) => {
     const cleaned = phone.replace(/\D/g, "");
     const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
