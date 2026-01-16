@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Plus, AlertTriangle, RefreshCw, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AddBookingModal } from "@/components/admin/AddBookingModal";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription";
 
 interface BookingData {
   id: string;
