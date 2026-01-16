@@ -202,20 +202,20 @@ const Invoices = () => {
   const totalPages = Math.ceil(invoices.length / pageSize);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-foreground">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-foreground">
             Invoices
           </h2>
-          <p className="text-muted-foreground font-rajdhani text-sm mt-1">
+          <p className="text-xs sm:text-sm text-muted-foreground font-rajdhani mt-1">
             Manage customer invoices and track payments
           </p>
         </div>
         <Button
           onClick={() => setShowModal(true)}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-2 glow-orange"
+          className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-2 glow-orange min-h-10 w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           New Invoice
@@ -223,11 +223,11 @@ const Invoices = () => {
       </div>
 
       {/* Filters Bar */}
-      <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-6 space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <Card className="border-border/30 bg-card/50 backdrop-blur-sm p-4 sm:p-6 space-y-3 sm:space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           {/* Search */}
           <div>
-            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-2">
+            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-1.5 sm:mb-2">
               Search
             </label>
             <input
@@ -235,19 +235,19 @@ const Invoices = () => {
               placeholder="Customer name or invoice ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 bg-secondary border border-border/30 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-primary font-rajdhani text-sm"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary border border-border/30 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-primary font-rajdhani text-sm min-h-10"
             />
           </div>
 
           {/* Status Filter */}
           <div>
-            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-2">
+            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-1.5 sm:mb-2">
               Status
             </label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-secondary border border-border/30 rounded-lg text-white focus:outline-none focus:border-primary font-rajdhani text-sm cursor-pointer"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary border border-border/30 rounded-lg text-white focus:outline-none focus:border-primary font-rajdhani text-sm cursor-pointer min-h-10"
             >
               <option value="all">All Statuses</option>
               <option value="draft">Draft</option>
