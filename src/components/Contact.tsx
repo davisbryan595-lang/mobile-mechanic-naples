@@ -121,6 +121,7 @@ export const Contact = () => {
           agree: false,
         });
         setDate(undefined);
+        setSelectedServices([]);
       } else {
         toast({
           title: "Error",
