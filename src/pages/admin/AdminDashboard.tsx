@@ -1155,26 +1155,16 @@ const AdminDashboard = () => {
                         {order.service_type.replace(/_/g, " ")}
                       </td>
                       <td className="p-4">
-                        <select
+                        <ThemedSelect
                           value={order.status}
                           onChange={(e) => updateWorkOrderStatus(order.id, e.target.value)}
-                          className={`px-3 py-1 rounded-full text-xs font-rajdhani font-medium border-0 focus:outline-none cursor-pointer ${
-                            order.status === "pending"
-                              ? "bg-blue-500/20 text-blue-400"
-                              : order.status === "in_progress"
-                              ? "bg-orange-500/20 text-orange-400"
-                              : order.status === "completed"
-                              ? "bg-green-500/20 text-green-400"
-                              : order.status === "cancelled"
-                              ? "bg-red-500/20 text-red-400"
-                              : "bg-gray-500/20 text-gray-400"
-                          }`}
+                          statusType="work-order"
                         >
                           <option value="pending">Pending</option>
                           <option value="in_progress">In Progress</option>
                           <option value="completed">Completed</option>
                           <option value="cancelled">Cancelled</option>
-                        </select>
+                        </ThemedSelect>
                       </td>
                     </tr>
                   ))}
