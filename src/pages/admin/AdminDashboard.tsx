@@ -256,6 +256,105 @@ const AdminDashboard = () => {
     }
   };
 
+  // Function to create job and appointment from form submission
+  const createJobFromSubmission = async (submission: FormSubmissionData) => {
+    try {
+      // Extract service from message
+      const extractedService = extractServiceFromMessage(submission.message);
+
+      // Get or create customer
+      let customerId: string | null = null;
+
+      const { data: existingCustomers } = await supabase
+        .from("customers")
+        .select("id")
+        .eq("email", submission.email)
+        .limit(1);
+
+      if (existingCustomers && existingCustomers.length > 0) {
+        customerId = existingCustomers[0].id;
+      } else {
+        const { data: newCustomer, error: customerError } = await supabase
+          .from("customers")
+          .insert([
+            {
+              first_name: submission.name.split(" ")[0] || submission.name,
+              last_name: submission.name.split(" ").slice(1).join(" ") || "",
+              email: submission.email,
+              phone: submission.phone,
+              address: submission.address,
+              is_active: true,
+            },
+          ])
+          .select("id")
+          .single();
+
+        if (customerError) throw customerError;
+        customerId = newCustomer?.id || null;
+      }
+
+      if (!customerId) throw new Error("Failed to get or create customer");
+
+      // Parse preferred date
+      const appointmentDate = submission.preferred_date
+        ? submission.preferred_date.split("T")[0]
+        : new Date().toISOString().split("T")[0];
+
+      // Create booking
+      const { error: bookingError } = await supabase.from("bookings").insert([
+        {
+          customer_id: customerId,
+          service_type: extractedService,
+          appointment_date: appointmentDate,
+          appointment_time: "09:00 AM",
+          status: "pending",
+          notes: submission.message,
+        },
+      ]);
+
+      if (bookingError) throw bookingError;
+
+      // Create work order
+      const { error: workOrderError } = await supabase
+        .from("work_orders")
+        .insert([
+          {
+            customer_id: customerId,
+            vehicle_id: null,
+            service_type: extractedService,
+            description: `${submission.message}\n\nVehicle Type: ${submission.vehicle_type || "Not specified"}\nPreferred Date: ${submission.preferred_date || "Not specified"}`,
+            status: "pending",
+          },
+        ]);
+
+      if (workOrderError) throw workOrderError;
+
+      toast.success("Job & Appointment created successfully", {
+        duration: 2000,
+        position: "top-right",
+      });
+
+      // Refresh form submissions
+      const { data, error } = await supabase
+        .from("form_submissions")
+        .select("id, name, email, phone, address, message, vehicle_type, preferred_date, how_heard_about_us, other_source, created_at")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (!error) {
+        setFormSubmissions(data || []);
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error creating job from submission:", message);
+      toast.error("Failed to create job & appointment", {
+        description: message,
+        duration: 3000,
+        position: "top-right",
+      });
+    }
+  };
+
   // Fetch stats
   useEffect(() => {
     const fetchStats = async () => {
