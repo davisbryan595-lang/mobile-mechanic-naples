@@ -1155,16 +1155,11 @@ const AdminDashboard = () => {
                         {order.service_type.replace(/_/g, " ")}
                       </td>
                       <td className="p-4">
-                        <ThemedSelect
+                        <StatusSelect
                           value={order.status}
-                          onChange={(e) => updateWorkOrderStatus(order.id, e.target.value)}
+                          onValueChange={(value) => updateWorkOrderStatus(order.id, value)}
                           statusType="work-order"
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="in_progress">In Progress</option>
-                          <option value="completed">Completed</option>
-                          <option value="cancelled">Cancelled</option>
-                        </ThemedSelect>
+                        />
                       </td>
                     </tr>
                   ))}
