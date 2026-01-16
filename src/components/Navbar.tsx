@@ -112,15 +112,6 @@ export const Navbar = () => {
                   variant="ghost"
                   size="sm"
                   className="text-primary hover:text-primary-foreground hover:bg-primary"
-                  onClick={() => navigate("/admin/login")}
-                >
-                  <LogIn className="w-4 h-4 mr-1" />
-                  Admin Login
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-primary hover:text-primary-foreground hover:bg-primary"
                   onClick={() => {
                     const phoneNumber = "(239) 272-9166";
                     toast.success(`Call us at: ${phoneNumber}`, {
