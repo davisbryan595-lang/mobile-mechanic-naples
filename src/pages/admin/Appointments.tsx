@@ -417,29 +417,29 @@ const Appointments = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between p-4 border-t border-border/30 bg-secondary/20">
-                <p className="text-sm text-muted-foreground font-rajdhani">
-                  Showing {(currentPage - 1) * pageSize + 1} to {Math.min(currentPage * pageSize, bookings.length)} of {bookings.length} appointments
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 border-t border-border/30 bg-secondary/20">
+                <p className="text-xs sm:text-sm text-muted-foreground font-rajdhani">
+                  Showing {(currentPage - 1) * pageSize + 1} to {Math.min(currentPage * pageSize, bookings.length)} of {bookings.length}
                 </p>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
                   <Button
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
                     size="sm"
                     variant="outline"
-                    className="border-border/30"
+                    className="border-border/30 min-h-9 px-2"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </Button>
-                  <span className="text-sm text-muted-foreground font-rajdhani px-4 py-2">
-                    Page {currentPage} of {totalPages}
+                  <span className="text-xs sm:text-sm text-muted-foreground font-rajdhani px-2 sm:px-4 py-1.5 sm:py-2">
+                    {currentPage} / {totalPages}
                   </span>
                   <Button
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
                     size="sm"
                     variant="outline"
-                    className="border-border/30"
+                    className="border-border/30 min-h-9 px-2"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </Button>
