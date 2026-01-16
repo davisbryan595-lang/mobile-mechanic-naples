@@ -289,13 +289,13 @@ const Appointments = () => {
 
           {/* Date Filter */}
           <div>
-            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-2">
+            <label className="block text-xs font-rajdhani font-semibold text-muted-foreground uppercase mb-1.5 sm:mb-2">
               Date Range
             </label>
             <select
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-secondary border border-border/30 rounded-lg text-white focus:outline-none focus:border-primary font-rajdhani text-sm cursor-pointer"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-secondary border border-border/30 rounded-lg text-white focus:outline-none focus:border-primary font-rajdhani text-sm cursor-pointer min-h-10"
             >
               <option value="all">All Dates</option>
               <option value="today">Today</option>
