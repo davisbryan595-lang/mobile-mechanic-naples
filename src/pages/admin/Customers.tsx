@@ -137,6 +137,19 @@ const Customers = () => {
     fetchCustomers();
   }, [fetchCustomers]);
 
+  // Real-time subscription for new customers
+  useRealtimeSubscription({
+    event: "INSERT",
+    table: "customers",
+    onPayload: (payload) => {
+      fetchCustomers();
+      toast.success("New lead added", {
+        duration: 3000,
+        position: "top-right",
+      });
+    },
+  });
+
   const handleFilterChange = (key: keyof FilterState, value: string) => {
     setFilters((prev) => ({
       ...prev,
