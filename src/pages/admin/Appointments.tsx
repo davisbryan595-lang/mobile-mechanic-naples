@@ -231,20 +231,20 @@ const Appointments = () => {
   const totalPages = Math.ceil(bookings.length / pageSize);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h2 className="text-3xl md:text-4xl font-orbitron font-bold text-foreground">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-foreground">
             Appointments
           </h2>
-          <p className="text-muted-foreground font-rajdhani text-sm mt-1">
+          <p className="text-xs sm:text-sm text-muted-foreground font-rajdhani mt-1">
             Manage and track all customer service appointments
           </p>
         </div>
         <Button
           onClick={() => setShowModal(true)}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-2 glow-orange"
+          className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-2 glow-orange min-h-10 w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           Add Booking
