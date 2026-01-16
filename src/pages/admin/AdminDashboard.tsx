@@ -1008,9 +1008,9 @@ const AdminDashboard = () => {
       {/* Tables Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
         {/* Upcoming Appointments */}
-        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
-          <div className="p-6 border-b border-border/30">
-            <h3 className="text-xl font-orbitron font-bold text-foreground">
+        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col h-full">
+          <div className="p-4 sm:p-5 md:p-6 border-b border-border/30">
+            <h3 className="text-lg sm:text-xl font-orbitron font-bold text-foreground">
               Upcoming Appointments
             </h3>
           </div>
