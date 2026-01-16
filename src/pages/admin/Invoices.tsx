@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Plus, AlertTriangle, RefreshCw, ChevronLeft, ChevronRight, Eye, Download, CheckCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ThemedSelect } from "@/components/ui/select-themed";
 import { supabase } from "@/integrations/supabase/client";
 import { AddInvoiceModal } from "@/components/admin/AddInvoiceModal";
 import { format } from "date-fns";
