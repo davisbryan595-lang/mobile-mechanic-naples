@@ -1190,45 +1190,47 @@ const AdminDashboard = () => {
         </Card>
 
         {/* Pending Jobs / Upcoming Work */}
-        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
-          <div className="p-6 border-b border-border/30 flex items-center justify-between">
+        <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col h-full">
+          <div className="p-4 sm:p-5 md:p-6 border-b border-border/30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h3 className="text-xl font-orbitron font-bold text-foreground">
-                Pending Jobs & Work Orders
+              <h3 className="text-lg sm:text-xl font-orbitron font-bold text-foreground">
+                Pending Jobs
               </h3>
               <p className="text-xs text-muted-foreground font-rajdhani mt-1">
-                Active and upcoming work - click status to update
+                Active work orders - click to update
               </p>
             </div>
             <Button
               onClick={() => alert("Work Order form coming soon")}
               size="sm"
-              className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-1"
+              className="bg-orange-500 hover:bg-orange-600 text-white font-rajdhani font-medium gap-1 w-full sm:w-auto min-h-10"
             >
               <Plus className="w-4 h-4" />
-              New
+              <span className="hidden sm:inline">New</span>
             </Button>
           </div>
 
           {loadingWorkOrders && (
-            <div className="p-6 text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
-              <p className="text-muted-foreground font-rajdhani text-sm">Loading work orders...</p>
+            <div className="p-4 sm:p-6 text-center flex-1 flex items-center justify-center">
+              <div>
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
+                <p className="text-muted-foreground font-rajdhani text-xs sm:text-sm">Loading work orders...</p>
+              </div>
             </div>
           )}
 
           {workOrdersError && (
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               <div className="bg-red-900/20 border border-red-500 rounded-lg p-3 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
-                <p className="text-red-400 font-rajdhani text-sm">Failed to load work orders</p>
+                <p className="text-red-400 font-rajdhani text-xs sm:text-sm">Failed to load work orders</p>
               </div>
             </div>
           )}
 
           {!loadingWorkOrders && !workOrdersError && workOrders.length === 0 && (
-            <div className="p-8 text-center">
-              <p className="text-muted-foreground font-rajdhani mb-3">
+            <div className="p-6 sm:p-8 text-center">
+              <p className="text-muted-foreground font-rajdhani text-sm sm:text-base mb-3">
                 No active work orders yet. Click the button above to get started.
               </p>
             </div>
