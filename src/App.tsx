@@ -16,6 +16,7 @@ import { CityAbout } from "./pages/city/CityAbout";
 import { CityGallery } from "./pages/city/CityGallery";
 import { CityServices } from "./pages/city/CityServices";
 import { CityContact } from "./pages/city/CityContact";
+import { ProtectedAdminRoute } from "./components/ProtectedAdminRoute";
 
 const queryClient = new QueryClient();
 
