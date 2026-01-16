@@ -393,17 +393,11 @@ const Appointments = () => {
                         {formatAppointmentTime(booking.appointment_date, booking.appointment_time)}
                       </td>
                       <td className="p-4">
-                        <ThemedSelect
+                        <StatusSelect
                           value={booking.status}
-                          onChange={(e) => handleStatusChange(booking.id, e.target.value)}
+                          onValueChange={(newStatus) => handleStatusChange(booking.id, newStatus)}
                           statusType="booking"
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="confirmed">Confirmed</option>
-                          <option value="in_progress">In Progress</option>
-                          <option value="completed">Completed</option>
-                          <option value="cancelled">Cancelled</option>
-                        </ThemedSelect>
+                        />
                       </td>
                       <td className="p-4">
                         <div className="flex gap-2">
