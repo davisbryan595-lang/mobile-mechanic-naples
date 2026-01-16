@@ -94,6 +94,8 @@ export const Contact = () => {
       submissionData.append("preferred_date", date ? format(date, "PPP") : "Not specified");
       submissionData.append("how_heard_about_us", formData.hearAboutUs);
       submissionData.append("other_source", formData.hearAboutUsOther);
+      submissionData.append("selected_services", JSON.stringify(selectedServices));
+      submissionData.append("estimated_total", calculateTotalPrice().toString());
 
       const response = await fetch(SUPABASE_EDGE_FUNCTION_URL, {
         method: "POST",
