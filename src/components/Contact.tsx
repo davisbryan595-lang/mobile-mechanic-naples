@@ -16,6 +16,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 const SUPABASE_EDGE_FUNCTION_URL = "https://xjhvmipqcacgkalqxkvq.supabase.co/functions/v1/form-handler";
 
+interface SelectedService {
+  id: string;
+  name: string;
+  price: number;
+}
+
 export const Contact = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -31,6 +37,12 @@ export const Contact = () => {
   });
   const [date, setDate] = useState<Date>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+
+  const calculateTotalPrice = () => {
+    return selectedServices.reduce((total, service) => total + service.price, 0);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
