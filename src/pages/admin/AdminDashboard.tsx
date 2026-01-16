@@ -1011,12 +1011,17 @@ const AdminDashboard = () => {
           )}
         </Card>
 
-        {/* Active Work Orders */}
+        {/* Pending Jobs / Upcoming Work */}
         <Card className="border-border/30 bg-card/50 backdrop-blur-sm overflow-hidden">
           <div className="p-6 border-b border-border/30 flex items-center justify-between">
-            <h3 className="text-xl font-orbitron font-bold text-foreground">
-              Active Work Orders
-            </h3>
+            <div>
+              <h3 className="text-xl font-orbitron font-bold text-foreground">
+                Pending Jobs & Work Orders
+              </h3>
+              <p className="text-xs text-muted-foreground font-rajdhani mt-1">
+                Active and upcoming work - click status to update
+              </p>
+            </div>
             <Button
               onClick={() => alert("Work Order form coming soon")}
               size="sm"
