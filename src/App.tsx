@@ -17,8 +17,21 @@ import { CityGallery } from "./pages/city/CityGallery";
 import { CityServices } from "./pages/city/CityServices";
 import { CityContact } from "./pages/city/CityContact";
 import { ProtectedAdminRoute } from "./components/ProtectedAdminRoute";
+import { useSubdomain } from "./hooks/use-subdomain";
 
 const queryClient = new QueryClient();
+
+const RootRoute = () => {
+  const { isCrmDomain } = useSubdomain();
+
+  // If on CRM subdomain, show login page at root
+  if (isCrmDomain) {
+    return <LoginAdmin />;
+  }
+
+  // Otherwise, show the normal home page
+  return <Index />;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -27,7 +40,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<RootRoute />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route
