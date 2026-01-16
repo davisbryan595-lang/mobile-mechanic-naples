@@ -30,11 +30,46 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
-          <Route path="/admin/login" element={<LoginAdmin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/customers/new" element={<CustomerForm />} />
-          <Route path="/admin/customers/:id" element={<CustomerDetail />} />
-          <Route path="/admin/customers/:id/edit" element={<CustomerForm />} />
+          <Route
+            path="/admin/login"
+            element={
+              <ProtectedAdminRoute>
+                <LoginAdmin />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboard />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/customers/new"
+            element={
+              <ProtectedAdminRoute>
+                <CustomerForm />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/customers/:id"
+            element={
+              <ProtectedAdminRoute>
+                <CustomerDetail />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/customers/:id/edit"
+            element={
+              <ProtectedAdminRoute>
+                <CustomerForm />
+              </ProtectedAdminRoute>
+            }
+          />
 
           {/* City-Specific Pages with Dynamic Routes */}
           <Route path="/:citySlug-home-mechanic-service" element={<CityHome />} />
