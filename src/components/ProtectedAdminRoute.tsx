@@ -13,8 +13,15 @@ interface ProtectedAdminRouteProps {
 export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const { isCrmDomain } = useSubdomain();
 
-  if (!isCrmDomain) {
-    // Redirect to home if not on CRM subdomain
+  // Allow access in development (localhost and dev server URLs)
+  const isDevelopment = typeof window !== "undefined" && (
+    window.location.hostname === "localhost" ||
+    window.location.hostname.includes(".fly.dev") ||
+    window.location.hostname.includes("127.0.0.1")
+  );
+
+  if (!isCrmDomain && !isDevelopment) {
+    // Redirect to home if not on CRM subdomain and not in development
     return <Navigate to="/" replace />;
   }
 
