@@ -896,7 +896,10 @@ const AdminDashboard = () => {
                     Date
                   </th>
                   <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
-                    Message
+                    Services
+                  </th>
+                  <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
+                    Est. Total
                   </th>
                   <th className="text-left p-4 font-rajdhani font-semibold text-muted-foreground uppercase text-xs">
                     Actions
