@@ -298,15 +298,29 @@ const AdminDashboard = () => {
           weeklyRevenue = `$${total.toFixed(2)}`;
         }
 
-        // Pending Payments - sum of invoices with status 'pending'
+        // Pending Payments - sum of invoices that are NOT paid (draft, sent, partial, overdue)
         const { data: pendingInvoices, error: pendingError } = await supabase
           .from("invoices")
-          .select("amount")
-          .eq("status", "pending");
+          .select("amount, status, due_date")
+          .neq("status", "paid");
 
         let pendingPayments = "$0";
+        let overdueCount = 0;
+        let upcomingCount = 0;
+
         if (!pendingError || pendingError.code === "PGRST116") {
-          const total = pendingInvoices?.reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0;
+          const today = new Date().toISOString().split("T")[0];
+
+          const total = pendingInvoices?.reduce((sum, inv) => {
+            // Count overdue vs upcoming
+            if (inv.due_date < today) {
+              overdueCount++;
+            } else {
+              upcomingCount++;
+            }
+            return sum + (inv.amount || 0);
+          }, 0) || 0;
+
           pendingPayments = `$${total.toFixed(2)}`;
         }
 
