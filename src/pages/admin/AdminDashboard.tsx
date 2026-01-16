@@ -55,6 +55,8 @@ interface FormSubmissionData {
   preferred_date?: string;
   how_heard_about_us?: string;
   other_source?: string;
+  selected_services?: string;
+  estimated_total?: number;
   created_at: string;
 }
 
