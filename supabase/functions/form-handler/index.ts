@@ -189,7 +189,7 @@ Deno.serve(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: senderEmail,
+            from: "onboarding@resend.dev",
             to: formData.email,
             subject: "Thank you for contacting us!",
             html: `
@@ -209,8 +209,8 @@ Deno.serve(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: senderEmail,
-            to: adminEmail,
+            from: "onboarding@resend.dev",
+            to: "davisbryan595@gmail.com",
             subject: `New Contact Form Submission from ${formData.name}`,
             html: emailHtml,
           }),
