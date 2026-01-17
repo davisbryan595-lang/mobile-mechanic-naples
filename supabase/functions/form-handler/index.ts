@@ -132,6 +132,9 @@ Deno.serve(async (req) => {
 
     // Send email notification using Resend
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    const senderEmail = Deno.env.get("SENDER_EMAIL") || "onboarding@resend.dev";
+    const adminEmail = Deno.env.get("ADMIN_EMAIL") || "davisbryan595@gmail.com";
+
     if (resendApiKey) {
       try {
         let servicesHtml = "";
@@ -189,7 +192,7 @@ Deno.serve(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: "onboarding@resend.dev",
+            from: senderEmail,
             to: formData.email,
             subject: "Thank you for contacting us!",
             html: `
@@ -209,8 +212,8 @@ Deno.serve(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: "onboarding@resend.dev",
-            to: "davisbryan595@gmail.com",
+            from: senderEmail,
+            to: adminEmail,
             subject: `New Contact Form Submission from ${formData.name}`,
             html: emailHtml,
           }),
