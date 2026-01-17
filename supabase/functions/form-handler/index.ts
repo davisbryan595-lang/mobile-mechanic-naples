@@ -210,7 +210,7 @@ Deno.serve(async (req) => {
           },
           body: JSON.stringify({
             from: "onboarding@resend.dev",
-            to: "contact@mobilemechanicservice.com",
+            to: "davisbryan595@gmail.com",
             subject: `New Contact Form Submission from ${formData.name}`,
             html: emailHtml,
           }),
