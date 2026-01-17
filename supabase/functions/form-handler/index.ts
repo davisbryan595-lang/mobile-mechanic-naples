@@ -132,9 +132,6 @@ Deno.serve(async (req) => {
 
     // Send email notification using Resend
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
-    const senderEmail = Deno.env.get("SENDER_EMAIL") || "onboarding@resend.dev";
-    const adminEmail = Deno.env.get("ADMIN_EMAIL") || "davisbryan595@gmail.com";
-
     if (resendApiKey) {
       try {
         let servicesHtml = "";
