@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { Facebook, Instagram, MessageCircle, Phone, Menu, X, Music } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/sonner";
 import logo from "@/assets/logo.png";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -12,7 +16,7 @@ export const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
-      const sections = ["home", "about", "services", "pricing", "reviews", "contact"];
+      const sections = ["home", "about", "services", "pricing", "gallery", "reviews", "contact"];
       const currentSection = sections.find((section) => {
         const element = document.getElementById(section);
         if (element) {
@@ -37,11 +41,24 @@ export const Navbar = () => {
   }, [isMobileMenuOpen]);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setIsMobileMenuOpen(false);
+    // If not on home page, navigate to home first
+    if (location.pathname !== "/") {
+      navigate("/");
+      // Schedule scroll after navigation
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      // Already on home page, just scroll
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
+    setIsMobileMenuOpen(false);
   };
 
   const navLinks = [
@@ -49,16 +66,18 @@ export const Navbar = () => {
     { id: "about", label: "About" },
     { id: "services", label: "Services" },
     { id: "pricing", label: "Pricing & Calculator" },
+    { id: "gallery", label: "Gallery" },
     { id: "packages", label: "Packages" },
     { id: "reviews", label: "Reviews" },
+    { id: "blog", label: "Blog", path: "/blog" },
     { id: "contact", label: "Contact" },
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
-    { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+    { icon: Facebook, href: "https://www.facebook.com/share/1GmBcnPumP/?mibextid=wwXIfr", label: "Facebook" },
+    { icon: Instagram, href: "https://www.instagram.com/mobilemechanicservice_?igsh=MWtoNGl5NXhxNGgzcw%3D%3D", label: "Instagram" },
     { icon: Music, href: "https://tiktok.com", label: "TikTok" },
-    { icon: MessageCircle, href: "https://wa.me/2392729166", label: "WhatsApp" },
+    { icon: MessageCircle, href: "sms:2392729166", label: "SMS" },
   ];
 
   return (
@@ -72,15 +91,15 @@ export const Navbar = () => {
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-12 text-sm">
               <div className="flex items-center gap-4">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.facebook.com/share/1GmBcnPumP/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <Facebook className="w-4 h-4" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.instagram.com/mobilemechanicservice_?igsh=MWtoNGl5NXhxNGgzcw%3D%3D" target="_blank" rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <Instagram className="w-4 h-4" />
                 </a>
-                <a href="https://wa.me/2392729166" target="_blank" rel="noopener noreferrer"
+                <a href="sms:2392729166"
                   className="text-muted-foreground hover:text-primary transition-colors">
                   <MessageCircle className="w-4 h-4" />
                 </a>
@@ -88,17 +107,28 @@ export const Navbar = () => {
 
               <img src={logo} alt="Mobile Service" className="h-12 w-auto" />
 
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-primary hover:text-primary-foreground hover:bg-primary"
-                asChild
-              >
-                <a href="tel:2392729166">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary hover:text-primary-foreground hover:bg-primary"
+                  onClick={() => {
+                    const phoneNumber = "(239) 272-9166";
+                    toast.success(`Call us at: ${phoneNumber}`, {
+                      action: {
+                        label: "Copy",
+                        onClick: () => {
+                          navigator.clipboard.writeText("2392729166");
+                          toast.success("Phone number copied!");
+                        },
+                      },
+                    });
+                  }}
+                >
                   <Phone className="w-4 h-4 mr-2" />
                   Call Now
-                </a>
-              </Button>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -110,19 +140,35 @@ export const Navbar = () => {
               <ul className="flex items-center gap-8">
                 {navLinks.map((link) => (
                   <li key={link.id}>
-                    <button
-                      onClick={() => scrollToSection(link.id)}
-                      className={`relative font-rajdhani font-medium tracking-wide text-sm transition-colors ${
-                        activeSection === link.id
-                          ? "text-primary"
-                          : "text-foreground hover:text-primary"
-                      } group`}
-                    >
-                      {link.label}
-                      <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform duration-300 ${
-                        activeSection === link.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                      }`} />
-                    </button>
+                    {(link as any).path ? (
+                      <a
+                        href={(link as any).path}
+                        className={`relative font-rajdhani font-medium tracking-wide text-sm transition-colors ${
+                          window.location.pathname === (link as any).path
+                            ? "text-primary"
+                            : "text-foreground hover:text-primary"
+                        } group`}
+                      >
+                        {link.label}
+                        <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform duration-300 ${
+                          window.location.pathname === (link as any).path ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        }`} />
+                      </a>
+                    ) : (
+                      <button
+                        onClick={() => scrollToSection(link.id)}
+                        className={`relative font-rajdhani font-medium tracking-wide text-sm transition-colors ${
+                          activeSection === link.id
+                            ? "text-primary"
+                            : "text-foreground hover:text-primary"
+                        } group`}
+                      >
+                        {link.label}
+                        <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-primary transition-transform duration-300 ${
+                          activeSection === link.id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        }`} />
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -162,24 +208,41 @@ export const Navbar = () => {
                   {/* Mobile Navigation Links */}
                   <div className="px-4 space-y-2">
                     {navLinks.map((link) => (
-                      <button
-                        key={link.id}
-                        onClick={() => scrollToSection(link.id)}
-                        className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium transition-all ${
-                          activeSection === link.id
-                            ? "bg-white/30 text-white"
-                            : "text-white/80 hover:bg-white/20 hover:text-white"
-                        }`}
-                      >
-                        {link.label}
-                      </button>
+                      (link as any).path ? (
+                        <a
+                          key={link.id}
+                          href={(link as any).path}
+                          className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium text-sm transition-all ${
+                            window.location.pathname === (link as any).path
+                              ? "bg-white/30 text-white"
+                              : "text-white/80 hover:bg-white/20 hover:text-white"
+                          }`}
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <button
+                          key={link.id}
+                          onClick={() => {
+                            scrollToSection(link.id);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`block w-full text-left px-4 py-2 rounded-lg font-rajdhani font-medium text-sm transition-all ${
+                            activeSection === link.id
+                              ? "bg-white/30 text-white"
+                              : "text-white/80 hover:bg-white/20 hover:text-white"
+                          }`}
+                        >
+                          {link.label}
+                        </button>
+                      )
                     ))}
                   </div>
 
                   <div className="border-t border-white/20 pt-4 px-4">
                     {/* Mobile Social Icons */}
                     <div className="mb-4">
-                      <p className="text-xs font-rajdhani font-medium text-white/60 mb-3 uppercase">
+                      <p className="text-xs font-rajdhani font-medium text-white/60 mb-2 uppercase text-xs">
                         Follow Us
                       </p>
                       <div className="flex items-center gap-3">
@@ -203,7 +266,8 @@ export const Navbar = () => {
 
                     {/* Mobile Call Button */}
                     <Button
-                      className="w-full bg-primary hover:bg-primary/90 text-white"
+                      size="sm"
+                      className="w-full bg-primary hover:bg-primary/90 text-white text-sm"
                       asChild
                     >
                       <a href="tel:2392729166" className="flex items-center justify-center gap-2">

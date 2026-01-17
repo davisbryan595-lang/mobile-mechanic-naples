@@ -6,10 +6,21 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { MessageCircle, Phone, MapPin, Facebook, Instagram, Music, CalendarIcon } from "lucide-react";
+import { MessageCircle, Phone, MapPin, Facebook, Instagram, Music, CalendarIcon, Loader, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { SERVICES, SERVICE_CATEGORIES } from "@/data/services";
+import { getServicePrice } from "@/utils/service-pricing";
+import { Checkbox } from "@/components/ui/checkbox";
+
+const SUPABASE_EDGE_FUNCTION_URL = "https://xjhvmipqcacgkalqxkvq.supabase.co/functions/v1/form-handler";
+
+interface SelectedService {
+  id: string;
+  name: string;
+  price: number;
+}
 
 export const Contact = () => {
   const { toast } = useToast();
@@ -17,15 +28,41 @@ export const Contact = () => {
     name: "",
     email: "",
     phone: "",
-    service: "",
+    vehicleType: "",
+    address: "",
     message: "",
+    hearAboutUs: "",
+    hearAboutUsOther: "",
     agree: false,
   });
   const [date, setDate] = useState<Date>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const calculateTotalPrice = () => {
+    return selectedServices.reduce((total, service) => total + service.price, 0);
+  };
+
+  const toggleService = (serviceId: string, serviceName: string) => {
+    setSelectedServices((prev) => {
+      const existingService = prev.find((s) => s.id === serviceId);
+      if (existingService) {
+        return prev.filter((s) => s.id !== serviceId);
+      } else {
+        const price = getServicePrice(serviceId);
+        return [...prev, { id: serviceId, name: serviceName, price }];
+      }
+    });
+  };
+
+  const removeService = (serviceId: string) => {
+    setSelectedServices((prev) => prev.filter((s) => s.id !== serviceId));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.agree) {
       toast({
         title: "Agreement Required",
@@ -35,21 +72,73 @@ export const Contact = () => {
       return;
     }
 
-    // Here you would typically send the form data to your backend
-    toast({
-      title: "Message Sent!",
-      description: "We'll get back to you as soon as possible.",
-    });
+    if (!formData.name || !formData.email || !formData.phone || !formData.address || !formData.message) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      service: "",
-      message: "",
-      agree: false,
-    });
+    setIsSubmitting(true);
+
+    try {
+      const submissionData = new FormData();
+      submissionData.append("name", formData.name);
+      submissionData.append("email", formData.email);
+      submissionData.append("phone", formData.phone);
+      submissionData.append("vehicle_type", formData.vehicleType);
+      submissionData.append("address", formData.address);
+      submissionData.append("message", formData.message);
+      submissionData.append("preferred_date", date ? format(date, "PPP") : "Not specified");
+      submissionData.append("how_heard_about_us", formData.hearAboutUs);
+      submissionData.append("other_source", formData.hearAboutUsOther);
+      submissionData.append("selected_services", JSON.stringify(selectedServices));
+      submissionData.append("estimated_total", calculateTotalPrice().toString());
+
+      const response = await fetch(SUPABASE_EDGE_FUNCTION_URL, {
+        method: "POST",
+        body: submissionData,
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: "Thank you! Your message has been sent. We'll get back to you soon.",
+        });
+
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          vehicleType: "",
+          address: "",
+          message: "",
+          hearAboutUs: "",
+          hearAboutUsOther: "",
+          agree: false,
+        });
+        setDate(undefined);
+        setSelectedServices([]);
+      } else {
+        toast({
+          title: "Error",
+          description: "Something went wrong. Please try again or call us directly.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again or call us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -112,7 +201,7 @@ export const Contact = () => {
               <h3 className="font-orbitron text-xl font-bold mb-4">Follow Us</h3>
               <div className="flex gap-4">
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/share/1GmBcnPumP/?mibextid=wwXIfr"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
@@ -120,7 +209,7 @@ export const Contact = () => {
                   <Facebook className="w-6 h-6 text-primary" />
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/mobilemechanicservice_?igsh=MWtoNGl5NXhxNGgzcw%3D%3D"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors"
@@ -178,20 +267,108 @@ export const Contact = () => {
               </div>
 
               <div>
-                <Label htmlFor="service" className="font-orbitron">Service Type</Label>
-                <Select value={formData.service} onValueChange={(value) => setFormData({ ...formData, service: value })}>
+                <Label htmlFor="vehicleType" className="font-orbitron">Vehicle Type</Label>
+                <Select value={formData.vehicleType} onValueChange={(value) => setFormData({ ...formData, vehicleType: value })}>
                   <SelectTrigger className="bg-background border-border mt-2">
-                    <SelectValue placeholder="Select a service" />
+                    <SelectValue placeholder="Select vehicle type" />
                   </SelectTrigger>
                   <SelectContent className="bg-background border-border">
-                    <SelectItem value="ac-repair">A/C Repair</SelectItem>
-                    <SelectItem value="brake-service">Brake Service</SelectItem>
-                    <SelectItem value="diagnostics">Diagnostics</SelectItem>
-                    <SelectItem value="starter-alternator">Starter/Alternator</SelectItem>
-                    <SelectItem value="battery">Battery</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="passenger-car">Passenger Car</SelectItem>
+                    <SelectItem value="suv">SUV</SelectItem>
+                    <SelectItem value="truck">Truck</SelectItem>
+                    <SelectItem value="van-commercial">Van / Commercial</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div>
+                <Label className="font-orbitron">Services & Packages <span className="text-xs text-muted-foreground">(optional)</span></Label>
+                <div className="mt-3 space-y-3 max-h-64 overflow-y-auto border border-border/30 rounded-lg p-4 bg-background/50">
+                  {SERVICE_CATEGORIES.length > 0 ? (
+                    SERVICE_CATEGORIES.map((category) => {
+                      const categoryServices = SERVICES.filter((s) => s.category === category);
+                      return (
+                        <div key={category} className="border-b border-border/20 pb-3 last:border-0">
+                          <button
+                            type="button"
+                            onClick={() => setExpandedCategory(expandedCategory === category ? null : category)}
+                            className="w-full text-left font-rajdhani text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                          >
+                            {category}
+                          </button>
+                          {expandedCategory === category && (
+                            <div className="mt-2 space-y-2 ml-2">
+                              {categoryServices.map((service) => {
+                                const isSelected = selectedServices.some((s) => s.id === service.id);
+                                return (
+                                  <div key={service.id} className="flex items-start gap-2">
+                                    <Checkbox
+                                      id={service.id}
+                                      checked={isSelected}
+                                      onCheckedChange={() => toggleService(service.id, service.name)}
+                                      className="mt-1"
+                                    />
+                                    <label
+                                      htmlFor={service.id}
+                                      className="text-xs cursor-pointer flex-1 leading-tight"
+                                    >
+                                      <span className="font-rajdhani">{service.name}</span>
+                                      <br />
+                                      <span className="text-muted-foreground text-xs">
+                                        ${getServicePrice(service.id).toFixed(2)}
+                                      </span>
+                                    </label>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })
+                  ) : null}
+                </div>
+
+                {selectedServices.length > 0 && (
+                  <div className="mt-3 p-3 bg-primary/10 border border-primary/30 rounded-lg">
+                    <p className="font-rajdhani text-sm font-semibold mb-2">Selected Services:</p>
+                    <div className="space-y-1 mb-3">
+                      {selectedServices.map((service) => (
+                        <div key={service.id} className="flex items-center justify-between text-xs">
+                          <span>{service.name}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">${service.price.toFixed(2)}</span>
+                            <button
+                              type="button"
+                              onClick={() => removeService(service.id)}
+                              className="text-muted-foreground hover:text-destructive transition-colors"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="border-t border-primary/30 pt-2">
+                      <p className="flex items-center justify-between font-orbitron text-sm">
+                        <span>Estimated Total:</span>
+                        <span className="text-primary font-bold">${calculateTotalPrice().toFixed(2)}</span>
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="address" className="font-orbitron">Address</Label>
+                <Input
+                  id="address"
+                  value={formData.address}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  required
+                  className="bg-background border-border mt-2"
+                  placeholder="Service location address"
+                />
               </div>
 
               <div>
@@ -234,6 +411,40 @@ export const Contact = () => {
                 />
               </div>
 
+              <div className="pt-4 border-t border-border/30">
+                <Label htmlFor="hearAboutUs" className="font-rajdhani text-sm text-muted-foreground">
+                  How did you hear about us? <span className="text-xs">(optional - helps us improve!)</span>
+                </Label>
+                <Select value={formData.hearAboutUs} onValueChange={(value) => setFormData({ ...formData, hearAboutUs: value })}>
+                  <SelectTrigger className="bg-background border-border mt-2">
+                    <SelectValue placeholder="-- Select one --" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border-border">
+                    <SelectItem value="google-search">Google Search</SelectItem>
+                    <SelectItem value="facebook-instagram">Facebook / Instagram</SelectItem>
+                    <SelectItem value="referral">Referral / Friend / Family</SelectItem>
+                    <SelectItem value="yelp-reviews">Yelp / Google Reviews</SelectItem>
+                    <SelectItem value="walk-in">Walk-in / Drive-by</SelectItem>
+                    <SelectItem value="sign-advertisement">Sign / Advertisement / Flyer</SelectItem>
+                    <SelectItem value="other">Other (please specify)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground mt-1.5">This helps us know which marketing works best — thank you!</p>
+              </div>
+
+              {formData.hearAboutUs === "other" && (
+                <div>
+                  <Input
+                    id="hearAboutUsOther"
+                    type="text"
+                    value={formData.hearAboutUsOther}
+                    onChange={(e) => setFormData({ ...formData, hearAboutUsOther: e.target.value })}
+                    placeholder="Please tell us more..."
+                    className="bg-background border-border"
+                  />
+                </div>
+              )}
+
               <div className="flex items-start gap-2">
                 <input
                   type="checkbox"
@@ -249,10 +460,18 @@ export const Contact = () => {
 
               <Button
                 type="submit"
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold text-lg glow-orange-strong"
+                disabled={isSubmitting}
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold text-lg glow-orange-strong disabled:opacity-50 disabled:cursor-not-allowed"
                 size="lg"
               >
-                Send Message
+                {isSubmitting ? (
+                  <>
+                    <Loader className="w-4 h-4 mr-2 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  "Send Message"
+                )}
               </Button>
             </form>
           </div>
