@@ -1,10 +1,82 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, Facebook, Instagram, Play } from "lucide-react";
+
+interface InstagramEmbedWrapperProps {
+  postId: string;
+  index: number;
+}
+
+const InstagramEmbedWrapper = ({ postId, index }: InstagramEmbedWrapperProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const url = `https://www.instagram.com/p/${postId}/`;
+
+  return (
+    <>
+      <div
+        className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up h-64 bg-gradient-to-br from-background via-card to-background"
+        style={{ animationDelay: `${index * 0.1}s` }}
+        onClick={() => setIsOpen(true)}
+      >
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all flex items-center justify-center">
+          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/80 group-hover:bg-primary transition-colors">
+            <Play className="w-8 h-8 text-white fill-white" />
+          </div>
+        </div>
+      </div>
+
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setIsOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-2xl bg-black rounded-lg overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-primary transition-colors z-10 bg-black/50 rounded-full p-2 hover:bg-black/70"
+              aria-label="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <iframe
+              src={`https://www.instagram.com/p/${postId}/embed/captioned/`}
+              width="100%"
+              style={{ minHeight: "600px" }}
+              frameBorder="0"
+              scrolling="no"
+              allowFullScreen={true}
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              title={`Instagram Post ${index + 1}`}
+            ></iframe>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
 
 export const Gallery = () => {
+  const [activeTab, setActiveTab] = useState<"work" | "facebook" | "instagram">("work");
   const [showAll, setShowAll] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const facebookPostIds = [
+    "1063659892535347",
+    "1283700730200298",
+    "1996593834239180",
+    "3192988037542385",
+  ];
+
+  const instagramPostIds = [
+    "DSp-7FDEYB7",
+    "DSi9s1uETxF",
+    "DSi9nv2EVSJ",
+    "DSfKhgYEbpB",
+  ];
 
   const allImages = [
     {
@@ -12,7 +84,7 @@ export const Gallery = () => {
       alt: "Headlight Restoration & Polishing",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F9cb02518bcef4375a06d9d062f807b90?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F2911595d1b0a42268e17b328e8d1cd31?format=webp&width=800",
       alt: "Professional Brake Service",
     },
     {
@@ -24,11 +96,11 @@ export const Gallery = () => {
       alt: "Transmission & CV Axle Work",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F52eb1b8329084e2fbf312d7bf2067645?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F86aa742a714b4c3683563ef2b20f4864?format=webp&width=800",
       alt: "Vehicle on Lift Service",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fad22e439ef4a4d5b8474e5fe238e0428?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F904dea1c0c2148f2809f7a8ae0458a7f?format=webp&width=800",
       alt: "Professional Headlight Detail",
     },
     {
@@ -40,15 +112,15 @@ export const Gallery = () => {
       alt: "Advanced Engine Diagnostics",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fdd9c1c91d1cc40879c4cda1344144f34?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F4c133a74774947f6bb1fe43017fef144?format=webp&width=800",
       alt: "Transmission Service Setup",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F7c2cd6ce0d1642ee92d718f59b845be5?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F8fd8f184b96c45baa7af6d6daf2334e7?format=webp&width=800",
       alt: "Suspension Component Work",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F313d55b89f744049905289ac1c60323f?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Fbbca93c367854547a000d1896b2d4ed9?format=webp&width=800",
       alt: "Professional Engine Service",
     },
     {
@@ -56,11 +128,11 @@ export const Gallery = () => {
       alt: "Battery & Electrical Service",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F0192521194b946ba81c7e379f89dd014?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Ff6fcd8f5b0d44c43b3c70cf7cd747e3d?format=webp&width=800",
       alt: "Vehicle Maintenance Detail",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fe9610e8724a8434c8d86f49a1de0ea58?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Fa79df58b31f8455c97ae3b661017fd4a?format=webp&width=800",
       alt: "Complete Engine Inspection",
     },
     {
@@ -88,11 +160,11 @@ export const Gallery = () => {
       alt: "Vehicle Hood Service",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F7c02c5fe623c4ea79f0509926e04d4ed?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F218ad3ec2e4a4412a89eddb546f7fcea?format=webp&width=800",
       alt: "Professional Vehicle Maintenance",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Faba83b904b6e4634bbe755e0547cf10d?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F88f40f97d3674714973cc3748c8fe777?format=webp&width=800",
       alt: "Engine Compartment Work",
     },
     {
@@ -108,7 +180,7 @@ export const Gallery = () => {
       alt: "Professional Engine Rebuild",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2Fd11f2793911447959105d0af3a92476e?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Ffbd9332073c047f79ce18749a0f8f7ee?format=webp&width=800",
       alt: "Undercarriage Service Work",
     },
     {
@@ -120,7 +192,7 @@ export const Gallery = () => {
       alt: "Engine Block Inspection",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F72a613ca175b401a8a2db91e539ad062?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2F502d572387d240d5a2f5c09fc90bc3b5?format=webp&width=800",
       alt: "Professional Parts Replacement",
     },
     {
@@ -152,7 +224,7 @@ export const Gallery = () => {
       alt: "Professional Mechanic Working",
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets%2F5ea4b1680de74be58c62aa3fdc28c495%2F3a49128b69e5433bab1d08fd66c04681?format=webp&width=800",
+      src: "https://cdn.builder.io/api/v1/image/assets%2Fbd2db2bf76dc466fa0ee7e5d644defec%2Fcbc9a9cf985048dba5b9c82a68c0f576?format=webp&width=800",
       alt: "Engine Diagnostics Service",
     },
     {
@@ -269,45 +341,130 @@ export const Gallery = () => {
 
   return (
     <>
-      <section className="py-20 bg-card">
+      <section id="gallery" className="py-20 bg-card">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold mb-4">
-              Our <span className="text-primary text-glow">Work</span>
+              Gallery & <span className="text-primary text-glow">Social Media</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Professional service delivered at your location
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {displayedImages.map((image, index) => (
-              <div
-                key={index}
-                className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-                onClick={() => setSelectedImage(image.src)}
-              >
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-              </div>
-            ))}
+          {/* Tabs */}
+          <div className="flex justify-center gap-4 mb-12 flex-wrap">
+            <button
+              onClick={() => {
+                setActiveTab("work");
+                setShowAll(false);
+              }}
+              className={`px-6 py-2 rounded-lg font-rajdhani font-medium transition-all ${
+                activeTab === "work"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-border text-foreground hover:bg-border/80"
+              }`}
+            >
+              Our Work
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab("facebook");
+                setShowAll(false);
+              }}
+              className={`px-6 py-2 rounded-lg font-rajdhani font-medium transition-all flex items-center gap-2 ${
+                activeTab === "facebook"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-border text-foreground hover:bg-border/80"
+              }`}
+            >
+              <Facebook className="w-4 h-4" />
+              Facebook
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab("instagram");
+                setShowAll(false);
+              }}
+              className={`px-6 py-2 rounded-lg font-rajdhani font-medium transition-all flex items-center gap-2 ${
+                activeTab === "instagram"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-border text-foreground hover:bg-border/80"
+              }`}
+            >
+              <Instagram className="w-4 h-4" />
+              Instagram
+            </button>
           </div>
 
-          {!showAll && (
-            <div className="flex justify-center mt-12">
-              <Button
-                onClick={() => setShowAll(true)}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold text-lg glow-orange-strong"
-                size="lg"
-              >
-                View All Gallery
-              </Button>
+          {/* Our Work Tab */}
+          {activeTab === "work" && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {displayedImages.map((image, index) => (
+                  <div
+                    key={index}
+                    className="group relative overflow-hidden rounded-lg border-2 border-border hover:border-primary transition-all cursor-pointer animate-slide-up"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                    onClick={() => setSelectedImage(image.src)}
+                  >
+                    <div className="aspect-[4/3] overflow-hidden">
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {!showAll && (
+                <div className="flex justify-center mt-12">
+                  <Button
+                    onClick={() => setShowAll(true)}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron font-bold text-lg glow-orange-strong"
+                    size="lg"
+                  >
+                    View All Gallery
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Facebook Posts Tab */}
+          {activeTab === "facebook" && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {facebookPostIds.map((postId, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center justify-center rounded-lg border-2 border-border hover:border-primary transition-all animate-slide-up overflow-hidden"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <iframe
+                    src={`https://www.facebook.com/plugins/post.php?href=https://www.facebook.com/reel/${postId}/&width=500&show_text=true`}
+                    width="100%"
+                    height="500"
+                    style={{ border: "none", overflow: "hidden" }}
+                    allowFullScreen={true}
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  ></iframe>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Instagram Posts Tab */}
+          {activeTab === "instagram" && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {instagramPostIds.map((postId, index) => (
+                <InstagramEmbedWrapper
+                  key={index}
+                  postId={postId}
+                  index={index}
+                />
+              ))}
             </div>
           )}
         </div>

@@ -6,11 +6,15 @@ import { Pricing } from "@/components/Pricing";
 import { MaintenancePackages } from "@/components/MaintenancePackages";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { Gallery } from "@/components/Gallery";
+import { FacebookPosts } from "@/components/FacebookPosts";
+import { InstagramReels } from "@/components/InstagramReels";
 import { WarrantyInfo } from "@/components/WarrantyInfo";
 import { Reviews } from "@/components/Reviews";
 import { Disclaimer } from "@/components/Disclaimer";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
+import { ChatBot } from "@/components/ChatBot";
+import { AccessibilityWidget } from "@/components/AccessibilityWidget";
 
 const Index = () => {
   return (
@@ -24,12 +28,16 @@ const Index = () => {
         <MaintenancePackages />
         <WhyChooseUs />
         <Gallery />
+        <FacebookPosts />
+        <InstagramReels />
         <WarrantyInfo />
         <Reviews />
         <Disclaimer />
         <Contact />
       </main>
       <Footer />
+      <ChatBot />
+      <AccessibilityWidget />
     </div>
   );
 };
